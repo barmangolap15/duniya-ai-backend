@@ -1,5 +1,10 @@
 # LevelUp — Gamified Learning & Verified Talent Platform
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/barmangolap15/duniya-ai-backend)
+
+- **Frontend (Live on Firebase)**: [https://duniyaai-ddc79.web.app](https://duniyaai-ddc79.web.app)
+- **Backend Blueprint**: [`render.yaml`](./render.yaml)
+
 LevelUp is an industry-standard gamified learn-by-doing platform that bridges the gap between learning to code and proving real-world competence. Instead of static certificate pdfs, students build real applications in a live browser sandbox that produce 100% verified, runnable portfolios reviewed by mentors and scouted by recruiters.
 
 ---
