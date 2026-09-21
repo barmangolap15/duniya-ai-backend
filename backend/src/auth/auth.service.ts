@@ -31,11 +31,24 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-    const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
-    if (!user) throw new UnauthorizedException('Invalid credentials');
+    const email = (dto.email || '').trim().toLowerCase();
+    let user = await this.prisma.user.findUnique({ where: { email } });
+
+    // If not found, check alias domains (@duniyaai.com <-> @levelup.com)
+    if (!user) {
+      if (email.endsWith('@duniyaai.com') || email.endsWith('@duniya-ai.com')) {
+        const altEmail = email.replace(/@duniya-?ai\.com$/, '@levelup.com');
+        user = await this.prisma.user.findUnique({ where: { email: altEmail } });
+      } else if (email.endsWith('@levelup.com')) {
+        const altEmail = email.replace(/@levelup\.com$/, '@duniyaai.com');
+        user = await this.prisma.user.findUnique({ where: { email: altEmail } });
+      }
+    }
+
+    if (!user) throw new UnauthorizedException('Invalid email or password');
 
     const isValid = await bcrypt.compare(dto.password, user.passwordHash);
-    if (!isValid) throw new UnauthorizedException('Invalid credentials');
+    if (!isValid) throw new UnauthorizedException('Invalid email or password');
 
     const token = this.jwtService.sign({ userId: user.id, email: user.email, role: user.role });
     return { token, user: { id: user.id, email: user.email, name: user.name, role: user.role } };
