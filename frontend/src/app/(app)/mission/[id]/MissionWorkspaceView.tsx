@@ -6,6 +6,8 @@ import CodeMirror from '@uiw/react-codemirror';
 import { html } from '@codemirror/lang-html';
 import { css } from '@codemirror/lang-css';
 import { javascript } from '@codemirror/lang-javascript';
+import { python } from '@codemirror/lang-python';
+import { sql } from '@codemirror/lang-sql';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { api } from '@/lib/api';
 import { soundManager } from '@/lib/sounds';
@@ -15,13 +17,13 @@ import { ArrowLeft, Play, Save, Check, ChevronRight, Lightbulb, Keyboard, Lock, 
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
-type Tab = 'html' | 'css' | 'js';
+type Tab = string;
 
 interface Step {
   id: number;
   title: string;
   instruction: string;
-  target: Tab;
+  target: string;
   expectedCode: string;
   hint: string;
   validation: string;
@@ -61,9 +63,9 @@ export default function MissionWorkspace() {
   const missionId = actualMissionId || (params?.id as string);
 
   // Editor state
-  const [activeTab, setActiveTab] = useState<Tab>('html');
-  const [code, setCode] = useState({ html: '', css: '', js: '' });
-  const [debouncedCode, setDebouncedCode] = useState({ html: '', css: '', js: '' });
+  const [activeTab, setActiveTab] = useState<string>('html');
+  const [code, setCode] = useState<Record<string, string>>({ html: '', css: '', js: '', py: '', sql: '' });
+  const [debouncedCode, setDebouncedCode] = useState<Record<string, string>>({ html: '', css: '', js: '', py: '', sql: '' });
   const [isSaving, setIsSaving] = useState(false);
 
   // Step-by-step state
@@ -142,23 +144,44 @@ export default function MissionWorkspace() {
         html: submission.htmlCode || '',
         css: submission.cssCode || '',
         js: submission.jsCode || '',
+        py: submission.jsCode || '',
+        sql: submission.jsCode || '',
       });
       setDebouncedCode({
         html: submission.htmlCode || '',
         css: submission.cssCode || '',
         js: submission.jsCode || '',
+        py: submission.jsCode || '',
+        sql: submission.jsCode || '',
       });
     } else if (mission) {
       setCode({
         html: mission.starterHtml || '',
         css: mission.starterCss || '',
         js: mission.starterJs || '',
+        py: mission.starterJs || '',
+        sql: mission.starterJs || '',
       });
       setDebouncedCode({
         html: mission.starterHtml || '',
         css: mission.starterCss || '',
         js: mission.starterJs || '',
+        py: mission.starterJs || '',
+        sql: mission.starterJs || '',
       });
+    }
+
+    if (mission) {
+      // Pick initial tab based on first step or available languages
+      const missionLangs = (mission.languages && mission.languages.length > 0)
+        ? mission.languages
+        : ['html', 'css', 'js'];
+      const firstTarget = steps[0]?.target;
+      if (firstTarget && missionLangs.includes(firstTarget)) {
+        setActiveTab(firstTarget);
+      } else if (missionLangs[0]) {
+        setActiveTab(missionLangs[0]);
+      }
     }
   }, [submission, mission]);
 
@@ -327,6 +350,8 @@ export default function MissionWorkspace() {
   const getExtensions = () => {
     if (activeTab === 'html') return [html()];
     if (activeTab === 'css') return [css()];
+    if (activeTab === 'py' || activeTab === 'python') return [python()];
+    if (activeTab === 'sql') return [sql()];
     return [javascript()];
   };
 
@@ -448,32 +473,54 @@ export default function MissionWorkspace() {
         <div className="flex-1 flex flex-col border-r border-gray-800 min-w-0">
           {/* Editor Tabs */}
           <div className="flex bg-gray-900 border-b border-gray-800 shrink-0">
-            {(['html', 'css', 'js'] as Tab[]).map((tab) => {
-              const isTarget = currentStep?.target === tab;
-              const hasLang = (mission.languages || ['html', 'css', 'js']).includes(tab);
-              return (
-                <button
-                  key={tab}
-                  onClick={() => {
-                    setActiveTab(tab);
-                    soundManager.playTap();
-                  }}
-                  disabled={!hasLang}
-                  className={`relative px-6 py-2.5 text-sm font-medium border-r border-gray-800 transition-all uppercase ${
-                    activeTab === tab
-                      ? 'bg-gray-950 text-primary-400 border-t-2 border-t-primary-500'
-                      : hasLang
-                        ? 'text-gray-400 hover:bg-gray-800 hover:text-white border-t-2 border-t-transparent'
-                        : 'text-gray-600 border-t-2 border-t-transparent cursor-not-allowed opacity-50'
-                  } ${isTarget && activeTab !== tab ? 'animate-tab-glow' : ''}`}
-                >
-                  {tab}
-                  {isTarget && activeTab !== tab && (
-                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-primary-400 rounded-full animate-pulse" />
-                  )}
-                </button>
-              );
-            })}
+            {(() => {
+              // Gather all active languages for this mission: either defined in mission.languages or referenced by steps
+              const stepTargets = Array.from(new Set(steps.map(s => s.target).filter(Boolean)));
+              const missionLangs: string[] = mission.languages && mission.languages.length > 0
+                ? mission.languages
+                : (stepTargets.length > 0 ? stepTargets : ['html', 'css', 'js']);
+              
+              // Ensure any step target is also accessible as a tab
+              const displayTabs = Array.from(new Set([...missionLangs, ...stepTargets]));
+
+              const tabLabels: Record<string, string> = {
+                html: 'HTML',
+                css: 'CSS',
+                js: 'JavaScript',
+                py: 'Python',
+                python: 'Python',
+                sql: 'SQL',
+              };
+
+              return displayTabs.map((tab) => {
+                const isTarget = currentStep?.target === tab;
+                const isCurrentActive = activeTab === tab;
+                return (
+                  <button
+                    key={tab}
+                    onClick={() => {
+                      setActiveTab(tab);
+                      soundManager.playTap();
+                    }}
+                    className={`relative px-6 py-2.5 text-sm font-medium border-r border-gray-800 transition-all uppercase flex items-center gap-2 ${
+                      isCurrentActive
+                        ? 'bg-gray-950 text-primary-400 border-t-2 border-t-primary-500'
+                        : 'text-gray-400 hover:bg-gray-800 hover:text-white border-t-2 border-t-transparent'
+                    } ${isTarget && !isCurrentActive ? 'animate-tab-glow' : ''}`}
+                  >
+                    <span>{tabLabels[tab] || tab.toUpperCase()}</span>
+                    {isTarget && (
+                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-primary-500/20 text-primary-300 font-mono lowercase border border-primary-500/30">
+                        target
+                      </span>
+                    )}
+                    {isTarget && !isCurrentActive && (
+                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-primary-400 rounded-full animate-pulse" />
+                    )}
+                  </button>
+                );
+              });
+            })()}
             {/* Preview toggle */}
             <button
               onClick={() => setShowPreview(!showPreview)}
