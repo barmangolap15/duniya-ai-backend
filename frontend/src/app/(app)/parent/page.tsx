@@ -16,26 +16,22 @@ import {
   ExternalLink,
   UserPlus,
   Star,
-  BookOpen,
-  ArrowUpRight,
-  TrendingUp,
-  ShieldCheck,
-  Send,
-  Code2,
-  Lock,
-  ChevronDown,
-  ChevronRight,
-  Award,
-  AlertCircle,
-  HelpCircle,
   FileText,
   Printer,
   Compass,
   Layers,
-  Check,
-  Zap,
+  Award,
+  Send,
+  X,
+  TrendingUp,
+  ShieldCheck,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
 
 export default function ParentPage() {
   const { user } = useAuth();
@@ -104,84 +100,83 @@ export default function ParentPage() {
   return (
     <div className="p-6 sm:p-10 max-w-7xl mx-auto w-full space-y-8">
       {/* Portal Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-gray-800">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border-dark">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold flex items-center gap-1">
-              <Heart className="w-3 h-3 fill-rose-400" />
-              Parent Oversight & Progress Hub
+            <span className="px-2.5 py-0.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-semibold flex items-center gap-1.5 font-body">
+              <Heart className="w-3.5 h-3.5 fill-gold-500" />
+              <span>Family Oversight Hub</span>
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold flex items-center gap-1">
-              <ShieldCheck className="w-3 h-3 text-emerald-400" />
-              Verified Educational Reports
+            <span className="px-2.5 py-0.5 rounded-full bg-accent-500/10 border border-accent-500/30 text-accent-400 text-xs font-semibold flex items-center gap-1.5 font-body">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Verified Reports & Progress</span>
             </span>
           </div>
-          <h1 className="text-3xl font-extrabold text-white">Family Learning Dashboard</h1>
-          <p className="text-gray-400 text-sm mt-1">
-            Track your student's curriculum mastery, milestone reports, and mentor evaluation results.
+          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-white tracking-tight">
+            Family Learning Dashboard
+          </h1>
+          <p className="text-slate-400 text-sm font-body mt-1">
+            Track learning velocity, review verified code evaluations, and send encouragement boosts.
           </p>
         </div>
 
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           onClick={() => setShowLinkModal(true)}
-          className="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl text-white text-xs font-semibold flex items-center gap-2 transition-colors self-start md:self-auto"
+          className="gap-2 self-start md:self-auto text-xs"
         >
-          <UserPlus className="w-4 h-4 text-primary-400" />
-          Link Another Child
-        </button>
+          <UserPlus className="w-4 h-4 text-gold-400" />
+          <span>Link another student</span>
+        </Button>
       </div>
 
       {/* If No Children Linked */}
       {!children || children.length === 0 ? (
-        <div className="bg-gray-900 border border-gray-800 rounded-3xl p-12 text-center max-w-xl mx-auto space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 mx-auto">
-            <Heart className="w-8 h-8" />
+        <Card className="max-w-xl mx-auto p-8 sm:p-10 text-center space-y-4">
+          <div className="w-14 h-14 rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 mx-auto">
+            <Heart className="w-7 h-7" />
           </div>
-          <h2 className="text-xl font-bold text-white">No Children Linked Yet</h2>
-          <p className="text-gray-400 text-sm">
-            Enter your child's student email address below to monitor their progress, verify their projects, and review official evaluation reports.
+          <h2 className="font-heading text-xl font-bold text-white">No Student Accounts Linked</h2>
+          <p className="text-slate-400 text-xs leading-relaxed font-body">
+            Enter your child's student email address below to monitor their daily study streak, view official progress reports, and cheer their milestones.
           </p>
-          <div className="flex gap-3 pt-2">
-            <input
+          <div className="flex gap-2.5 pt-2">
+            <Input
               type="email"
-              placeholder="e.g. student@duniyaai.com"
+              placeholder="student@example.com"
               value={linkEmail}
               onChange={(e) => setLinkEmail(e.target.value)}
-              className="flex-1 bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-primary-500"
+              className="flex-1 text-xs"
             />
-            <button
+            <Button
+              variant="amber"
+              size="default"
               onClick={() => linkMutation.mutate(linkEmail)}
               disabled={!linkEmail || linkMutation.isPending}
-              className="px-5 py-2 bg-primary-600 hover:bg-primary-500 text-white rounded-xl text-sm font-semibold transition-colors disabled:opacity-50"
+              isLoading={linkMutation.isPending}
             >
-              Link Child
-            </button>
+              Link student
+            </Button>
           </div>
-        </div>
+        </Card>
       ) : (
         <div className="space-y-8">
           {/* Child Switcher Tabs (if multiple) */}
           {children.length > 1 && (
-            <div className="flex gap-3 border-b border-gray-800 pb-2">
+            <div className="flex gap-2 border-b border-border-dark pb-2">
               {children.map((child: any, idx: number) => (
                 <button
                   key={child.id}
                   onClick={() => setSelectedChildIndex(idx)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 ${
+                  className={`px-3.5 py-2 rounded-[10px] text-xs font-medium transition-all flex items-center gap-2 ${
                     idx === selectedChildIndex
-                      ? 'bg-primary-600 text-white shadow-md'
-                      : 'bg-gray-900 text-gray-400 hover:text-white'
+                      ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
+                      : 'bg-surface-dark text-slate-400 hover:text-white border border-border-dark'
                   }`}
                 >
-                  <img
-                    src={
-                      child.avatarUrl ||
-                      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250'
-                    }
-                    alt={child.name}
-                    className="w-5 h-5 rounded-full object-cover"
-                  />
-                  {child.name}
+                  <Avatar name={child.name} size="sm" variant="student" />
+                  <span>{child.name}</span>
                 </button>
               ))}
             </div>
@@ -189,75 +184,70 @@ export default function ParentPage() {
 
           {/* Child Hero Card */}
           {currentChild && (
-            <div className="bg-gradient-to-r from-gray-900 via-gray-900 to-rose-950/20 border border-gray-800 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
-              <div className="flex items-center gap-5">
-                <img
-                  src={
-                    currentChild.avatarUrl ||
-                    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250'
-                  }
-                  alt={currentChild.name}
-                  className="w-18 h-18 rounded-2xl object-cover border-2 border-rose-500/40"
-                />
-                <div className="space-y-1">
-                  <div className="flex items-center gap-3">
-                    <h2 className="text-2xl font-extrabold text-white">{currentChild.name}</h2>
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase bg-rose-500/20 text-rose-300 border border-rose-500/30">
-                      Level {currentChild.level}
-                    </span>
+            <Card className="border-gold-500/25 bg-gradient-to-r from-surface-dark via-surface-dark to-gold-950/10">
+              <CardContent className="p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="flex items-center gap-4 sm:gap-5">
+                  <Avatar name={currentChild.name} size="xl" variant="student" />
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2.5 flex-wrap">
+                      <h2 className="font-heading text-2xl font-bold text-white">{currentChild.name}</h2>
+                      <Badge variant="streak">
+                        Level {currentChild.level}
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-primary-400 font-semibold">{currentChild.trackName}</p>
+                    <p className="text-xs text-slate-400 max-w-md">{currentChild.headline}</p>
                   </div>
-                  <p className="text-xs text-primary-400 font-semibold">{currentChild.trackName}</p>
-                  <p className="text-xs text-gray-400 max-w-md">{currentChild.headline}</p>
                 </div>
-              </div>
 
-              <div className="flex items-center gap-3 self-end md:self-auto">
-                <Link
-                  href={`/portfolio/${currentChild.id}`}
-                  target="_blank"
-                  className="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors border border-gray-700"
-                >
-                  <ExternalLink className="w-3.5 h-3.5 text-primary-400" />
-                  <span>Public Portfolio</span>
-                </Link>
+                <div className="flex items-center gap-2.5 self-end md:self-auto flex-wrap">
+                  <Link href={`/portfolio/${currentChild.id}`} target="_blank">
+                    <Button variant="outline" size="sm" className="gap-1.5 text-xs">
+                      <ExternalLink className="w-3.5 h-3.5 text-primary-400" />
+                      <span>Portfolio</span>
+                    </Button>
+                  </Link>
 
-                <button
-                  onClick={() => setActiveParentTab('CHEERS')}
-                  className="px-4 py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-rose-600/20 flex items-center gap-1.5 hover:scale-[1.02] active:scale-95"
-                >
-                  <Heart className="w-3.5 h-3.5 fill-current" />
-                  <span>Send Cheer (+15 XP)</span>
-                </button>
-              </div>
-            </div>
+                  <Button
+                    variant="amber"
+                    size="sm"
+                    onClick={() => setActiveParentTab('CHEERS')}
+                    className="gap-1.5 text-xs"
+                  >
+                    <Heart className="w-3.5 h-3.5 fill-current" />
+                    <span>Send cheer (+15 XP)</span>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           )}
 
           {/* Tab Navigation */}
-          <div className="flex items-center gap-2 border-b border-gray-800 pb-3 overflow-x-auto scrollbar-thin">
+          <div className="flex items-center gap-2 border-b border-border-dark pb-3 overflow-x-auto">
             <button
               onClick={() => setActiveParentTab('OVERVIEW')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shrink-0 ${
+              className={`px-4 py-2 rounded-[10px] text-xs font-semibold transition-all flex items-center gap-2 shrink-0 ${
                 activeParentTab === 'OVERVIEW'
-                  ? 'bg-rose-600 text-white shadow-md'
-                  : 'bg-gray-900 text-gray-400 hover:text-white'
+                  ? 'bg-gold-500 text-slate-950 shadow-sm'
+                  : 'bg-surface-dark text-slate-400 hover:text-white border border-border-dark'
               }`}
             >
               <TrendingUp className="w-4 h-4" />
-              <span>Learning Velocity & Milestones</span>
+              <span>Velocity & Milestones</span>
             </button>
 
             <button
               onClick={() => setActiveParentTab('REPORTS')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shrink-0 ${
+              className={`px-4 py-2 rounded-[10px] text-xs font-semibold transition-all flex items-center gap-2 shrink-0 ${
                 activeParentTab === 'REPORTS'
-                  ? 'bg-rose-600 text-white shadow-md'
-                  : 'bg-gray-900 text-gray-400 hover:text-white'
+                  ? 'bg-gold-500 text-slate-950 shadow-sm'
+                  : 'bg-surface-dark text-slate-400 hover:text-white border border-border-dark'
               }`}
             >
               <FileText className="w-4 h-4" />
               <span>Progress & Assessment Reports</span>
               {reportData?.mentorEvaluations?.length > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-emerald-500 text-gray-950 font-mono text-[10px] font-bold">
+                <span className="px-1.5 py-0.2 rounded-full bg-slate-900 text-gold-400 font-mono text-[10px] font-bold">
                   {reportData.mentorEvaluations.length}
                 </span>
               )}
@@ -265,479 +255,453 @@ export default function ParentPage() {
 
             <button
               onClick={() => setActiveParentTab('CHEERS')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shrink-0 ${
+              className={`px-4 py-2 rounded-[10px] text-xs font-semibold transition-all flex items-center gap-2 shrink-0 ${
                 activeParentTab === 'CHEERS'
-                  ? 'bg-rose-600 text-white shadow-md'
-                  : 'bg-gray-900 text-gray-400 hover:text-white'
+                  ? 'bg-gold-500 text-slate-950 shadow-sm'
+                  : 'bg-surface-dark text-slate-400 hover:text-white border border-border-dark'
               }`}
             >
-              <Heart className="w-4 h-4 fill-rose-400" />
+              <Sparkles className="w-4 h-4" />
               <span>Encouragement & Cheers</span>
               {currentChild?.cheers?.length > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-rose-500/20 text-rose-300 font-mono text-[10px]">
+                <span className="px-1.5 py-0.2 rounded-full bg-slate-900 text-gold-400 font-mono text-[10px] font-bold">
                   {currentChild.cheers.length}
                 </span>
               )}
             </button>
           </div>
 
-          {/* ─────────────────────────────────────────────────────────────
-              TAB 1: LEARNING VELOCITY & MILESTONES
-              ───────────────────────────────────────────────────────────── */}
+          {/* TAB 1: LEARNING VELOCITY */}
           {activeParentTab === 'OVERVIEW' && currentChild && (
-            <div className="space-y-8">
+            <div className="space-y-6">
               {/* Quick Metrics */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-                  <div className="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-400 mb-3">
-                    <Flame className="w-5 h-5 fill-orange-400" />
-                  </div>
-                  <div className="text-xs text-gray-400">Learning Streak</div>
-                  <div className="text-2xl font-bold text-white mt-1">{currentChild.streak} Days</div>
-                  <div className="text-[11px] text-orange-400 mt-0.5 font-medium">Consistent daily habit</div>
-                </div>
+                <Card>
+                  <CardContent className="p-5">
+                    <div className="w-9 h-9 rounded-full bg-gold-500/10 border border-gold-500/25 flex items-center justify-center text-gold-400 mb-3">
+                      <Flame className="w-5 h-5 fill-gold-500" />
+                    </div>
+                    <p className="text-xs text-slate-400">Daily Streak</p>
+                    <p className="font-mono text-2xl font-bold text-white mt-1">{currentChild.streak} Days</p>
+                    <p className="text-[11px] text-gold-400 mt-0.5">Consistent daily habit</p>
+                  </CardContent>
+                </Card>
 
-                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-                  <div className="w-10 h-10 rounded-xl bg-primary-500/10 border border-primary-500/30 flex items-center justify-center text-primary-400 mb-3">
-                    <Clock className="w-5 h-5" />
-                  </div>
-                  <div className="text-xs text-gray-400">Estimated Effort</div>
-                  <div className="text-2xl font-bold text-white mt-1">
-                    ~{currentChild.estimatedHours || 1} Hours
-                  </div>
-                  <div className="text-[11px] text-primary-400 mt-0.5 font-medium">Focused code execution</div>
-                </div>
+                <Card>
+                  <CardContent className="p-5">
+                    <div className="w-9 h-9 rounded-full bg-primary-500/10 border border-primary-500/25 flex items-center justify-center text-primary-400 mb-3">
+                      <Clock className="w-5 h-5" />
+                    </div>
+                    <p className="text-xs text-slate-400">Study Velocity</p>
+                    <p className="font-mono text-2xl font-bold text-white mt-1">
+                      ~{currentChild.estimatedHours || 1} Hours
+                    </p>
+                    <p className="text-[11px] text-primary-400 mt-0.5">Focused code execution</p>
+                  </CardContent>
+                </Card>
 
-                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-                  <div className="w-10 h-10 rounded-xl bg-accent-500/10 border border-accent-500/30 flex items-center justify-center text-accent-400 mb-3">
-                    <Trophy className="w-5 h-5" />
-                  </div>
-                  <div className="text-xs text-gray-400">Total Experience</div>
-                  <div className="text-2xl font-bold text-white mt-1">{currentChild.xp} XP</div>
-                  <div className="text-[11px] text-accent-400 mt-0.5 font-medium">Gamified progress points</div>
-                </div>
+                <Card>
+                  <CardContent className="p-5">
+                    <div className="w-9 h-9 rounded-full bg-accent-500/10 border border-accent-500/25 flex items-center justify-center text-accent-400 mb-3">
+                      <Trophy className="w-5 h-5" />
+                    </div>
+                    <p className="text-xs text-slate-400">Total Experience</p>
+                    <p className="font-mono text-2xl font-bold text-accent-400 mt-1">{currentChild.xp} XP</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Verified points earned</p>
+                  </CardContent>
+                </Card>
 
-                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-3">
-                    <CheckCircle2 className="w-5 h-5" />
-                  </div>
-                  <div className="text-xs text-gray-400">Missions Completed</div>
-                  <div className="text-2xl font-bold text-white mt-1">
-                    {currentChild.completedMissionsCount} Projects
-                  </div>
-                  <div className="text-[11px] text-emerald-400 mt-0.5 font-medium">Interactive challenges</div>
-                </div>
+                <Card>
+                  <CardContent className="p-5">
+                    <div className="w-9 h-9 rounded-full bg-accent-500/10 border border-accent-500/25 flex items-center justify-center text-accent-400 mb-3">
+                      <CheckCircle2 className="w-5 h-5" />
+                    </div>
+                    <p className="text-xs text-slate-400">Missions Completed</p>
+                    <p className="font-mono text-2xl font-bold text-white mt-1">
+                      {currentChild.completedMissionsCount}
+                    </p>
+                    <p className="text-[11px] text-accent-400 mt-0.5">Passes automated tests</p>
+                  </CardContent>
+                </Card>
               </div>
 
               {/* Progress Summary Card */}
-              <div className="bg-gradient-to-r from-gray-900 to-gray-950 border border-gray-800 rounded-3xl p-6 sm:p-8 space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-white">Curriculum Track Progression</h3>
-                    <p className="text-xs text-gray-400 mt-0.5">
-                      Enrolled in <strong className="text-primary-400">{currentChild.trackName}</strong>
-                    </p>
+              <Card>
+                <CardHeader>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <CardTitle>Curriculum Progression</CardTitle>
+                      <CardDescription>
+                        Enrolled track: <strong className="text-primary-400">{currentChild.trackName}</strong>
+                      </CardDescription>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-mono text-2xl font-bold text-white">
+                        {currentChild.completionRate}%
+                      </span>
+                      <span className="text-xs text-slate-400 block font-mono">Milestone completion rate</span>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <span className="text-2xl font-extrabold text-white">
-                      {currentChild.completionRate}%
-                    </span>
-                    <span className="text-xs text-gray-400 block">Relative milestone rate</span>
+                </CardHeader>
+                <CardContent>
+                  <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gold-500 transition-all duration-500 rounded-full"
+                      style={{ width: `${Math.max(5, currentChild.completionRate)}%` }}
+                    />
                   </div>
-                </div>
+                </CardContent>
+              </Card>
 
-                <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-rose-500 via-primary-500 to-accent-500 transition-all duration-500"
-                    style={{ width: `${Math.max(5, currentChild.completionRate)}%` }}
-                  />
-                </div>
-              </div>
+              {/* Recent Project Submissions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Project Submissions</CardTitle>
+                  <CardDescription>Latest challenges attempted and reviewed</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!currentChild.recentActivity || currentChild.recentActivity.length === 0 ? (
+                    <p className="text-xs text-slate-500">No project submissions logged yet.</p>
+                  ) : (
+                    <div className="divide-y divide-border-dark">
+                      {currentChild.recentActivity.map((act: any, idx: number) => (
+                        <div key={idx} className="py-3 flex items-center justify-between gap-4 text-xs">
+                          <div className="space-y-0.5">
+                            <div className="font-semibold text-white text-sm">{act.missionTitle}</div>
+                            <div className="text-slate-400 font-mono text-[11px]">
+                              {act.courseName} · {new Date(act.date).toLocaleDateString()}
+                            </div>
+                          </div>
 
-              {/* Recent Verified Activities */}
-              <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 space-y-4">
-                <h3 className="text-base font-bold text-white">Recent Project Submissions</h3>
-                {!currentChild.recentActivity || currentChild.recentActivity.length === 0 ? (
-                  <p className="text-xs text-gray-500">No project submissions logged yet.</p>
-                ) : (
-                  <div className="space-y-3">
-                    {currentChild.recentActivity.map((act: any, idx: number) => (
-                      <div
-                        key={idx}
-                        className="p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 flex items-center justify-between gap-4 text-xs"
-                      >
-                        <div className="space-y-1">
-                          <div className="font-bold text-white text-sm">{act.missionTitle}</div>
-                          <div className="text-gray-400">
-                            Course: <span className="text-gray-200">{act.courseName}</span> •{' '}
-                            <span>{new Date(act.date).toLocaleDateString()}</span>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="xp">+{act.xp} XP</Badge>
+                            <Badge variant="secondary">{act.status}</Badge>
                           </div>
                         </div>
-
-                        <div className="flex items-center gap-3">
-                          <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold font-mono">
-                            +{act.xp} XP
-                          </span>
-                          <span className="px-2.5 py-1 rounded-full bg-gray-800 text-gray-300 font-medium">
-                            {act.status}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
           )}
 
-          {/* ─────────────────────────────────────────────────────────────
-              TAB 2: PROGRESS REPORTS & EVALUATION RESULTS (REPLACED CHAT)
-              ───────────────────────────────────────────────────────────── */}
+          {/* TAB 2: PROGRESS REPORTS & EVALUATION RESULTS */}
           {activeParentTab === 'REPORTS' && currentChild && (
-            <div className="space-y-8">
+            <div className="space-y-6">
               {/* Report Header Card */}
-              <div className="bg-gradient-to-r from-gray-900 via-gray-900 to-primary-950/20 border border-gray-800 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl">
-                <div className="space-y-1">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/30 text-primary-300 text-xs font-bold uppercase tracking-wider">
-                    <FileText className="w-3.5 h-3.5" />
-                    <span>Official Academic & Progress Report</span>
+              <Card className="border-gold-500/25 bg-surface-dark">
+                <CardContent className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                  <div className="space-y-1">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-semibold">
+                      <FileText className="w-3.5 h-3.5" />
+                      <span>Academic Progress Report</span>
+                    </div>
+                    <h2 className="font-heading text-2xl font-bold text-white pt-1">
+                      {currentChild.name}’s Certified Report Card
+                    </h2>
+                    <p className="text-xs text-slate-400 max-w-xl font-body">
+                      Curriculum mastery status, diagnostic assessment evaluation, and certified mentor reviews.
+                    </p>
                   </div>
-                  <h2 className="text-2xl font-bold text-white pt-1">
-                    {currentChild.name}’s Learning Report Card
-                  </h2>
-                  <p className="text-xs text-gray-400 max-w-xl">
-                    Comprehensive skill evaluation, curriculum mastery status, and certified mentor evaluations.
-                  </p>
-                </div>
 
-                <button
-                  onClick={() => window.print()}
-                  className="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-white rounded-xl text-xs font-bold transition-all border border-gray-700 flex items-center gap-2 self-start sm:self-auto shadow-sm"
-                >
-                  <Printer className="w-4 h-4 text-primary-400" />
-                  <span>Print / Save Report</span>
-                </button>
-              </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => window.print()}
+                    className="gap-2 self-start sm:self-auto text-xs"
+                  >
+                    <Printer className="w-4 h-4 text-gold-400" />
+                    <span>Print / Save Report</span>
+                  </Button>
+                </CardContent>
+              </Card>
 
               {loadingReport ? (
                 <LoadingSpinner />
               ) : (
-                <div className="space-y-8">
-                  {/* 1. AI Placement & Skill Assessment Results */}
-                  <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 space-y-6">
-                    <div className="flex items-center justify-between border-b border-gray-800 pb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-primary-500/10 border border-primary-500/30 rounded-xl text-primary-400">
-                          <Compass className="w-5 h-5" />
+                <div className="space-y-6">
+                  {/* AI Placement & Skill Assessment */}
+                  <Card>
+                    <CardHeader className="border-b border-border-dark pb-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-primary-500/10 border border-primary-500/25 rounded-[10px] text-primary-400">
+                            <Compass className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <CardTitle className="text-base">Skill Assessment & Diagnostic Results</CardTitle>
+                            <CardDescription>Onboarding diagnostic evaluation</CardDescription>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="text-base font-bold text-white">AI Skill Assessment & Placement Results</h3>
-                          <p className="text-xs text-gray-400">
-                            Diagnostic evaluation performed upon student onboarding
+
+                        <Badge variant="verified">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          {reportData?.assessmentResult?.completed ? 'Verified Assessment' : 'Diagnostic Completed'}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+
+                    <CardContent className="pt-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 bg-night rounded-[10px] border border-border-dark space-y-1">
+                          <span className="text-[11px] font-mono uppercase tracking-wider text-primary-400 font-semibold">
+                            Assigned Career Track
+                          </span>
+                          <p className="font-heading text-base font-bold text-white">
+                            {reportData?.assessmentResult?.trackName || currentChild.trackName}
+                          </p>
+                          <p className="text-xs text-slate-400 leading-relaxed font-body">
+                            {reportData?.assessmentResult?.trackDescription ||
+                              'Curriculum tailored to build modern interactive projects with industry code standards.'}
                           </p>
                         </div>
-                      </div>
 
-                      <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-xs font-bold flex items-center gap-1.5">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        {reportData?.assessmentResult?.completed ? 'Verified Assessment' : 'Pending Diagnostic'}
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="p-4 bg-gray-950/80 rounded-2xl border border-gray-800/80 space-y-1.5">
-                        <span className="text-[11px] font-bold text-primary-400 uppercase tracking-wider">
-                          Assigned Career Subject Path
-                        </span>
-                        <div className="text-lg font-bold text-white">
-                          {reportData?.assessmentResult?.trackName || currentChild.trackName}
-                        </div>
-                        <p className="text-xs text-gray-400 leading-relaxed">
-                          {reportData?.assessmentResult?.trackDescription ||
-                            'Curriculum tailored to build modern interactive projects with industry code standards.'}
-                        </p>
-                      </div>
-
-                      <div className="p-4 bg-gray-950/80 rounded-2xl border border-gray-800/80 space-y-2">
-                        <span className="text-[11px] font-bold text-accent-400 uppercase tracking-wider">
-                          Competency Milestones
-                        </span>
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                          <div className="p-2 bg-gray-900 rounded-xl border border-gray-800">
-                            <span className="text-gray-400 block text-[10px]">Total Missions</span>
-                            <span className="text-sm font-bold text-white">
-                              {reportData?.track?.totalMissions || 0} Missions
-                            </span>
-                          </div>
-                          <div className="p-2 bg-gray-900 rounded-xl border border-gray-800">
-                            <span className="text-gray-400 block text-[10px]">Completed</span>
-                            <span className="text-sm font-bold text-emerald-400">
-                              {reportData?.track?.completedMissions || 0} Passed
-                            </span>
-                          </div>
-                          <div className="p-2 bg-gray-900 rounded-xl border border-gray-800">
-                            <span className="text-gray-400 block text-[10px]">Academic Level</span>
-                            <span className="text-sm font-bold text-white">Level {currentChild.level}</span>
-                          </div>
-                          <div className="p-2 bg-gray-900 rounded-xl border border-gray-800">
-                            <span className="text-gray-400 block text-[10px]">Active Habit</span>
-                            <span className="text-sm font-bold text-orange-400">{currentChild.streak} Day Streak</span>
+                        <div className="p-4 bg-night rounded-[10px] border border-border-dark space-y-2 font-mono">
+                          <span className="text-[11px] uppercase tracking-wider text-accent-400 font-semibold">
+                            Competency Summary
+                          </span>
+                          <div className="grid grid-cols-2 gap-2 text-xs">
+                            <div className="p-2.5 bg-surface-dark rounded-md border border-border-dark">
+                              <span className="text-slate-400 block text-[10px]">Total Missions</span>
+                              <span className="text-sm font-bold text-white">
+                                {reportData?.track?.totalMissions || 0}
+                              </span>
+                            </div>
+                            <div className="p-2.5 bg-surface-dark rounded-md border border-border-dark">
+                              <span className="text-slate-400 block text-[10px]">Passed</span>
+                              <span className="text-sm font-bold text-accent-400">
+                                {reportData?.track?.completedMissions || 0}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
 
-                  {/* 2. Course-by-Course Curriculum Mastery Breakdown */}
-                  <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 space-y-6">
-                    <div className="flex items-center justify-between border-b border-gray-800 pb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-accent-500/10 border border-accent-500/30 rounded-xl text-accent-400">
-                          <Layers className="w-5 h-5" />
+                  {/* Course-by-Course Curriculum Mastery Breakdown */}
+                  <Card>
+                    <CardHeader className="border-b border-border-dark pb-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-accent-500/10 border border-accent-500/25 rounded-[10px] text-accent-400">
+                            <Layers className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <CardTitle className="text-base">Curriculum Mastery Breakdown</CardTitle>
+                            <CardDescription>Step-by-step progress through enrolled courses</CardDescription>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="text-base font-bold text-white">Curriculum Progress Breakdown</h3>
-                          <p className="text-xs text-gray-400">
-                            Step-by-step course completion and unit mastery
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="text-right">
-                        <span className="text-sm font-bold text-white">
+                        <span className="font-mono text-xs font-semibold text-white">
                           Overall: {reportData?.track?.overallPercentage || 0}%
                         </span>
                       </div>
-                    </div>
+                    </CardHeader>
 
-                    <div className="space-y-4">
+                    <CardContent className="pt-4 space-y-3">
                       {reportData?.coursesProgress?.map((course: any, idx: number) => (
-                        <div
-                          key={course.id || idx}
-                          className="p-5 bg-gray-950/80 rounded-2xl border border-gray-800/80 space-y-3"
-                        >
+                        <div key={course.id || idx} className="p-4 bg-night rounded-[10px] border border-border-dark space-y-2">
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div>
                               <div className="flex items-center gap-2">
-                                <h4 className="text-sm font-bold text-white">{course.name}</h4>
+                                <span className="font-semibold text-sm text-white">{course.name}</span>
                                 {course.isCompleted ? (
-                                  <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">
-                                    Mastered ✅
-                                  </span>
+                                  <Badge variant="verified" size="sm">Mastered</Badge>
                                 ) : course.completedMissions > 0 ? (
-                                  <span className="px-2 py-0.5 rounded-md bg-primary-500/20 text-primary-300 border border-primary-500/30 text-[10px] font-bold">
-                                    In Progress ⚡
-                                  </span>
+                                  <Badge variant="default" size="sm">In progress</Badge>
                                 ) : (
-                                  <span className="px-2 py-0.5 rounded-md bg-gray-800 text-gray-400 text-[10px] font-medium">
-                                    Upcoming
-                                  </span>
+                                  <Badge variant="secondary" size="sm">Upcoming</Badge>
                                 )}
                               </div>
-                              <p className="text-xs text-gray-400 mt-0.5">{course.description}</p>
+                              <p className="text-xs text-slate-400 mt-0.5">{course.description}</p>
                             </div>
 
-                            <div className="text-right shrink-0">
-                              <span className="text-xs font-mono font-bold text-gray-200">
-                                {course.completedMissions} / {course.totalMissions} Missions
+                            <div className="font-mono text-xs text-right shrink-0">
+                              <span className="text-white font-medium">
+                                {course.completedMissions} / {course.totalMissions} missions
                               </span>
-                              <span className="text-[11px] text-gray-500 ml-2 font-bold">
-                                ({course.percentage}%)
-                              </span>
+                              <span className="text-slate-500 ml-1.5 font-bold">({course.percentage}%)</span>
                             </div>
                           </div>
 
-                          <div className="w-full h-2 bg-gray-900 rounded-full overflow-hidden border border-gray-800">
+                          <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
                             <div
-                              className={`h-full transition-all duration-500 ${
-                                course.isCompleted
-                                  ? 'bg-emerald-500'
-                                  : 'bg-gradient-to-r from-primary-500 to-accent-500'
-                              }`}
+                              className="h-full bg-accent-500 rounded-full transition-all duration-300"
                               style={{ width: `${course.percentage}%` }}
                             />
                           </div>
                         </div>
                       ))}
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
 
-                  {/* 3. Certified Mentor Evaluation Reports (Grades & Written Feedback) */}
-                  <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 space-y-6">
-                    <div className="flex items-center justify-between border-b border-gray-800 pb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400">
-                          <Award className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <h3 className="text-base font-bold text-white">
-                            Certified Mentor Evaluations & Code Reviews
-                          </h3>
-                          <p className="text-xs text-gray-400">
-                            Official grading and qualitative feedback on completed project code
-                          </p>
-                        </div>
-                      </div>
-
-                      <span className="text-xs text-emerald-400 font-semibold px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
-                        100% Industry Verified
-                      </span>
-                    </div>
-
-                    {!reportData?.mentorEvaluations || reportData.mentorEvaluations.length === 0 ? (
-                      <div className="text-center py-10 p-6 bg-gray-950/60 border border-gray-800/80 rounded-2xl space-y-2">
-                        <Award className="w-10 h-10 mx-auto text-gray-600" />
-                        <h4 className="text-sm font-bold text-white">No Mentor Evaluations Yet</h4>
-                        <p className="text-xs text-gray-400 max-w-md mx-auto">
-                          When {currentChild.name} completes coding challenges, industry mentors review and grade their code here.
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {reportData.mentorEvaluations.map((item: any) => (
-                          <div
-                            key={item.submissionId}
-                            className="p-5 bg-gray-950/80 rounded-2xl border border-gray-800/80 space-y-3 hover:border-emerald-500/30 transition-colors"
-                          >
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-800/60 pb-3">
-                              <div>
-                                <h4 className="text-sm font-bold text-white">{item.missionTitle}</h4>
-                                <div className="text-xs text-gray-400">
-                                  Course: <strong className="text-gray-300">{item.courseName}</strong> • Evaluated on{' '}
-                                  {new Date(item.date).toLocaleDateString()}
-                                </div>
-                              </div>
-
-                              <div className="flex items-center gap-3">
-                                {/* Star Rating */}
-                                <div className="flex items-center gap-1 bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-xl text-xs font-bold text-amber-300">
-                                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                                  <span>{item.review?.rating || 5} / 5</span>
-                                </div>
-
-                                <span className="px-2.5 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
-                                  Approved ✅
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Written Mentor Feedback */}
-                            <div className="space-y-1.5 pt-1">
-                              <div className="flex items-center gap-2 text-xs">
-                                <span className="font-bold text-accent-400">
-                                  {item.review?.mentorName || 'Certified Mentor'}
-                                </span>
-                                <span className="text-gray-500">•</span>
-                                <span className="text-gray-400 text-[11px]">
-                                  {item.review?.mentorHeadline || 'Staff Software Engineer'}
-                                </span>
-                              </div>
-                              <p className="text-xs text-gray-300 bg-gray-900/60 p-3.5 rounded-xl border border-gray-800 leading-relaxed italic">
-                                "{item.review?.feedback}"
-                              </p>
-                            </div>
+                  {/* Certified Mentor Evaluation Reports */}
+                  <Card>
+                    <CardHeader className="border-b border-border-dark pb-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-gold-500/10 border border-gold-500/25 rounded-[10px] text-gold-400">
+                            <Award className="w-5 h-5" />
                           </div>
-                        ))}
+                          <div>
+                            <CardTitle className="text-base">Mentor Evaluations & Code Reviews</CardTitle>
+                            <CardDescription>Qualitative grading from verified senior developers</CardDescription>
+                          </div>
+                        </div>
+
+                        <Badge variant="verified">100% Industry Verified</Badge>
                       </div>
-                    )}
-                  </div>
+                    </CardHeader>
+
+                    <CardContent className="pt-4">
+                      {!reportData?.mentorEvaluations || reportData.mentorEvaluations.length === 0 ? (
+                        <div className="text-center py-8 text-slate-500 text-xs font-body">
+                          No mentor evaluations yet. When {currentChild.name} completes coding challenges, certified mentors review and grade their code here.
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          {reportData.mentorEvaluations.map((item: any) => (
+                            <div
+                              key={item.submissionId}
+                              className="p-4 bg-night rounded-[10px] border border-border-dark space-y-2.5"
+                            >
+                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border-dark pb-2.5">
+                                <div>
+                                  <h4 className="font-semibold text-sm text-white">{item.missionTitle}</h4>
+                                  <p className="text-xs text-slate-400 font-mono">
+                                    {item.courseName} · Evaluated {new Date(item.date).toLocaleDateString()}
+                                  </p>
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                  <span className="inline-flex items-center gap-1 bg-gold-500/10 border border-gold-500/30 px-2.5 py-0.5 rounded-full font-mono text-xs font-bold text-gold-400">
+                                    <Star className="w-3.5 h-3.5 fill-gold-500" />
+                                    <span>{item.review?.rating || 5} / 5</span>
+                                  </span>
+                                  <Badge variant="verified">Approved</Badge>
+                                </div>
+                              </div>
+
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2 text-xs">
+                                  <span className="font-semibold text-accent-400">
+                                    {item.review?.mentorName || 'Certified Mentor'}
+                                  </span>
+                                  <span className="text-slate-500">·</span>
+                                  <span className="text-slate-400 text-[11px]">
+                                    {item.review?.mentorHeadline || 'Staff Software Engineer'}
+                                  </span>
+                                </div>
+                                <p className="text-xs text-slate-300 italic bg-surface-dark p-3 rounded-[8px] border border-border-dark leading-relaxed font-body">
+                                  "{item.review?.feedback}"
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 </div>
               )}
             </div>
           )}
 
-          {/* ─────────────────────────────────────────────────────────────
-              TAB 3: FAMILY ENCOURAGEMENT & CHEERS
-              ───────────────────────────────────────────────────────────── */}
+          {/* TAB 3: CHEERS & ENCOURAGEMENT */}
           {activeParentTab === 'CHEERS' && currentChild && (
-            <div className="space-y-8">
-              {/* Send Cheer Form */}
-              <div className="bg-gradient-to-r from-rose-950/30 via-gray-900 to-gray-900 border border-rose-500/30 rounded-3xl p-6 sm:p-8 space-y-6">
-                <div>
-                  <h3 className="text-lg font-bold text-white">Send Encouragement to {currentChild.name}</h3>
-                  <p className="text-xs text-gray-400 mt-1">
+            <div className="space-y-6">
+              <Card className="border-gold-500/25">
+                <CardHeader>
+                  <CardTitle>Send Encouragement Boost</CardTitle>
+                  <CardDescription>
                     Your cheers appear on {currentChild.name}’s dashboard and reward them with{' '}
-                    <strong className="text-rose-400">+15 XP</strong> to boost their streak!
-                  </p>
-                </div>
-
-                {/* Preset Cheer Chips */}
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold text-gray-300">Quick Templates</label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {cheerTemplates.map((template, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setCheerNote(template)}
-                        className={`p-3 rounded-xl text-left text-xs border transition-all ${
-                          cheerNote === template
-                            ? 'bg-rose-600/20 border-rose-500 text-rose-200'
-                            : 'bg-gray-950/60 border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800'
-                        }`}
-                      >
-                        {template}
-                      </button>
-                    ))}
+                    <strong className="text-gold-400 font-mono">+15 XP</strong> to boost their streak!
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Preset Cheer Chips */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-slate-300">Quick templates</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {cheerTemplates.map((template, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setCheerNote(template)}
+                          className={`p-3 rounded-[10px] text-left text-xs border transition-all ${
+                            cheerNote === template
+                              ? 'bg-gold-500/15 border-gold-500 text-gold-300'
+                              : 'bg-night border-border-dark text-slate-400 hover:text-white hover:bg-surface-raised'
+                          }`}
+                        >
+                          {template}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-3">
-                  <textarea
-                    rows={3}
-                    value={cheerNote}
-                    onChange={(e) => setCheerNote(e.target.value)}
-                    placeholder="Write a personal encouragement note..."
-                    className="w-full bg-gray-950 border border-gray-800 rounded-2xl p-4 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-rose-500 transition-colors"
-                  />
+                  <div className="space-y-3">
+                    <textarea
+                      rows={3}
+                      value={cheerNote}
+                      onChange={(e) => setCheerNote(e.target.value)}
+                      placeholder="Write a warm note of encouragement..."
+                      className="w-full bg-night border border-border-dark rounded-[10px] p-3.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-gold-500 transition-colors font-body"
+                    />
 
-                  <button
-                    onClick={() =>
-                      cheerMutation.mutate({
-                        childId: currentChild.id,
-                        message: cheerNote,
-                      })
-                    }
-                    disabled={!cheerNote.trim() || cheerMutation.isPending}
-                    className="px-6 py-3 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-rose-600/20 flex items-center gap-2 disabled:opacity-50 hover:scale-[1.02] active:scale-95"
-                  >
-                    <Send className="w-4 h-4" />
-                    <span>Send Cheer (+15 XP to {currentChild.name})</span>
-                  </button>
-                </div>
-              </div>
+                    <Button
+                      variant="amber"
+                      size="default"
+                      onClick={() =>
+                        cheerMutation.mutate({
+                          childId: currentChild.id,
+                          message: cheerNote,
+                        })
+                      }
+                      disabled={!cheerNote.trim() || cheerMutation.isPending}
+                      isLoading={cheerMutation.isPending}
+                      className="gap-2"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>Send Cheer (+15 XP to {currentChild.name})</span>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
 
               {/* Past Cheers List */}
-              <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 space-y-4">
-                <h3 className="text-base font-bold text-white">Recent Cheers Sent</h3>
-                {!currentChild.cheers || currentChild.cheers.length === 0 ? (
-                  <p className="text-xs text-gray-500">No encouragement cheers sent yet.</p>
-                ) : (
-                  <div className="space-y-3">
-                    {currentChild.cheers.map((cheer: any) => (
-                      <div
-                        key={cheer.id}
-                        className="p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 flex items-start justify-between gap-4 text-xs"
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="p-2 bg-rose-500/10 border border-rose-500/30 rounded-xl text-rose-400 mt-0.5">
-                            <Heart className="w-4 h-4 fill-rose-400" />
+              <Card>
+                <CardHeader>
+                  <CardTitle>Cheer History</CardTitle>
+                  <CardDescription>Motivational boosts sent to {currentChild.name}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!currentChild.cheers || currentChild.cheers.length === 0 ? (
+                    <p className="text-xs text-slate-500 py-2">No encouragement cheers sent yet.</p>
+                  ) : (
+                    <div className="divide-y divide-border-dark">
+                      {currentChild.cheers.map((cheer: any) => (
+                        <div key={cheer.id} className="py-3 flex items-start justify-between gap-4 text-xs">
+                          <div className="flex items-start gap-3">
+                            <div className="p-1.5 bg-gold-500/10 border border-gold-500/25 rounded-full text-gold-400 mt-0.5">
+                              <Heart className="w-3.5 h-3.5 fill-gold-500" />
+                            </div>
+                            <div>
+                              <p className="text-slate-200 font-body">{cheer.message}</p>
+                              <span className="text-[11px] text-slate-500 mt-0.5 block font-mono">
+                                Sent {new Date(cheer.createdAt).toLocaleString()}
+                              </span>
+                            </div>
                           </div>
-                          <div>
-                            <p className="text-gray-200">{cheer.message}</p>
-                            <span className="text-[11px] text-gray-500 mt-1 block">
-                              Sent on {new Date(cheer.createdAt).toLocaleString()}
-                            </span>
-                          </div>
-                        </div>
 
-                        <span className="px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-300 font-bold font-mono shrink-0">
-                          +15 XP
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                          <Badge variant="streak">+15 XP</Badge>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
           )}
         </div>
@@ -745,37 +709,43 @@ export default function ParentPage() {
 
       {/* Link Child Modal */}
       {showLinkModal && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-4">
-            <h3 className="text-lg font-bold text-white">Link a Student Account</h3>
-            <p className="text-xs text-gray-400 leading-relaxed">
-              Enter the email address registered by your child on DuniyaAI. You'll gain access to their progress reports and milestone reviews.
-            </p>
-
-            <input
-              type="email"
-              placeholder="student@levelup.com"
-              value={linkEmail}
-              onChange={(e) => setLinkEmail(e.target.value)}
-              className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primary-500"
-            />
-
-            <div className="flex items-center justify-end gap-3 pt-2">
+        <div className="fixed inset-0 z-50 bg-night/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <Card className="max-w-md w-full p-6 space-y-4 shadow-2xl animate-slide-up">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg">Link a Student Account</CardTitle>
               <button
                 onClick={() => setShowLinkModal(false)}
-                className="px-4 py-2 text-xs font-semibold text-gray-400 hover:text-white transition-colors"
+                className="p-1 rounded-md text-slate-400 hover:text-white"
               >
-                Cancel
-              </button>
-              <button
-                onClick={() => linkMutation.mutate(linkEmail)}
-                disabled={!linkEmail || linkMutation.isPending}
-                className="px-5 py-2 bg-primary-600 hover:bg-primary-500 text-white rounded-xl text-xs font-bold transition-colors disabled:opacity-50 shadow-lg shadow-primary-600/30"
-              >
-                {linkMutation.isPending ? 'Linking...' : 'Confirm Link'}
+                <X className="w-5 h-5" />
               </button>
             </div>
-          </div>
+            <CardDescription>
+              Enter the student email address registered on DuniyaAI to link their profile and track verified reports.
+            </CardDescription>
+
+            <Input
+              type="email"
+              placeholder="student@example.com"
+              value={linkEmail}
+              onChange={(e) => setLinkEmail(e.target.value)}
+            />
+
+            <div className="flex items-center justify-end gap-2.5 pt-2">
+              <Button variant="outline" size="sm" onClick={() => setShowLinkModal(false)}>
+                Cancel
+              </Button>
+              <Button
+                variant="amber"
+                size="sm"
+                onClick={() => linkMutation.mutate(linkEmail)}
+                disabled={!linkEmail || linkMutation.isPending}
+                isLoading={linkMutation.isPending}
+              >
+                Confirm link
+              </Button>
+            </div>
+          </Card>
         </div>
       )}
     </div>

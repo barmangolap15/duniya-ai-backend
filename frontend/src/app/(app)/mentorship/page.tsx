@@ -13,18 +13,20 @@ import {
   CheckCircle2,
   Clock,
   Sparkles,
-  ExternalLink,
   ChevronRight,
-  User,
   PlusCircle,
   HelpCircle,
   Copy,
   Check,
   ShieldCheck,
-  AlertCircle,
-  Layers,
+  X,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
 
 export default function MentorshipHubPage() {
   const { user } = useAuth();
@@ -64,7 +66,6 @@ export default function MentorshipHubPage() {
     queryFn: () => api.dashboard.get(),
   });
 
-  // Auto-select first thread if none selected
   const activeThread =
     threads?.find((t: any) => t.id === selectedThreadId) || threads?.[0] || null;
 
@@ -149,7 +150,6 @@ export default function MentorshipHubPage() {
 
   if (loadingThreads) return <LoadingSpinner />;
 
-  // Filter threads
   const filteredThreads = (threads || []).filter((t: any) => {
     if (filterStatus === 'ALL') return true;
     if (filterStatus === 'RESOLVED') return t.status === 'RESOLVED';
@@ -160,87 +160,81 @@ export default function MentorshipHubPage() {
   const primaryMentor = mentors?.[0] || {
     name: 'Elena Rostova',
     headline: 'Staff Frontend Engineer @ TechCorp | 8+ yrs Industry Mentor',
-    avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=250',
   };
 
   return (
     <div className="p-6 sm:p-10 max-w-7xl mx-auto w-full space-y-8">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-gray-800">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border-dark">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-accent-500/10 border border-accent-500/30 text-accent-400 text-xs font-semibold flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-accent-400" />
-              1-on-1 Engineering Guidance
+            <span className="px-2.5 py-0.5 rounded-full bg-accent-500/10 border border-accent-500/30 text-accent-400 text-xs font-semibold flex items-center gap-1.5 font-body">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>1-on-1 Engineering Guidance</span>
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-primary-500/10 border border-primary-500/30 text-primary-300 text-xs font-semibold flex items-center gap-1">
-              <ShieldCheck className="w-3 h-3 text-primary-400" />
-              Parental Safety Oversight Active
+            <span className="px-2.5 py-0.5 rounded-full bg-primary-500/10 border border-primary-500/30 text-primary-300 text-xs font-semibold flex items-center gap-1.5 font-body">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Verified Mentor Support</span>
             </span>
           </div>
-          <h1 className="text-3xl font-extrabold text-white">Mentorship & Code Guidance Hub</h1>
-          <p className="text-gray-400 text-sm mt-1">
+          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-white tracking-tight">
+            Mentorship & Code Guidance
+          </h1>
+          <p className="text-slate-400 text-sm font-body mt-1">
             Connect directly with verified senior engineers. Get code feedback, ask architectural questions, and debug your mission work.
           </p>
         </div>
 
-        <button
+        <Button
+          size="default"
           onClick={() => setShowNewThreadModal(true)}
-          className="px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-primary-600/20 flex items-center gap-2 self-start md:self-auto hover:scale-[1.02] active:scale-95"
+          className="gap-2 self-start md:self-auto"
         >
           <PlusCircle className="w-4 h-4" />
-          Ask Mentor a Question
-        </button>
+          <span>Ask mentor a question</span>
+        </Button>
       </div>
 
       {/* Mentor Spotlight Card */}
-      <div className="p-4 sm:p-5 bg-gradient-to-r from-gray-900 via-gray-900 to-accent-950/40 border border-gray-800 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <img
-              src={primaryMentor.avatarUrl}
-              alt={primaryMentor.name}
-              className="w-13 h-13 rounded-2xl object-cover border-2 border-accent-500/40"
-            />
-            <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-gray-950 rounded-full" title="Online & Available" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="font-bold text-white text-base">{primaryMentor.name}</h3>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-accent-500/20 text-accent-300 border border-accent-500/30">
-                Staff Mentor
-              </span>
+      <Card className="border-accent-500/25 bg-gradient-to-r from-surface-dark via-surface-dark to-accent-950/15">
+        <CardContent className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Avatar name={primaryMentor.name} size="lg" variant="mentor" />
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="font-heading text-base font-bold text-white">{primaryMentor.name}</h3>
+                <Badge variant="verified" size="sm">
+                  Staff Mentor
+                </Badge>
+              </div>
+              <p className="text-xs text-slate-400 mt-0.5 font-body">{primaryMentor.headline}</p>
             </div>
-            <p className="text-xs text-gray-400 mt-0.5">{primaryMentor.headline}</p>
           </div>
-        </div>
 
-        <div className="flex items-center gap-3 self-end sm:self-auto text-xs text-gray-400">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-950 rounded-xl border border-gray-800">
+          <div className="flex items-center gap-2 text-xs text-slate-400 font-mono">
             <Clock className="w-3.5 h-3.5 text-accent-400" />
-            <span>Avg Response: <strong className="text-white">Under 15 mins</strong></span>
+            <span>Avg response: <strong className="text-white">Under 15 mins</strong></span>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Main Two-Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Threads List (5 cols) */}
-        <div className="lg:col-span-5 bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden flex flex-col">
-          {/* Filter Bar */}
-          <div className="p-3 border-b border-gray-800 bg-gray-950/60 flex items-center justify-between">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+        <div className="lg:col-span-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono font-medium text-slate-400 uppercase tracking-wider">
               Discussions ({filteredThreads.length})
             </span>
-            <div className="flex items-center gap-1 bg-gray-900 p-0.5 rounded-lg border border-gray-800">
+            <div className="flex items-center gap-1 bg-surface-dark p-1 rounded-[8px] border border-border-dark font-body text-xs">
               {(['ALL', 'OPEN', 'RESOLVED'] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setFilterStatus(tab)}
-                  className={`px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors ${
+                  className={`px-2.5 py-1 text-[11px] font-semibold rounded-[6px] transition-colors ${
                     filterStatus === tab
                       ? 'bg-primary-600 text-white shadow-sm'
-                      : 'text-gray-400 hover:text-white'
+                      : 'text-slate-400 hover:text-white'
                   }`}
                 >
                   {tab === 'ALL' ? 'All' : tab === 'OPEN' ? 'Active' : 'Resolved'}
@@ -249,386 +243,227 @@ export default function MentorshipHubPage() {
             </div>
           </div>
 
-          {/* Thread Cards */}
-          <div className="divide-y divide-gray-800 max-h-[620px] overflow-y-auto">
-            {filteredThreads.length === 0 ? (
-              <div className="p-8 text-center text-gray-500 space-y-2">
-                <HelpCircle className="w-8 h-8 mx-auto text-gray-600" />
-                <p className="text-sm font-medium">No discussions found</p>
-                <p className="text-xs">Have a question? Click "Ask Mentor a Question" to begin!</p>
-              </div>
-            ) : (
-              filteredThreads.map((thread: any) => {
-                const isSelected = activeThread?.id === thread.id;
-                const lastMsg = thread.messages?.[thread.messages.length - 1];
-                const isWaitingOnMentor = thread.status === 'WAITING_ON_MENTOR';
-                const isResolved = thread.status === 'RESOLVED';
-
+          {filteredThreads.length === 0 ? (
+            <Card className="p-8 text-center text-slate-400 text-xs">
+              No discussions in this filter.
+            </Card>
+          ) : (
+            <div className="space-y-2 max-h-[600px] overflow-y-auto pr-1">
+              {filteredThreads.map((t: any) => {
+                const isSelected = activeThread?.id === t.id;
                 return (
-                  <button
-                    key={thread.id}
-                    onClick={() => setSelectedThreadId(thread.id)}
-                    className={`w-full p-4 text-left transition-all flex flex-col gap-2 ${
+                  <div
+                    key={t.id}
+                    onClick={() => setSelectedThreadId(t.id)}
+                    className={`p-4 rounded-[12px] border cursor-pointer transition-all space-y-1.5 ${
                       isSelected
-                        ? 'bg-primary-950/30 border-l-4 border-l-primary-500'
-                        : 'hover:bg-gray-850 bg-gray-900/40'
+                        ? 'border-primary-500 bg-primary-500/10 shadow-sm'
+                        : 'border-border-dark bg-surface-dark hover:border-slate-700 hover:bg-surface-raised'
                     }`}
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-semibold text-accent-400 truncate max-w-[200px]">
-                        {thread.mission?.title || 'General Code Inquiry'}
-                      </span>
-                      <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0 ${
-                          isResolved
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                            : isWaitingOnMentor
-                              ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30'
-                              : 'bg-primary-500/10 text-primary-300 border border-primary-500/30'
-                        }`}
-                      >
-                        {isResolved ? 'Resolved' : isWaitingOnMentor ? 'Mentor Reviewing' : 'Mentor Replied'}
-                      </span>
+                      <h4 className="font-semibold text-sm text-white truncate">{t.subject}</h4>
+                      <Badge variant={t.status === 'RESOLVED' ? 'verified' : 'streak'} size="sm">
+                        {t.status}
+                      </Badge>
                     </div>
-
-                    <h4 className="font-bold text-white text-sm line-clamp-1">{thread.subject}</h4>
-
-                    {lastMsg && (
-                      <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">
-                        <strong className="text-gray-300">
-                          {lastMsg.senderRole === 'MENTOR' ? 'Elena: ' : 'You: '}
-                        </strong>
-                        {lastMsg.content}
-                      </p>
-                    )}
-
-                    <div className="flex items-center justify-between text-[11px] text-gray-500 pt-1">
-                      <span>{new Date(thread.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                      <span className="flex items-center gap-1 text-primary-400 font-medium">
-                        {thread.messages?.length || 0} messages
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </span>
-                    </div>
-                  </button>
+                    <p className="text-xs text-slate-400 font-body line-clamp-1">
+                      {t.messages?.[t.messages.length - 1]?.content || t.messages?.[0]?.content}
+                    </p>
+                    <p className="text-[11px] text-slate-500 font-mono">
+                      {new Date(t.updatedAt).toLocaleDateString()}
+                    </p>
+                  </div>
                 );
-              })
-            )}
-          </div>
+              })}
+            </div>
+          )}
         </div>
 
-        {/* Right Column: Active Thread Details & Interactive Chat (7 cols) */}
-        <div className="lg:col-span-7 bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden flex flex-col min-h-[620px]">
+        {/* Right Column: Chat & Reply Area (7 cols) */}
+        <div className="lg:col-span-7">
           {activeThread ? (
-            <>
-              {/* Thread Header */}
-              <div className="p-4 sm:p-5 border-b border-gray-800 bg-gray-950/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-accent-400">
-                      {activeThread.mission?.title ? `Mission: ${activeThread.mission.title}` : 'General Consultation'}
-                    </span>
-                    {activeThread.missionId && (
-                      <a
-                        href={`/mission/${activeThread.missionId}/`}
-                        className="text-[11px] text-primary-400 hover:text-primary-300 flex items-center gap-1"
-                      >
-                        <ExternalLink className="w-3 h-3" />
-                        Workspace
-                      </a>
-                    )}
+            <Card className="flex flex-col min-h-[500px]">
+              <CardHeader className="border-b border-border-dark pb-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5 min-w-0">
+                    <CardTitle className="text-base truncate">{activeThread.subject}</CardTitle>
+                    <CardDescription>
+                      Course mission: <strong className="text-white">{activeThread.mission?.title || 'General Code Inquiry'}</strong>
+                    </CardDescription>
                   </div>
-                  <h2 className="text-base sm:text-lg font-bold text-white">{activeThread.subject}</h2>
-                </div>
 
-                <div className="flex items-center gap-2">
-                  <button
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() =>
                       updateStatusMutation.mutate({
                         threadId: activeThread.id,
                         status: activeThread.status === 'RESOLVED' ? 'OPEN' : 'RESOLVED',
                       })
                     }
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 ${
-                      activeThread.status === 'RESOLVED'
-                        ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-                        : 'bg-emerald-600/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-600/30'
-                    }`}
+                    className="text-xs shrink-0"
                   >
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    {activeThread.status === 'RESOLVED' ? 'Reopen Question' : 'Mark Resolved'}
-                  </button>
+                    {activeThread.status === 'RESOLVED' ? 'Reopen' : 'Mark resolved'}
+                  </Button>
                 </div>
-              </div>
+              </CardHeader>
 
-              {/* Message Feed */}
-              <div className="flex-1 p-5 space-y-4 overflow-y-auto max-h-[480px]">
+              <CardContent className="p-4 sm:p-5 space-y-4 flex-1 overflow-y-auto max-h-[420px]">
                 {activeThread.messages?.map((msg: any) => {
-                  const isUser = msg.senderId === user?.id;
                   const isMentor = msg.senderRole === 'MENTOR';
-
                   return (
                     <div
                       key={msg.id}
-                      className={`flex gap-3 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}
+                      className={`p-4 rounded-[12px] text-xs space-y-2 ${
+                        isMentor
+                          ? 'bg-accent-950/20 border border-accent-500/30 ml-4 sm:ml-8'
+                          : 'bg-night border border-border-dark mr-4 sm:mr-8'
+                      }`}
                     >
-                      <img
-                        src={
-                          msg.sender?.avatarUrl ||
-                          (isMentor
-                            ? primaryMentor.avatarUrl
-                            : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250')
-                        }
-                        alt={msg.sender?.name || 'User'}
-                        className="w-8 h-8 rounded-xl object-cover shrink-0 border border-gray-700"
-                      />
-
-                      <div className={`space-y-1.5 max-w-[85%] ${isUser ? 'items-end' : 'items-start'}`}>
-                        <div className={`flex items-center gap-2 text-[11px] ${isUser ? 'justify-end' : 'justify-start'}`}>
-                          <span className="font-semibold text-gray-300">
-                            {isUser ? 'You' : msg.sender?.name || 'Elena Rostova'}
-                          </span>
-                          {isMentor && (
-                            <span className="px-1.5 py-0.2 rounded bg-accent-500/20 text-accent-300 font-mono text-[9px] border border-accent-500/30">
-                              STAFF MENTOR
-                            </span>
-                          )}
-                          <span className="text-gray-500">
-                            {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                          </span>
-                        </div>
-
-                        {/* Message Box */}
-                        <div
-                          className={`p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed ${
-                            isUser
-                              ? 'bg-primary-600 text-white rounded-tr-none'
-                              : 'bg-gray-800 text-gray-100 rounded-tl-none border border-gray-700'
-                          }`}
-                        >
-                          <p className="whitespace-pre-wrap">{msg.content}</p>
-
-                          {/* Code Snippet if present */}
-                          {msg.codeSnippet && (
-                            <div className="mt-3 relative rounded-xl bg-gray-950 border border-gray-800 p-3 overflow-hidden text-left">
-                              <div className="flex items-center justify-between text-[10px] text-gray-400 font-mono mb-2 border-b border-gray-800 pb-1">
-                                <span className="flex items-center gap-1 text-accent-400 font-bold">
-                                  <Code2 className="w-3 h-3" />
-                                  Code Context {msg.stepNumber ? `• Step ${msg.stepNumber}` : ''}
-                                </span>
-                                <button
-                                  type="button"
-                                  onClick={() => handleCopyCode(msg.codeSnippet, msg.id)}
-                                  className="text-gray-400 hover:text-white flex items-center gap-1"
-                                >
-                                  {copiedSnippetId === msg.id ? (
-                                    <Check className="w-3 h-3 text-emerald-400" />
-                                  ) : (
-                                    <Copy className="w-3 h-3" />
-                                  )}
-                                  <span>{copiedSnippetId === msg.id ? 'Copied' : 'Copy'}</span>
-                                </button>
-                              </div>
-                              <pre className="text-xs font-mono text-emerald-300 overflow-x-auto whitespace-pre p-1">
-                                <code>{msg.codeSnippet}</code>
-                              </pre>
-                            </div>
-                          )}
-                        </div>
+                      <div className="flex items-center justify-between text-[11px] font-mono">
+                        <span className={`font-semibold ${isMentor ? 'text-accent-400' : 'text-primary-300'}`}>
+                          {msg.senderName} ({msg.senderRole})
+                        </span>
+                        <span className="text-slate-500">{new Date(msg.createdAt).toLocaleTimeString()}</span>
                       </div>
+                      <p className="text-slate-200 leading-relaxed font-body">{msg.content}</p>
+                      {msg.codeSnippet && (
+                        <div className="relative group">
+                          <pre className="p-3 bg-night rounded-[8px] border border-border-dark font-mono text-[11px] text-accent-300 overflow-x-auto">
+                            <code>{msg.codeSnippet}</code>
+                          </pre>
+                          <button
+                            onClick={() => handleCopyCode(msg.codeSnippet, msg.id)}
+                            className="absolute top-2 right-2 p-1 bg-surface-raised rounded text-slate-400 hover:text-white"
+                            title="Copy code"
+                          >
+                            {copiedSnippetId === msg.id ? (
+                              <Check className="w-3.5 h-3.5 text-accent-400" />
+                            ) : (
+                              <Copy className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
-              </div>
+              </CardContent>
 
               {/* Reply Form */}
-              <div className="p-4 border-t border-gray-800 bg-gray-950">
-                <form onSubmit={handleSendReply} className="space-y-3">
-                  {showCodeInput && (
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between text-xs text-gray-400">
-                        <span className="flex items-center gap-1 font-mono text-accent-400">
-                          <Code2 className="w-3.5 h-3.5" /> Attach Code Snippet (HTML/CSS/JS)
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setShowCodeInput(false);
-                            setReplyCode('');
-                          }}
-                          className="text-gray-500 hover:text-gray-300 text-[11px]"
-                        >
-                          Remove snippet
-                        </button>
-                      </div>
-                      <textarea
-                        value={replyCode}
-                        onChange={(e) => setReplyCode(e.target.value)}
-                        placeholder="Paste code snippet here..."
-                        rows={4}
-                        className="w-full bg-gray-900 border border-gray-800 rounded-xl p-3 text-xs font-mono text-emerald-400 focus:outline-none focus:border-accent-500 resize-none"
-                      />
-                    </div>
-                  )}
+              <form onSubmit={handleSendReply} className="p-4 border-t border-border-dark bg-night/60 space-y-3">
+                <textarea
+                  rows={2}
+                  placeholder="Type your message or follow-up question..."
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  className="w-full bg-surface-dark border border-border-dark rounded-[10px] p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 font-body"
+                />
 
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setShowCodeInput(!showCodeInput)}
-                      className={`p-2.5 rounded-xl border transition-colors ${
-                        showCodeInput
-                          ? 'bg-accent-500/20 border-accent-500/40 text-accent-300'
-                          : 'bg-gray-900 border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800'
-                      }`}
-                      title="Attach code snippet"
-                    >
-                      <Code2 className="w-4 h-4" />
-                    </button>
+                {showCodeInput && (
+                  <textarea
+                    rows={3}
+                    placeholder="// Paste relevant code snippet here..."
+                    value={replyCode}
+                    onChange={(e) => setReplyCode(e.target.value)}
+                    className="w-full bg-night border border-border-dark rounded-[10px] p-3 text-xs font-mono text-accent-300 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                )}
 
-                    <input
-                      type="text"
-                      value={replyText}
-                      onChange={(e) => setReplyText(e.target.value)}
-                      placeholder="Write your reply or question to mentor..."
-                      className="flex-1 bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-primary-500 placeholder:text-gray-500"
-                    />
+                <div className="flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={() => setShowCodeInput(!showCodeInput)}
+                    className="text-xs text-primary-400 hover:text-primary-300 font-medium"
+                  >
+                    {showCodeInput ? '− Remove code block' : '+ Attach code snippet'}
+                  </button>
 
-                    <button
-                      type="submit"
-                      disabled={!replyText.trim() || addMessageMutation.isPending}
-                      className="px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50 flex items-center gap-1.5 hover:scale-[1.02] active:scale-95"
-                    >
-                      <Send className="w-3.5 h-3.5" />
-                      <span>Send</span>
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </>
+                  <Button
+                    type="submit"
+                    size="sm"
+                    disabled={!replyText.trim() || addMessageMutation.isPending}
+                    isLoading={addMessageMutation.isPending}
+                    className="gap-1.5"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Send message</span>
+                  </Button>
+                </div>
+              </form>
+            </Card>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-gray-500 space-y-3">
-              <MessageSquare className="w-12 h-12 text-gray-700" />
-              <h3 className="text-base font-bold text-white">No discussion selected</h3>
-              <p className="text-xs text-gray-400 max-w-sm">
-                Select an existing question from the left sidebar or start a new thread to get guidance from our staff mentors.
-              </p>
-              <button
-                onClick={() => setShowNewThreadModal(true)}
-                className="px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-xs font-bold rounded-xl transition-all"
-              >
-                Ask a Question
-              </button>
-            </div>
+            <Card className="h-full flex items-center justify-center p-12 text-slate-500 text-xs font-body">
+              Select an inquiry or click "Ask mentor a question" to start
+            </Card>
           )}
         </div>
       </div>
 
-      {/* Modal: Ask Mentor a Question */}
+      {/* New Question Modal */}
       {showNewThreadModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-gray-900 border border-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-800">
-              <div className="flex items-center gap-2">
-                <div className="p-2 bg-primary-500/10 border border-primary-500/30 rounded-xl text-primary-400">
-                  <MessageSquare className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">Ask Mentor a Question</h3>
-                  <p className="text-xs text-gray-400">Directly routed to Elena Rostova (Staff Mentor)</p>
-                </div>
-              </div>
+        <div className="fixed inset-0 z-50 bg-night/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <Card className="max-w-lg w-full p-6 space-y-4 shadow-2xl animate-slide-up">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg">Ask a Senior Mentor</CardTitle>
               <button
                 onClick={() => setShowNewThreadModal(false)}
-                className="text-gray-400 hover:text-white text-sm px-2 py-1 rounded-lg"
+                className="p-1 rounded-md text-slate-400 hover:text-white"
               >
-                ✕
+                <X className="w-5 h-5" />
               </button>
             </div>
+            <CardDescription>
+              Submit a technical question to verified engineering mentors for feedback, code debugging, or architecture advice.
+            </CardDescription>
 
-            <form onSubmit={handleCreateQuestion} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                  Related Mission (Optional)
-                </label>
-                <select
-                  value={newMissionId}
-                  onChange={(e) => setNewMissionId(e.target.value)}
-                  className="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-primary-500"
-                >
-                  <option value="">General Consultation / Not tied to a mission</option>
-                  {dashboardData?.activeMissions?.map((m: any) => (
-                    <option key={m.id} value={m.id}>
-                      {m.title} ({m.courseName})
-                    </option>
-                  ))}
-                  {dashboardData?.recentSubmissions?.map((s: any) => (
-                    <option key={s.mission.id} value={s.mission.id}>
-                      {s.mission.title} (Completed)
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                  Subject / Summary <span className="text-rose-400">*</span>
-                </label>
-                <input
+            <form onSubmit={handleCreateQuestion} className="space-y-3 pt-2">
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-slate-300">Question subject</label>
+                <Input
                   type="text"
-                  required
-                  placeholder="e.g. How to structure CSS flexbox for responsive card grid"
+                  placeholder="e.g. CSS Grid auto-fit column overlapping on mobile"
                   value={newSubject}
                   onChange={(e) => setNewSubject(e.target.value)}
-                  className="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-primary-500"
+                  required
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                  What are you stuck on or want advice about? <span className="text-rose-400">*</span>
-                </label>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-slate-300">Detailed explanation</label>
                 <textarea
-                  required
-                  rows={4}
-                  placeholder="Describe your thinking, what you tried, and what error or unexpected behavior you encountered..."
+                  rows={3}
+                  placeholder="Describe what you tried, what you expected, and what happened..."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  className="w-full bg-gray-950 border border-gray-800 rounded-xl p-3.5 text-xs text-white focus:outline-none focus:border-primary-500 resize-none leading-relaxed"
+                  required
+                  className="w-full bg-night border border-border-dark rounded-[10px] p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 font-body"
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1.5 flex items-center justify-between">
-                  <span>Code Snippet (Optional)</span>
-                  <span className="text-gray-500 font-mono text-[10px]">HTML, CSS, or JS</span>
-                </label>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-slate-300">Code snippet (optional)</label>
                 <textarea
-                  rows={4}
-                  placeholder="Paste your current code here so the mentor can inspect it directly..."
+                  rows={3}
+                  placeholder="// Paste your CSS / HTML / JS code snippet here..."
                   value={newCodeSnippet}
                   onChange={(e) => setNewCodeSnippet(e.target.value)}
-                  className="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs font-mono text-emerald-400 focus:outline-none focus:border-accent-500 resize-none"
+                  className="w-full bg-night border border-border-dark rounded-[10px] p-3 text-xs font-mono text-accent-300 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
               </div>
 
-              <div className="flex gap-3 pt-3">
-                <button
-                  type="button"
-                  onClick={() => setShowNewThreadModal(false)}
-                  className="flex-1 px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-xs font-semibold transition-colors"
-                >
+              <div className="flex items-center justify-end gap-2.5 pt-2">
+                <Button variant="outline" size="sm" type="button" onClick={() => setShowNewThreadModal(false)}>
                   Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={createThreadMutation.isPending}
-                  className="flex-1 px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-1.5"
-                >
+                </Button>
+                <Button type="submit" size="sm" isLoading={createThreadMutation.isPending} className="gap-1.5">
                   <Send className="w-3.5 h-3.5" />
-                  <span>Send to Mentor</span>
-                </button>
+                  <span>Submit question</span>
+                </Button>
               </div>
             </form>
-          </div>
+          </Card>
         </div>
       )}
     </div>

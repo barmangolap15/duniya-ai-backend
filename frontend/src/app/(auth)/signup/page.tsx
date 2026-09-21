@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import { useAuth, getRoleHomeRoute, UserRole } from '@/lib/auth-context';
 import toast from 'react-hot-toast';
-import { UserPlus, Sparkles, GraduationCap, Users, HeartHandshake, Briefcase, Code2, Heart } from 'lucide-react';
-import Logo from '@/components/Logo';
+import { ArrowRight, Code2, Eye, Heart, Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 
 export default function SignupPage() {
   const [name, setName] = useState('');
@@ -23,7 +25,7 @@ export default function SignupPage() {
     try {
       const res = await api.auth.register({ name: name.trim(), email: email.trim(), password, role });
       await login(res.token);
-      toast.success(`Account created! Welcome to DuniyaAI, ${res.user.name}.`);
+      toast.success(`Welcome to DuniyaAI, ${res.user.name}!`);
 
       if (res.user.role === 'STUDENT') {
         router.push('/quiz');
@@ -38,123 +40,117 @@ export default function SignupPage() {
     }
   };
 
+  const roleOptions = [
+    {
+      id: 'STUDENT' as UserRole,
+      label: 'Student',
+      icon: Code2,
+      activeClass: 'border-primary-500 bg-primary-500/10 text-primary-300 ring-1 ring-primary-500',
+    },
+    {
+      id: 'MENTOR' as UserRole,
+      label: 'Mentor',
+      icon: Eye,
+      activeClass: 'border-accent-500 bg-accent-500/10 text-accent-300 ring-1 ring-accent-500',
+    },
+    {
+      id: 'PARENT' as UserRole,
+      label: 'Parent',
+      icon: Heart,
+      activeClass: 'border-gold-500 bg-gold-500/10 text-gold-400 ring-1 ring-gold-500',
+    },
+    {
+      id: 'RECRUITER' as UserRole,
+      label: 'Recruiter',
+      icon: Search,
+      activeClass: 'border-danger-500 bg-danger-500/10 text-danger-400 ring-1 ring-danger-500',
+    },
+  ];
+
   return (
-    <div className="bg-gray-900 border border-gray-800 p-8 rounded-3xl shadow-2xl max-w-md w-full">
-      <div className="text-center mb-6 space-y-2">
-        <div className="flex justify-center mb-2">
-          <Logo size="md" href="/" />
-        </div>
-        <h2 className="text-xl font-bold text-white">Create Your Account</h2>
-        <p className="text-xs text-gray-400">
-          Choose your role to get your customized workspace
-        </p>
-      </div>
+    <Card className="w-full shadow-2xl border-border-dark bg-surface-dark">
+      <CardHeader className="text-center space-y-1">
+        <CardTitle className="text-xl">Create your account</CardTitle>
+        <CardDescription>
+          Select your role to configure your dedicated workspace
+        </CardDescription>
+      </CardHeader>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Role Selector */}
-        <div>
-          <label className="block text-xs font-semibold text-gray-300 mb-2">I am joining as a:</label>
-          <div className="grid grid-cols-3 gap-2">
-            <button
-              type="button"
-              onClick={() => setRole('STUDENT')}
-              className={`p-2.5 rounded-xl border text-center transition-all flex flex-col items-center gap-1 text-xs font-semibold ${
-                role === 'STUDENT'
-                  ? 'bg-primary-600/20 border-primary-500 text-primary-300 shadow-sm'
-                  : 'bg-gray-950 border-gray-800 text-gray-400 hover:text-white hover:bg-gray-850'
-              }`}
-            >
-              <Code2 className="w-4 h-4" />
-              <span>Student</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setRole('MENTOR')}
-              className={`p-2.5 rounded-xl border text-center transition-all flex flex-col items-center gap-1 text-xs font-semibold ${
-                role === 'MENTOR'
-                  ? 'bg-accent-600/20 border-accent-500 text-accent-300 shadow-sm'
-                  : 'bg-gray-950 border-gray-800 text-gray-400 hover:text-white hover:bg-gray-850'
-              }`}
-            >
-              <Sparkles className="w-4 h-4" />
-              <span>Mentor</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setRole('PARENT')}
-              className={`p-2.5 rounded-xl border text-center transition-all flex flex-col items-center gap-1 text-xs font-semibold ${
-                role === 'PARENT'
-                  ? 'bg-rose-600/20 border-rose-500 text-rose-300 shadow-sm'
-                  : 'bg-gray-950 border-gray-800 text-gray-400 hover:text-white hover:bg-gray-850'
-              }`}
-            >
-              <Heart className="w-4 h-4" />
-              <span>Parent</span>
-            </button>
+      <CardContent className="space-y-4">
+        {/* Role Selector Grid */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-slate-300">I am joining as a</label>
+          <div className="grid grid-cols-4 gap-2">
+            {roleOptions.map((opt) => {
+              const Icon = opt.icon;
+              const isSelected = role === opt.id;
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setRole(opt.id)}
+                  className={`p-2.5 rounded-[10px] border text-center transition-all flex flex-col items-center gap-1.5 text-xs font-medium select-none ${
+                    isSelected
+                      ? opt.activeClass
+                      : 'border-border-dark bg-night text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{opt.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        <div>
-          <label className="block text-xs font-semibold text-gray-300 mb-1.5">Full Name</label>
-          <input
-            type="text"
-            required
-            placeholder="Your name"
-            className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-3.5">
+          <div className="space-y-1.5">
+            <label className="text-xs font-medium text-slate-300">Full name</label>
+            <Input
+              type="text"
+              required
+              placeholder="Aarav Sharma"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
 
-        <div>
-          <label className="block text-xs font-semibold text-gray-300 mb-1.5">Email Address</label>
-          <input
-            type="email"
-            required
-            placeholder="you@domain.com"
-            className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+          <div className="space-y-1.5">
+            <label className="text-xs font-medium text-slate-300">Email address</label>
+            <Input
+              type="email"
+              required
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
-        <div>
-          <label className="block text-xs font-semibold text-gray-300 mb-1.5">Password (min 6 characters)</label>
-          <input
-            type="password"
-            required
-            minLength={6}
-            placeholder="••••••••"
-            className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+          <div className="space-y-1.5">
+            <label className="text-xs font-medium text-slate-300">Password</label>
+            <Input
+              type="password"
+              required
+              placeholder="Minimum 8 characters"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-3 bg-primary-600 hover:bg-primary-500 text-white font-bold rounded-xl transition-all disabled:opacity-50 mt-2 flex items-center justify-center gap-2 shadow-lg shadow-primary-600/20 hover:scale-[1.01] active:scale-98 text-sm"
-        >
-          {loading ? (
-            'Creating your account...'
-          ) : (
-            <>
-              <UserPlus className="w-4 h-4" />
-              <span>Create Account as {role.charAt(0) + role.slice(1).toLowerCase()}</span>
-            </>
-          )}
-        </button>
-      </form>
+          <Button type="submit" size="default" className="w-full gap-2 mt-2" isLoading={loading}>
+            Create {role.toLowerCase()} account <ArrowRight className="w-4 h-4" />
+          </Button>
+        </form>
+      </CardContent>
 
-      <div className="mt-6 text-center text-gray-400 text-xs">
-        Already have an account?{' '}
-        <Link href="/login" className="text-primary-400 hover:text-primary-300 font-semibold underline">
-          Log in
-        </Link>
-      </div>
-    </div>
+      <CardFooter className="flex flex-col border-t border-border-dark pt-4 text-center text-xs text-slate-400 space-y-2">
+        <p>
+          Already have an account?{' '}
+          <Link href="/login" className="text-primary-400 hover:text-primary-300 font-medium underline underline-offset-4">
+            Sign in
+          </Link>
+        </p>
+      </CardFooter>
+    </Card>
   );
 }

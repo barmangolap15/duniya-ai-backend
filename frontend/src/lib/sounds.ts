@@ -116,6 +116,10 @@ class SoundManager {
       osc.stop(ctx.currentTime + 0.2);
     } catch (e) {}
   }
+
+  playMilestone() {
+    this.playMissionComplete();
+  }
 }
 
 export const soundManager = new SoundManager();

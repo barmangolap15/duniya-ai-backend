@@ -14,7 +14,6 @@ import {
   Heart,
   Sparkles,
   MessageSquare,
-  ExternalLink,
   Star,
   CheckCircle2,
   Clock,
@@ -22,8 +21,6 @@ import {
   Layers,
   Compass,
   ArrowRight,
-  BookOpen,
-  Code2,
   Server,
   Smartphone,
   Layout,
@@ -32,6 +29,10 @@ import {
   Rocket,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -59,7 +60,7 @@ export default function Dashboard() {
   const switchTrackMutation = useMutation({
     mutationFn: (trackId: string) => api.missions.switchTrack(trackId),
     onSuccess: (res) => {
-      toast.success(`Switched path to ${res.track?.name || 'new track'}!`);
+      toast.success(`Switched track to ${res.track?.name || 'new track'}`);
       setShowTrackModal(false);
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
       queryClient.invalidateQueries({ queryKey: ['auth-me'] });
@@ -75,7 +76,7 @@ export default function Dashboard() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[70vh] gap-3">
         <LoadingSpinner />
-        <p className="text-xs text-primary-400 font-semibold animate-pulse">
+        <p className="text-xs text-primary-400 font-medium animate-pulse">
           Directing you to your AI skill & interest assessment...
         </p>
       </div>
@@ -87,282 +88,258 @@ export default function Dashboard() {
   const currentTrack = data?.careerTrack;
 
   const getTrackIcon = (name: string) => {
-    if (name?.includes('Backend')) return <Server className="w-5 h-5 text-emerald-400" />;
-    if (name?.includes('Full-Stack')) return <Layers className="w-5 h-5 text-purple-400" />;
-    if (name?.includes('Mobile')) return <Smartphone className="w-5 h-5 text-amber-400" />;
-    if (name?.includes('Python') || name?.includes('AI')) return <Sparkles className="w-5 h-5 text-rose-400" />;
-    return <Layout className="w-5 h-5 text-blue-400" />;
+    if (name?.includes('Backend')) return <Server className="w-5 h-5 text-accent-400" />;
+    if (name?.includes('Full-Stack')) return <Layers className="w-5 h-5 text-primary-400" />;
+    if (name?.includes('Mobile')) return <Smartphone className="w-5 h-5 text-gold-400" />;
+    if (name?.includes('Python') || name?.includes('AI')) return <Sparkles className="w-5 h-5 text-danger-400" />;
+    return <Layout className="w-5 h-5 text-primary-400" />;
   };
 
   return (
-    <div className="p-6 sm:p-10 max-w-7xl mx-auto w-full space-y-10">
+    <div className="p-6 sm:p-10 max-w-7xl mx-auto w-full space-y-8">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-white">Welcome back, {user.name}! 👋</h1>
-          <p className="text-gray-400 text-sm mt-1">
-            Choose your learning track, solve interactive missions, and get mentor code reviews.
+          <h1 className="font-heading text-3xl sm:text-4xl font-bold tracking-tight text-white">
+            Welcome back, {user.name}
+          </h1>
+          <p className="text-slate-400 text-sm font-body mt-1">
+            Build interactive missions, sharpen skills, and get verified mentor code reviews.
           </p>
         </div>
-        <div className="flex items-center gap-3 self-start sm:self-auto flex-wrap">
-          <Link
-            href="/quiz"
-            className="px-4 py-2.5 bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 rounded-xl text-xs font-bold transition-all flex items-center gap-2 hover:scale-105"
-          >
-            <Sparkles className="w-4 h-4 text-purple-400" />
-            <span>{user.quizCompleted ? 'Recalibrate Quiz / Skills' : 'Personalize Learning Path'}</span>
+        <div className="flex items-center gap-2.5 self-start sm:self-auto flex-wrap">
+          <Link href="/quiz">
+            <Button variant="outline" size="sm" className="gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-primary-400" />
+              <span>{user.quizCompleted ? 'Recalibrate AI Match' : 'Personalize Path'}</span>
+            </Button>
           </Link>
-          <button
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => setShowTrackModal(true)}
-            className="px-4 py-2.5 bg-primary-600/20 hover:bg-primary-600/30 text-primary-300 border border-primary-500/30 rounded-xl text-xs font-bold transition-all flex items-center gap-2 hover:scale-105"
+            className="gap-2"
           >
-            <Compass className="w-4 h-4 text-primary-400" />
-            <span>Switch Subject / Track</span>
-          </button>
-          <Link
-            href="/mentorship"
-            className="px-4 py-2.5 bg-accent-600/20 hover:bg-accent-600/30 text-accent-300 border border-accent-500/30 rounded-xl text-xs font-bold transition-all flex items-center gap-2 hover:scale-105"
-          >
-            <MessageSquare className="w-4 h-4 text-accent-400" />
-            <span>Ask Mentor For Help</span>
+            <Compass className="w-3.5 h-3.5 text-slate-400" />
+            <span>Switch Track</span>
+          </Button>
+          <Link href="/mentorship">
+            <Button variant="default" size="sm" className="gap-2">
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>Ask Mentor</span>
+            </Button>
           </Link>
         </div>
       </div>
 
-      {/* Uncompleted Assessment Banner */}
-      {!user.quizCompleted && (
-        <div className="bg-gradient-to-r from-purple-950/60 via-indigo-950/50 to-gray-900 border-2 border-purple-500/40 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl shadow-purple-950/30 animate-in fade-in">
+      {/* Active Learning Track Banner */}
+      <Card className="bg-gradient-to-r from-surface-dark via-surface-dark to-night border-primary-500/30">
+        <CardContent className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-purple-500/20 border border-purple-500/40 rounded-xl shrink-0 mt-0.5">
-              <Sparkles className="w-6 h-6 text-purple-300 animate-pulse" />
+            <div className="p-3 bg-primary-500/10 border border-primary-500/25 rounded-[12px] shrink-0">
+              {getTrackIcon(currentTrack?.name || '')}
             </div>
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded bg-purple-500/30 text-purple-200 border border-purple-500/40">
-                  Recommended Next Step
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="text-[11px] font-mono font-medium uppercase tracking-wider text-primary-400">
+                  Active Learning Track
                 </span>
-                <span className="text-xs text-amber-300 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
-                  +50 XP Bonus
+                <span className="text-xs text-slate-500 font-mono">
+                  · {data?.totalMissions || 0} missions available
                 </span>
               </div>
-              <h2 className="text-lg font-bold text-white">
-                Complete your 2-minute skill & interest assessment
+              <h2 className="font-heading text-xl font-bold text-white">
+                {currentTrack?.name || 'Frontend Web Development'}
               </h2>
-              <p className="text-xs text-gray-300 mt-1 max-w-xl leading-relaxed">
-                Answer 5 quick questions so our system can recommend the optimal career track, courses, and tailored first coding missions for you.
+              <p className="text-xs text-slate-400 mt-1 max-w-2xl font-body leading-relaxed">
+                {currentTrack?.description ||
+                  'Build modern web applications with semantic HTML5, responsive CSS layouts, and dynamic JavaScript.'}
               </p>
             </div>
           </div>
 
-          <Link
-            href="/quiz"
-            className="px-5 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold rounded-xl shrink-0 shadow-lg shadow-purple-600/30 transition-all flex items-center justify-center gap-2 hover:scale-105"
-          >
-            <Rocket className="w-4 h-4" />
-            <span>Take Quick Assessment</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      )}
-
-      {/* Active Subject / Track Banner */}
-      <div className="bg-gradient-to-r from-primary-950/40 via-gray-900 to-gray-900 border border-primary-500/30 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl">
-        <div className="flex items-start gap-4">
-          <div className="p-3.5 bg-primary-500/10 border border-primary-500/30 rounded-2xl shrink-0 mt-1">
-            {getTrackIcon(currentTrack?.name || '')}
+          <div className="flex items-center gap-2.5 shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowTrackModal(true)}
+              className="gap-1.5 text-xs"
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Change Track</span>
+            </Button>
+            <Link href="/roadmap">
+              <Button size="sm" className="gap-1 text-xs">
+                <span>View Syllabus</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </Button>
+            </Link>
           </div>
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-primary-500/20 text-primary-300 border border-primary-500/30">
-                Active Learning Track
-              </span>
-              <span className="text-xs text-gray-500">
-                {data?.totalMissions || 0} Missions Available
-              </span>
-            </div>
-            <h2 className="text-xl font-bold text-white">
-              {currentTrack?.name || 'Frontend Web Development'}
-            </h2>
-            <p className="text-xs text-gray-400 mt-1 max-w-2xl leading-relaxed">
-              {currentTrack?.description || 'Build modern web applications with semantic HTML5, CSS layouts, and dynamic JavaScript.'}
-            </p>
-          </div>
-        </div>
+        </CardContent>
+      </Card>
 
-        <div className="flex items-center gap-3 shrink-0">
-          <button
-            onClick={() => setShowTrackModal(true)}
-            className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-2 border border-gray-700"
-          >
-            <Layers className="w-3.5 h-3.5 text-gray-400" />
-            <span>Change Subject ({allTracks?.length || 5} Available)</span>
-          </button>
-          <Link
-            href="/roadmap"
-            className="px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-lg shadow-primary-600/30"
-          >
-            <span>View Syllabus</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-      </div>
-
-      {/* Top Stats */}
+      {/* Stats Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 flex flex-col justify-between">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 bg-primary-900/50 rounded-xl text-primary-400">
-              <Trophy className="w-6 h-6" />
+        {/* Level & XP */}
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-primary-500/10 border border-primary-500/25 rounded-[10px] text-primary-400">
+                <Trophy className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xs font-body text-slate-400">Current Level</p>
+                <p className="font-heading text-xl font-bold text-white">Level {user.level}</p>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <XPBar xp={user.xp} level={user.level} />
+          </CardContent>
+        </Card>
+
+        {/* Day Streak */}
+        <Card>
+          <CardContent className="p-6 flex items-center gap-4 h-full">
+            <div className="p-3 bg-gold-500/10 border border-gold-500/25 rounded-full text-gold-400">
+              <Flame className="w-7 h-7 fill-gold-500" />
             </div>
             <div>
-              <div className="text-sm text-gray-400">Current Level</div>
-              <div className="text-2xl font-bold text-white">Level {user.level}</div>
+              <p className="text-xs font-body text-slate-400">Daily Streak</p>
+              <p className="font-mono text-3xl font-bold text-white tabular-nums">
+                {data?.stats?.streak || 0} <span className="text-sm font-sans font-normal text-slate-400">days</span>
+              </p>
+              <p className="text-xs text-gold-400 mt-1 font-body">Consistency builds mastery</p>
             </div>
-          </div>
-          <XPBar xp={user.xp} level={user.level} />
-        </div>
+          </CardContent>
+        </Card>
 
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 flex items-center gap-4">
-          <div className="p-4 bg-orange-900/30 rounded-full text-orange-500">
-            <Flame className="w-8 h-8" />
-          </div>
-          <div>
-            <div className="text-sm text-gray-400">Learning Streak</div>
-            <div className="text-3xl font-bold text-white">{data?.stats?.streak || 0} Days</div>
-            <div className="text-xs text-orange-400 mt-1">Consistency is key! 🔥</div>
-          </div>
-        </div>
-
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 flex items-center justify-between">
-          <div>
-            <div className="text-sm text-gray-400 mb-1">Track Progress</div>
-            <div className="text-3xl font-bold text-white mb-2">{data?.completionPercentage || 0}%</div>
-            <div className="text-xs text-gray-500">
-              {data?.completedMissions || 0} of {data?.totalMissions || 0} missions
+        {/* Track Progress */}
+        <Card>
+          <CardContent className="p-6 flex items-center justify-between h-full">
+            <div>
+              <p className="text-xs font-body text-slate-400">Track Progress</p>
+              <p className="font-mono text-3xl font-bold text-white tabular-nums">
+                {data?.completionPercentage || 0}%
+              </p>
+              <p className="text-xs text-slate-400 mt-1 font-mono">
+                {data?.completedMissions || 0} of {data?.totalMissions || 0} missions
+              </p>
             </div>
-          </div>
-          <div className="w-20 h-20 rounded-full border-4 border-gray-800 border-t-primary-500 flex items-center justify-center">
-            <span className="text-primary-400 font-bold">{data?.completionPercentage || 0}%</span>
-          </div>
-        </div>
+            <div className="w-16 h-16 rounded-full border-4 border-slate-800 border-t-primary-500 flex items-center justify-center font-mono text-sm font-bold text-primary-400">
+              {data?.completionPercentage || 0}%
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Ecosystem Highlights: Parent Cheer & Mentor Q&A */}
+      {/* Parent Cheer & Mentor Q&A Highlights */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Parent Cheer Highlight */}
-        <div className="bg-gradient-to-br from-rose-950/20 via-gray-900 to-gray-900 border border-rose-500/30 rounded-2xl p-6 flex flex-col justify-between space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-rose-400 font-bold text-xs uppercase tracking-wider">
-              <Heart className="w-4 h-4 fill-rose-400" />
-              Family Encouragement Boost
+        {/* Parent Cheer */}
+        <Card className="border-gold-500/25 bg-gradient-to-br from-gold-950/10 to-surface-dark">
+          <CardHeader className="pb-3 flex flex-row items-center justify-between">
+            <div className="flex items-center gap-2 text-gold-400 font-semibold text-xs uppercase tracking-wider">
+              <Heart className="w-4 h-4 fill-gold-500 text-gold-500" />
+              <span>Family Encouragement</span>
             </div>
-            <span className="text-xs text-gray-500">Live Feedback</span>
-          </div>
-
-          {latestCheer ? (
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <img
-                  src={latestCheer.parent?.avatarUrl || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150'}
-                  alt="Parent avatar"
-                  className="w-10 h-10 rounded-full object-cover border-2 border-rose-500/40"
-                />
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-white">
-                      {latestCheer.parent?.name || 'Your Parent'}
-                    </span>
-                    <span className="text-[10px] bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded-full font-bold border border-rose-500/30">
-                      +{latestCheer.xpAwarded} XP Boost
-                    </span>
+            <span className="text-xs text-slate-500 font-mono">Real-time</span>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {latestCheer ? (
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <Avatar name={latestCheer.parent?.name || 'Parent'} size="md" variant="parent" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-white">
+                        {latestCheer.parent?.name || 'Parent'}
+                      </span>
+                      <span className="inline-flex items-center rounded-full bg-gold-500/15 border border-gold-500/30 px-2 py-0.5 font-mono text-[11px] font-semibold text-gold-400">
+                        +{latestCheer.xpAwarded} XP Boost
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-300 italic mt-1 bg-night p-3 rounded-[10px] border border-border-dark leading-relaxed">
+                      "{latestCheer.message}"
+                    </p>
                   </div>
-                  <p className="text-xs text-gray-300 italic mt-1 bg-gray-950/60 p-3 rounded-xl border border-gray-800/80">
-                    "{latestCheer.message}"
-                  </p>
+                </div>
+                <div className="text-[11px] text-slate-500 flex items-center gap-1 font-mono">
+                  <Clock className="w-3.5 h-3.5" />
+                  <span>Cheered {new Date(latestCheer.createdAt).toLocaleDateString()}</span>
                 </div>
               </div>
-              <div className="text-[11px] text-gray-500 flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5" />
-                <span>Cheered {new Date(latestCheer.createdAt).toLocaleDateString()}</span>
+            ) : (
+              <div className="text-xs text-slate-400 py-3 leading-relaxed">
+                Your family can track your milestone achievements and send motivational XP boosts through the Parent Portal.
               </div>
-            </div>
-          ) : (
-            <div className="text-xs text-gray-400 py-2">
-              Your parents can follow your progress and send motivational boosts from the Parent Portal.
-            </div>
-          )}
-        </div>
+            )}
+          </CardContent>
+        </Card>
 
-        {/* Mentor Guidance & Q&A Preview */}
-        <div className="bg-gradient-to-br from-accent-950/20 via-gray-900 to-gray-900 border border-accent-500/30 rounded-2xl p-6 flex flex-col justify-between space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-accent-400 font-bold text-xs uppercase tracking-wider">
-              <Sparkles className="w-4 h-4 text-accent-400" />
-              Staff Mentor Guidance
+        {/* Mentor Consultation */}
+        <Card className="border-accent-500/25 bg-gradient-to-br from-accent-950/10 to-surface-dark">
+          <CardHeader className="pb-3 flex flex-row items-center justify-between">
+            <div className="flex items-center gap-2 text-accent-400 font-semibold text-xs uppercase tracking-wider">
+              <Sparkles className="w-4 h-4" />
+              <span>Mentor Guidance</span>
             </div>
             <Link
               href="/mentorship"
-              className="text-xs text-primary-400 hover:text-white flex items-center gap-1 font-semibold"
+              className="text-xs text-primary-400 hover:text-primary-300 flex items-center gap-1 font-medium"
             >
-              Open Hub
+              <span>Ask Mentor</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </Link>
-          </div>
-
-          {activeMentorThreads.length > 0 ? (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h4 className="text-sm font-bold text-white line-clamp-1">
-                  {activeMentorThreads[0].subject}
-                </h4>
-                <span
-                  className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase ${
-                    activeMentorThreads[0].status === 'RESOLVED'
-                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                      : 'bg-accent-500/10 text-accent-300 border border-accent-500/30'
-                  }`}
-                >
-                  {activeMentorThreads[0].status === 'RESOLVED' ? 'Resolved' : 'Active Discussion'}
-                </span>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {activeMentorThreads.length > 0 ? (
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <h4 className="text-sm font-semibold text-white truncate">
+                    {activeMentorThreads[0].subject}
+                  </h4>
+                  <Badge variant="outline" size="sm">
+                    {activeMentorThreads[0].status}
+                  </Badge>
+                </div>
+                <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                  {activeMentorThreads[0].messages?.[0]?.content || 'Mentorship inquiry in progress...'}
+                </p>
+                <div className="flex items-center gap-2 text-xs text-slate-400 pt-1">
+                  <Avatar name={activeMentorThreads[0].mentor?.name || 'Mentor'} size="sm" variant="mentor" />
+                  <span>With {activeMentorThreads[0].mentor?.name || 'Staff Mentor'}</span>
+                </div>
               </div>
-              <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">
-                {activeMentorThreads[0].messages?.[0]?.content || 'Mentorship consultation in progress...'}
-              </p>
-              <div className="flex items-center gap-2 text-xs text-gray-400 pt-1">
-                <img
-                  src={activeMentorThreads[0].mentor?.avatarUrl || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=250'}
-                  alt={activeMentorThreads[0].mentor?.name}
-                  className="w-5 h-5 rounded-full object-cover border border-accent-500/40"
-                />
-                <span>With {activeMentorThreads[0].mentor?.name || 'Staff Mentor'}</span>
+            ) : (
+              <div className="space-y-2 py-1 text-xs text-slate-400 leading-relaxed">
+                <p className="text-white font-medium">Stuck on a tricky mission step?</p>
+                <p>Senior engineering mentors are ready to review your code and guide you through blockers.</p>
+                <Link href="/mentorship" className="inline-block mt-1">
+                  <Button variant="outline" size="sm" className="text-xs">
+                    Ask a question
+                  </Button>
+                </Link>
               </div>
-            </div>
-          ) : (
-            <div className="space-y-2 py-1 text-xs text-gray-400">
-              <p className="text-white font-medium">Stuck on a tricky mission step?</p>
-              <p>Elena Rostova and staff engineering mentors are here to review your code and answer questions.</p>
-              <Link
-                href="/mentorship"
-                className="inline-block mt-2 text-primary-400 hover:underline font-semibold"
-              >
-                Start a Question &rarr;
-              </Link>
-            </div>
-          )}
-        </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Active Missions */}
+      {/* Up Next in Track */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-white">Up Next in {currentTrack?.name || 'Your Track'}</h2>
-          <button
+          <h2 className="font-heading text-2xl font-bold text-white">
+            Up Next in {currentTrack?.name || 'Your Track'}
+          </h2>
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setShowTrackModal(true)}
-            className="text-xs text-primary-400 hover:text-primary-300 flex items-center gap-1 font-semibold"
+            className="text-xs text-primary-400 hover:text-primary-300 gap-1"
           >
-            <span>Explore Other Subjects</span>
+            <span>Explore other subjects</span>
             <ChevronRight className="w-3.5 h-3.5" />
-          </button>
+          </Button>
         </div>
 
         {data?.activeMissions?.length > 0 ? (
@@ -378,150 +355,139 @@ export default function Dashboard() {
             ))}
           </div>
         ) : (
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-10 text-center space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-primary-500/10 border border-primary-500/30 flex items-center justify-center text-primary-400 mx-auto">
-              <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+          <Card className="text-center p-8 space-y-3">
+            <div className="w-12 h-12 rounded-full bg-accent-500/10 border border-accent-500/30 flex items-center justify-center text-accent-400 mx-auto">
+              <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-white">All missions completed in this subject! 🎉</h3>
-            <p className="text-xs text-gray-400 max-w-md mx-auto">
-              You've solved every mission in this track. Switch to another technology (Backend, Full-Stack, Mobile, or Python) to keep leveling up!
+            <h3 className="font-heading text-base font-bold text-white">All missions completed in this track!</h3>
+            <p className="text-xs text-slate-400 max-w-md mx-auto">
+              You've completed every mission in this syllabus. Switch tracks to continue leveling up.
             </p>
-            <button
-              onClick={() => setShowTrackModal(true)}
-              className="px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-xl text-xs font-bold transition-all"
-            >
-              Switch to Another Subject
-            </button>
-          </div>
+            <Button size="sm" onClick={() => setShowTrackModal(true)}>
+              Switch learning track
+            </Button>
+          </Card>
         )}
       </div>
 
-      {/* Recent Activity & Mentor Reviews */}
+      {/* Recent Activity & Reviews */}
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-white">Recent Activity & Reviews</h2>
+        <h2 className="font-heading text-2xl font-bold text-white">Recent Activity & Reviews</h2>
         {data?.recentSubmissions?.length > 0 ? (
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden divide-y divide-gray-800">
+          <Card className="divide-y divide-border-dark overflow-hidden">
             {data.recentSubmissions.map((sub: any) => (
-              <div key={sub.id} className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div key={sub.id} className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-white font-bold text-sm">{sub.mission.title}</span>
-                    <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                    <span className="text-white font-semibold text-sm">{sub.mission.title}</span>
+                    <Badge
+                      variant={
                         sub.status === 'APPROVED'
-                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                          ? 'verified'
                           : sub.status === 'SUBMITTED'
-                            ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30'
-                            : 'bg-gray-800 text-gray-400'
-                      }`}
+                            ? 'streak'
+                            : 'secondary'
+                      }
+                      size="sm"
                     >
                       {sub.status}
-                    </span>
+                    </Badge>
                   </div>
                   {sub.reviews?.[0] ? (
                     <div className="flex items-start gap-2 pt-1">
-                      <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 mt-0.5 shrink-0" />
-                      <p className="text-xs text-gray-300 italic">
-                        "{sub.reviews[0].feedback}" — <span className="text-accent-400 font-semibold">{sub.reviews[0].mentor?.name}</span>
+                      <Star className="w-3.5 h-3.5 text-gold-400 fill-gold-400 mt-0.5 shrink-0" />
+                      <p className="text-xs text-slate-300 italic font-body">
+                        "{sub.reviews[0].feedback}" — <span className="text-accent-400 font-medium">{sub.reviews[0].mentor?.name}</span>
                       </p>
                     </div>
                   ) : (
-                    <div className="text-xs text-gray-500">
+                    <p className="text-xs text-slate-500 font-mono">
                       Submitted on {new Date(sub.updatedAt).toLocaleDateString()}
-                    </div>
+                    </p>
                   )}
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-xs font-bold text-amber-400">+{sub.xpEarned} XP</span>
-                  <a
-                    href={`/mission/${sub.mission.id}/`}
-                    className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-xs font-semibold transition-colors"
-                  >
-                    View Code
-                  </a>
+                  <span className="font-mono text-xs font-semibold text-accent-400">+{sub.xpEarned} XP</span>
+                  <Link href={`/mission/${sub.mission.id}/`}>
+                    <Button variant="outline" size="sm" className="text-xs">
+                      View code
+                    </Button>
+                  </Link>
                 </div>
               </div>
             ))}
-          </div>
+          </Card>
         ) : (
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-8 text-center text-gray-500 text-sm">
-            No submissions yet. Start your first mission to earn XP and receive mentor feedback!
-          </div>
+          <Card className="p-6 text-center text-slate-400 text-xs font-body">
+            No submissions yet. Start your first mission to earn XP and receive verified mentor reviews!
+          </Card>
         )}
       </div>
 
-      {/* Modal: Switch Career Track / Subject */}
+      {/* Switch Track Modal */}
       {showTrackModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-900 border border-gray-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-4 border-b border-gray-800">
+        <div className="fixed inset-0 bg-night/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-surface-dark border border-border-dark rounded-[14px] max-w-2xl w-full p-6 space-y-5 shadow-2xl animate-slide-up">
+            <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-bold text-white">Choose Your Learning Path</h3>
-                <p className="text-xs text-gray-400 mt-0.5">
-                  Switch between technology tracks anytime. Your XP and completed missions are always saved!
+                <h3 className="font-heading text-lg font-bold text-white">Switch Career Track</h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Select a tech stack to recalibrate your curriculum missions
                 </p>
               </div>
               <button
                 onClick={() => setShowTrackModal(false)}
-                className="text-gray-400 hover:text-white p-2 rounded-lg bg-gray-800"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-surface-raised transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-4">
+            <div className="grid sm:grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto pr-1">
               {allTracks?.map((track: any) => {
-                const isCurrent = currentTrack?.id === track.id || currentTrack?.name === track.name;
+                const isCurrent = track.id === currentTrack?.id;
                 return (
                   <div
                     key={track.id}
-                    className={`p-5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+                    onClick={() => !isCurrent && switchTrackMutation.mutate(track.id)}
+                    className={`p-4 rounded-[12px] border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
                       isCurrent
-                        ? 'bg-primary-950/30 border-primary-500/50 shadow-lg shadow-primary-950/50'
-                        : 'bg-gray-950 border-gray-800/80 hover:border-gray-700'
+                        ? 'border-primary-500 bg-primary-500/10'
+                        : 'border-border-dark bg-night hover:border-slate-700 hover:bg-surface-raised'
                     }`}
                   >
-                    <div className="flex items-start gap-4">
-                      <div className="p-3 bg-gray-900 border border-gray-800 rounded-xl shrink-0 mt-1">
-                        {getTrackIcon(track.name)}
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="font-heading text-sm font-semibold text-white">{track.name}</span>
+                        {isCurrent && (
+                          <Badge variant="default" size="sm">
+                            Active
+                          </Badge>
+                        )}
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h4 className="text-base font-bold text-white">{track.name}</h4>
-                          {isCurrent && (
-                            <span className="text-[10px] bg-primary-500/20 text-primary-300 font-bold px-2 py-0.5 rounded-full border border-primary-500/30 flex items-center gap-1">
-                              <Check className="w-3 h-3" /> Active
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-xs text-gray-400 mt-1 leading-relaxed">
-                          {track.description}
-                        </p>
-                        <div className="flex items-center gap-3 mt-2 text-[11px] text-gray-500">
-                          <span>{track.courses?.length || 0} Courses</span>
-                          <span>•</span>
-                          <span>{track.totalMissionsCount || 0} Missions</span>
-                          <span>•</span>
-                          <span className="text-amber-400 font-semibold">+{track.totalXp || 0} Max XP</span>
-                        </div>
-                      </div>
+                      <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
+                        {track.description}
+                      </p>
                     </div>
 
-                    <button
-                      onClick={() => switchTrackMutation.mutate(track.id)}
-                      disabled={isCurrent || switchTrackMutation.isPending}
-                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
-                        isCurrent
-                          ? 'bg-gray-800 text-gray-500 cursor-default'
-                          : 'bg-primary-600 hover:bg-primary-500 text-white shadow-md'
-                      }`}
-                    >
-                      {isCurrent ? 'Current Path' : 'Switch Path'}
-                    </button>
+                    <div className="flex items-center justify-between pt-2 border-t border-border-dark/60 text-xs font-mono">
+                      <span className="text-slate-500">{track.missions?.length || 0} missions</span>
+                      {!isCurrent && (
+                        <span className="text-primary-400 font-sans font-medium flex items-center gap-1">
+                          Switch <ChevronRight className="w-3 h-3" />
+                        </span>
+                      )}
+                    </div>
                   </div>
                 );
               })}
+            </div>
+
+            <div className="flex justify-end pt-2">
+              <Button variant="outline" size="sm" onClick={() => setShowTrackModal(false)}>
+                Cancel
+              </Button>
             </div>
           </div>
         </div>

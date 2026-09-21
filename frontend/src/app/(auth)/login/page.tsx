@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import { useAuth, getRoleHomeRoute } from '@/lib/auth-context';
 import toast from 'react-hot-toast';
-import { LogIn, Sparkles } from 'lucide-react';
-import Logo from '@/components/Logo';
+import { ArrowRight, Sparkles, Lock, Mail } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -23,7 +25,6 @@ export default function LoginPage() {
       await login(res.token);
       toast.success(`Welcome back, ${res.user.name}!`);
 
-      // Redirect directly to the user's role-specific workbench or quiz if onboarding needed
       if (res.user.role === 'STUDENT' && res.user.quizCompleted === false) {
         router.push('/quiz');
       } else {
@@ -31,17 +32,17 @@ export default function LoginPage() {
         router.push(targetRoute);
       }
     } catch (error: any) {
-      toast.error(error.message || 'Login failed. Please check your email and password.');
+      toast.error(error.message || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }
   };
 
   const demoAccounts = [
-    { role: 'Student', email: 'student@levelup.com', color: 'border-primary-500/30 text-primary-300 bg-primary-500/10' },
-    { role: 'Mentor', email: 'mentor@levelup.com', color: 'border-accent-500/30 text-accent-300 bg-accent-500/10' },
-    { role: 'Parent', email: 'parent@levelup.com', color: 'border-rose-500/30 text-rose-300 bg-rose-500/10' },
-    { role: 'Recruiter', email: 'recruiter@levelup.com', color: 'border-blue-500/30 text-blue-300 bg-blue-500/10' },
+    { role: 'Student', email: 'student@levelup.com', color: 'hover:border-primary-500/50 hover:bg-primary-500/10 text-primary-300' },
+    { role: 'Mentor', email: 'mentor@levelup.com', color: 'hover:border-accent-500/50 hover:bg-accent-500/10 text-accent-300' },
+    { role: 'Parent', email: 'parent@levelup.com', color: 'hover:border-gold-500/50 hover:bg-gold-500/10 text-gold-400' },
+    { role: 'Recruiter', email: 'recruiter@levelup.com', color: 'hover:border-danger-500/50 hover:bg-danger-500/10 text-danger-400' },
   ];
 
   const fillDemo = (demoEmail: string) => {
@@ -50,88 +51,76 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="bg-gray-900 border border-gray-800 p-8 rounded-3xl shadow-2xl max-w-md w-full">
-      <div className="text-center mb-6 space-y-2">
-        <div className="flex justify-center mb-2">
-          <Logo size="md" href="/" />
+    <Card className="w-full shadow-2xl border-border-dark bg-surface-dark">
+      <CardHeader className="text-center space-y-1">
+        <CardTitle className="text-xl">Sign in to your account</CardTitle>
+        <CardDescription>
+          Enter your credentials to access your dedicated workbench
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="space-y-4">
+        {/* Quick Demo Fill Buttons */}
+        <div className="p-3 rounded-[10px] bg-night border border-border-dark space-y-2">
+          <div className="flex items-center justify-between text-[11px] font-body text-slate-400">
+            <span className="flex items-center gap-1.5 text-primary-400 font-medium">
+              <Sparkles className="w-3.5 h-3.5" />
+              Quick Demo Logins (Password: 12345678)
+            </span>
+          </div>
+          <div className="grid grid-cols-4 gap-1.5">
+            {demoAccounts.map((d) => (
+              <button
+                key={d.role}
+                type="button"
+                onClick={() => fillDemo(d.email)}
+                className={`py-1.5 px-2 rounded-md text-[11px] font-medium border border-border-dark bg-surface-dark transition-all text-center ${d.color} ${
+                  email === d.email ? 'border-primary-500 ring-1 ring-primary-500' : ''
+                }`}
+              >
+                {d.role}
+              </button>
+            ))}
+          </div>
         </div>
-        <h2 className="text-xl font-bold text-white">Sign In to Your Account</h2>
-        <p className="text-xs text-gray-400">
-          Access your personalized workspace based on your role
+
+        <form onSubmit={handleSubmit} className="space-y-3.5">
+          <div className="space-y-1.5">
+            <label className="text-xs font-medium text-slate-300">Email address</label>
+            <Input
+              type="email"
+              required
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-medium text-slate-300">Password</label>
+            <Input
+              type="password"
+              required
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+
+          <Button type="submit" size="default" className="w-full gap-2 mt-2" isLoading={loading}>
+            Sign in <ArrowRight className="w-4 h-4" />
+          </Button>
+        </form>
+      </CardContent>
+
+      <CardFooter className="flex flex-col border-t border-border-dark pt-4 text-center text-xs text-slate-400 space-y-2">
+        <p>
+          Don't have an account?{' '}
+          <Link href="/signup" className="text-primary-400 hover:text-primary-300 font-medium underline underline-offset-4">
+            Sign up
+          </Link>
         </p>
-      </div>
-
-      {/* Quick Demo Fill Buttons */}
-      <div className="mb-6 p-3 rounded-2xl bg-gray-950/80 border border-gray-800 space-y-2">
-        <div className="flex items-center justify-between text-[11px] text-gray-400 font-semibold px-1">
-          <span className="flex items-center gap-1.5 text-primary-400">
-            <Sparkles className="w-3.5 h-3.5" />
-            Quick Demo Accounts (Password: 12345678)
-          </span>
-        </div>
-        <div className="grid grid-cols-4 gap-1.5">
-          {demoAccounts.map((d) => (
-            <button
-              key={d.role}
-              type="button"
-              onClick={() => fillDemo(d.email)}
-              className={`py-1.5 px-2 rounded-xl text-[11px] font-bold border transition-all hover:scale-105 text-center ${d.color} ${
-                email === d.email ? 'ring-2 ring-primary-400' : ''
-              }`}
-            >
-              {d.role}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-xs font-semibold text-gray-300 mb-1.5">Email Address</label>
-          <input
-            type="email"
-            required
-            placeholder="student@levelup.com"
-            className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold text-gray-300 mb-1.5">Password</label>
-          <input
-            type="password"
-            required
-            placeholder="••••••••"
-            className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-3 bg-primary-600 hover:bg-primary-500 text-white font-bold rounded-xl transition-all disabled:opacity-50 mt-2 flex items-center justify-center gap-2 shadow-lg shadow-primary-600/20 hover:scale-[1.01] active:scale-98 text-sm"
-        >
-          {loading ? (
-            'Authenticating...'
-          ) : (
-            <>
-              <LogIn className="w-4 h-4" />
-              <span>Sign In</span>
-            </>
-          )}
-        </button>
-      </form>
-
-      <div className="mt-6 text-center text-gray-400 text-xs">
-        Don't have an account?{' '}
-        <Link href="/signup" className="text-primary-400 hover:text-primary-300 font-semibold underline">
-          Create an account
-        </Link>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }

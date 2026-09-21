@@ -7,7 +7,6 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import Link from 'next/link';
 import {
   CheckCircle2,
-  Lock,
   ArrowRight,
   Compass,
   Check,
@@ -17,9 +16,11 @@ import {
   Smartphone,
   Sparkles,
   ChevronRight,
-  BookOpen,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 export default function RoadmapPage() {
   const queryClient = useQueryClient();
@@ -38,7 +39,7 @@ export default function RoadmapPage() {
   const switchTrackMutation = useMutation({
     mutationFn: (trackId: string) => api.missions.switchTrack(trackId),
     onSuccess: (res) => {
-      toast.success(`Active path updated to ${res.track?.name || 'new track'}!`);
+      toast.success(`Active track updated to ${res.track?.name || 'new track'}`);
       queryClient.invalidateQueries({ queryKey: ['auth-me'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
     },
@@ -58,30 +59,31 @@ export default function RoadmapPage() {
   const isCurrentEnrolled = currentViewTrack?.id === activeEnrolledTrackId;
 
   const getTrackIcon = (name: string) => {
-    if (name?.includes('Backend')) return <Server className="w-4 h-4 text-emerald-400" />;
-    if (name?.includes('Full-Stack')) return <Layers className="w-4 h-4 text-purple-400" />;
-    if (name?.includes('Mobile')) return <Smartphone className="w-4 h-4 text-amber-400" />;
-    if (name?.includes('Python') || name?.includes('AI')) return <Sparkles className="w-4 h-4 text-rose-400" />;
-    return <Layout className="w-4 h-4 text-blue-400" />;
+    if (name?.includes('Backend')) return <Server className="w-4 h-4 text-accent-400" />;
+    if (name?.includes('Full-Stack')) return <Layers className="w-4 h-4 text-primary-400" />;
+    if (name?.includes('Mobile')) return <Smartphone className="w-4 h-4 text-gold-400" />;
+    if (name?.includes('Python') || name?.includes('AI')) return <Sparkles className="w-4 h-4 text-danger-400" />;
+    return <Layout className="w-4 h-4 text-primary-400" />;
   };
 
   return (
-    <div className="max-w-5xl mx-auto w-full p-6 sm:p-10 py-12 space-y-10">
+    <div className="max-w-5xl mx-auto w-full p-6 sm:p-10 py-10 space-y-8">
       {/* Top Banner */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-4">
-        <span className="px-4 py-1.5 bg-primary-900/50 text-primary-400 rounded-full text-xs font-bold tracking-wider uppercase border border-primary-500/20 inline-block">
-          Curriculum & Career Roadmaps
-        </span>
-        <h1 className="text-3xl md:text-5xl font-extrabold text-white">
-          Explore Subjects & <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-500">Learning Tracks</span>
+      <div className="text-center space-y-3">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/30 text-primary-300 text-xs font-semibold uppercase tracking-wider">
+          <Compass className="w-3.5 h-3.5" />
+          <span>Curriculum & Career Roadmaps</span>
+        </div>
+        <h1 className="font-heading text-3xl sm:text-5xl font-bold text-white tracking-tight">
+          Explore Learning Tracks & <span className="text-primary-400">Syllabus</span>
         </h1>
-        <p className="text-sm md:text-base text-gray-400 max-w-2xl mx-auto">
-          Choose any subject to view its syllabus and interactive coding missions. Switch your enrolled path anytime with 1 click!
+        <p className="text-sm text-slate-400 max-w-2xl mx-auto font-body leading-relaxed">
+          Select any career track to inspect its full course roadmap and interactive coding missions. Switch your enrolled path anytime with 1 click.
         </p>
-      </motion.div>
+      </div>
 
       {/* Track Selector Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin">
+      <div className="flex items-center gap-2 overflow-x-auto pb-2">
         {allTracks?.map((track: any) => {
           const isSelected = track.id === (selectedTrackId || activeEnrolledTrackId);
           const isEnrolled = track.id === activeEnrolledTrackId;
@@ -89,135 +91,141 @@ export default function RoadmapPage() {
             <button
               key={track.id}
               onClick={() => setSelectedTrackId(track.id)}
-              className={`px-4 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-2.5 whitespace-nowrap border shrink-0 ${
+              className={`px-4 py-2.5 rounded-[10px] text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap border shrink-0 ${
                 isSelected
-                  ? 'bg-primary-600/20 text-white border-primary-500/60 shadow-lg shadow-primary-950/50'
-                  : 'bg-gray-900/80 text-gray-400 border-gray-800 hover:border-gray-700 hover:text-white'
+                  ? 'bg-primary-600/15 text-white border-primary-500 shadow-sm'
+                  : 'bg-surface-dark text-slate-400 border-border-dark hover:border-slate-700 hover:text-white'
               }`}
             >
               {getTrackIcon(track.name)}
               <span>{track.name}</span>
               {isEnrolled && (
-                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-1.5 py-0.5 rounded-full border border-emerald-500/30">
-                  Enrolled
-                </span>
+                <Badge variant="verified" size="sm">
+                  Active
+                </Badge>
               )}
             </button>
           );
         })}
       </div>
 
-      {/* Selected Track Overview & Switch Trigger */}
+      {/* Selected Track Overview Card */}
       {currentViewTrack && (
-        <div className="bg-gradient-to-r from-gray-900 via-gray-900 to-primary-950/30 border border-gray-800 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-2xl">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="text-xs uppercase font-bold text-primary-400 tracking-wider">
-                {currentViewTrack.name}
-              </span>
-              {isCurrentEnrolled && (
-                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold border border-emerald-500/30 flex items-center gap-1">
-                  <Check className="w-3 h-3" /> Active Track
+        <Card className="border-primary-500/30 bg-gradient-to-r from-surface-dark via-surface-dark to-night">
+          <CardContent className="p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xs uppercase font-mono font-semibold text-primary-400 tracking-wider">
+                  {currentViewTrack.name}
                 </span>
+                {isCurrentEnrolled && (
+                  <Badge variant="verified" size="sm">
+                    <Check className="w-3 h-3" /> Enrolled Track
+                  </Badge>
+                )}
+              </div>
+              <h2 className="font-heading text-2xl font-bold text-white">{currentViewTrack.name}</h2>
+              <p className="text-xs text-slate-400 max-w-2xl leading-relaxed font-body">
+                {currentViewTrack.description}
+              </p>
+              <div className="flex items-center gap-3 text-xs text-slate-400 pt-1 font-mono">
+                <span>{currentViewTrack.courses?.length || 0} courses</span>
+                <span>·</span>
+                <span className="text-accent-400 font-semibold">
+                  {currentViewTrack.totalMissionsCount ||
+                    currentViewTrack.courses?.flatMap((c: any) => c.missions || []).length ||
+                    0}{' '}
+                  missions
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 shrink-0">
+              {!isCurrentEnrolled ? (
+                <Button
+                  size="sm"
+                  onClick={() => switchTrackMutation.mutate(currentViewTrack.id)}
+                  isLoading={switchTrackMutation.isPending}
+                  className="gap-2 text-xs"
+                >
+                  <Compass className="w-4 h-4" />
+                  <span>Switch to this track</span>
+                </Button>
+              ) : (
+                <Link href="/dashboard">
+                  <Button variant="secondary" size="sm" className="gap-2 text-xs">
+                    <span>Go to dashboard</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
               )}
             </div>
-            <h2 className="text-2xl font-bold text-white">{currentViewTrack.name}</h2>
-            <p className="text-xs text-gray-400 max-w-2xl leading-relaxed">
-              {currentViewTrack.description}
-            </p>
-            <div className="flex items-center gap-4 text-xs text-gray-400 pt-2">
-              <span>{currentViewTrack.courses?.length || 0} Comprehensive Courses</span>
-              <span>•</span>
-              <span className="text-amber-400 font-semibold">
-                {currentViewTrack.totalMissionsCount || currentViewTrack.courses?.flatMap((c: any) => c.missions || []).length || 0} Interactive Missions
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 shrink-0">
-            {!isCurrentEnrolled ? (
-              <button
-                onClick={() => switchTrackMutation.mutate(currentViewTrack.id)}
-                disabled={switchTrackMutation.isPending}
-                className="px-6 py-3 bg-primary-600 hover:bg-primary-500 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-primary-600/30 flex items-center gap-2"
-              >
-                <Compass className="w-4 h-4" />
-                <span>Switch to this Track</span>
-              </button>
-            ) : (
-              <Link
-                href="/dashboard"
-                className="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-xl text-xs font-bold transition-all border border-gray-700 flex items-center gap-2"
-              >
-                <span>Continue on Dashboard</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       )}
 
       {/* Course Tree */}
-      <div className="relative pt-6">
-        <div className="absolute left-[39px] top-8 bottom-4 w-0.5 bg-gray-800 hidden sm:block" />
+      <div className="relative pt-4">
+        <div className="absolute left-[31px] top-6 bottom-4 w-0.5 bg-border-dark hidden sm:block" />
 
-        <div className="space-y-8 relative z-10">
+        <div className="space-y-6 relative z-10">
           {(currentViewTrack?.courses || []).map((course: any, index: number) => {
             const missions = course.missions || [];
             return (
-              <motion.div
-                key={course.id || index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="flex flex-col sm:flex-row gap-6"
-              >
-                <div className="w-16 h-16 shrink-0 rounded-2xl flex items-center justify-center border-4 border-gray-950 bg-primary-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]">
-                  <span className="font-extrabold text-lg">{index + 1}</span>
+              <div key={course.id || index} className="flex flex-col sm:flex-row gap-5">
+                {/* Node number */}
+                <div className="w-14 h-14 shrink-0 rounded-[14px] flex items-center justify-center border-2 border-primary-500/40 bg-surface-dark text-white font-heading font-bold text-base shadow-sm">
+                  {index + 1}
                 </div>
 
-                <div className="flex-1 bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div>
-                      <h3 className="text-lg font-bold text-white">{course.name || course.title}</h3>
-                      <p className="text-xs text-gray-400 mt-0.5">{course.description}</p>
+                <Card className="flex-1">
+                  <CardContent className="p-5 sm:p-6 space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border-dark pb-3">
+                      <div>
+                        <h3 className="font-heading text-base font-bold text-white">
+                          {course.name || course.title}
+                        </h3>
+                        <p className="text-xs text-slate-400 mt-0.5 font-body">{course.description}</p>
+                      </div>
+                      <Badge variant="secondary" size="sm" className="self-start sm:self-auto font-mono">
+                        {missions.length} missions
+                      </Badge>
                     </div>
-                    <span className="text-xs font-semibold text-gray-400 bg-gray-950 px-3 py-1 rounded-full border border-gray-800 self-start sm:self-auto">
-                      {missions.length} Missions
-                    </span>
-                  </div>
 
-                  {/* Missions under this course */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-                    {missions.map((m: any) => (
-                      <a
-                        key={m.id}
-                        href={`/mission/${m.id}/`}
-                        className="p-3.5 bg-gray-950/80 hover:bg-gray-800/60 border border-gray-800 rounded-xl transition-all flex items-center justify-between gap-2 group"
-                      >
-                        <div className="space-y-0.5">
-                          <h4 className="text-xs font-bold text-gray-200 group-hover:text-primary-300 transition-colors">
-                            {m.title}
-                          </h4>
-                          <span className="text-[10px] text-amber-400 font-medium">+{m.xpReward} XP</span>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all" />
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
+                    {/* Missions Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                      {missions.map((m: any) => (
+                        <Link
+                          key={m.id}
+                          href={`/mission/${m.id}/`}
+                          className="p-3.5 bg-night rounded-[10px] border border-border-dark hover:border-primary-500/50 hover:bg-surface-raised transition-all flex items-center justify-between gap-2 group"
+                        >
+                          <div className="space-y-0.5 min-w-0">
+                            <h4 className="text-xs font-semibold text-slate-200 group-hover:text-primary-300 transition-colors truncate">
+                              {m.title}
+                            </h4>
+                            <span className="text-[11px] font-mono font-medium text-accent-400">
+                              +{m.xpReward} XP
+                            </span>
+                          </div>
+                          <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all shrink-0" />
+                        </Link>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             );
           })}
         </div>
       </div>
 
-      <div className="text-center pt-8">
-        <Link
-          href="/dashboard"
-          className="inline-flex px-8 py-3.5 bg-primary-600 hover:bg-primary-500 rounded-xl text-white font-bold text-sm transition-all shadow-lg shadow-primary-600/30"
-        >
-          Return to Mission Workspace
+      <div className="text-center pt-4">
+        <Link href="/dashboard">
+          <Button size="default" className="gap-2">
+            <span>Return to dashboard</span>
+            <ArrowRight className="w-4 h-4" />
+          </Button>
         </Link>
       </div>
     </div>

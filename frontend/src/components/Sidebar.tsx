@@ -3,68 +3,88 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth, UserRole } from '@/lib/auth-context';
 import Logo from '@/components/Logo';
+import { Avatar } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import {
   LayoutDashboard,
-  Target,
+  Compass,
   Briefcase,
   LogOut,
   Flame,
   Heart,
   Sparkles,
-  ExternalLink,
   Users2,
-  Share2,
   MessageSquare,
   Eye,
-  ShieldCheck,
-  Compass,
+  FileText,
+  BarChart3,
+  Search,
 } from 'lucide-react';
 
 export default function Sidebar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-
   const role: UserRole = user?.role || 'STUDENT';
 
   // Role-specific navigation links
   const studentLinks = [
-    { href: '/dashboard', label: 'Student Dashboard', icon: LayoutDashboard },
-    { href: '/mentorship', label: 'Mentorship & Q&A', icon: MessageSquare, badge: 'Help' },
-    { href: '/portfolio', label: 'My Portfolio', icon: Briefcase },
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/roadmap', label: 'Career Roadmap', icon: Compass },
-  ];
-
-  const mentorLinks = [
-    { href: '/mentor', label: 'Code Review Queue', icon: Eye, tag: 'Reviews' },
-    { href: '/mentor', label: 'Student Q&A Hub', icon: MessageSquare, tag: 'Inquiries' },
-    { href: '/mentor', label: 'Active Mentee Roster', icon: Users2, tag: 'Mentees' },
+    { href: '/mentorship', label: 'Ask Mentor', icon: MessageSquare },
+    { href: '/portfolio', label: 'My Portfolio', icon: Briefcase },
   ];
 
   const parentLinks = [
-    { href: '/parent', label: 'Family Dashboard', icon: Heart, tag: 'Milestones' },
-    { href: '/parent', label: 'Mentor Communications', icon: ShieldCheck, tag: 'Oversight' },
-    { href: '/parent', label: 'Encouragement & Cheers', icon: Sparkles, tag: '+15 XP' },
+    { href: '/parent', label: 'Overview', icon: Heart },
+    { href: '/parent?tab=reports', label: 'Academic Reports', icon: FileText },
+    { href: '/parent?tab=cheers', label: 'Send Cheer Boost', icon: Sparkles },
+  ];
+
+  const mentorLinks = [
+    { href: '/mentor', label: 'Review Queue', icon: Eye },
+    { href: '/mentor?tab=roster', label: 'Mentee Roster', icon: Users2 },
+    { href: '/mentorship', label: 'Student Inquiries', icon: MessageSquare },
   ];
 
   const recruiterLinks = [
-    { href: '/recruiter', label: 'Candidate Pipeline', icon: Users2, tag: 'Talent' },
+    { href: '/recruiter', label: 'Candidate Directory', icon: Search },
   ];
 
-  const getActiveLinks = () => {
+  const getSectionConfig = () => {
     switch (role) {
       case 'MENTOR':
-        return { title: 'Mentor Workbench', links: mentorLinks };
+        return {
+          title: 'Mentor Workbench',
+          links: mentorLinks,
+          accentClass: 'text-accent-400 bg-surface-raised border-l-2 border-accent-500',
+          badgeVariant: 'mentor' as const,
+        };
       case 'PARENT':
-        return { title: 'Family Oversight', links: parentLinks };
+        return {
+          title: 'Family Oversight',
+          links: parentLinks,
+          accentClass: 'text-gold-400 bg-surface-raised border-l-2 border-gold-500',
+          badgeVariant: 'parent' as const,
+        };
       case 'RECRUITER':
-        return { title: 'Recruiter Space', links: recruiterLinks };
+        return {
+          title: 'Talent Scout',
+          links: recruiterLinks,
+          accentClass: 'text-danger-400 bg-surface-raised border-l-2 border-danger-500',
+          badgeVariant: 'recruiter' as const,
+        };
       case 'STUDENT':
       default:
-        return { title: 'Student Learning Space', links: studentLinks };
+        return {
+          title: 'Learning Space',
+          links: studentLinks,
+          accentClass: 'text-primary-400 bg-surface-raised border-l-2 border-primary-500',
+          badgeVariant: 'student' as const,
+        };
     }
   };
 
-  const navSection = getActiveLinks();
+  const config = getSectionConfig();
 
   const getRoleHome = () => {
     if (role === 'MENTOR') return '/mentor';
@@ -74,135 +94,96 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="w-64 border-r border-gray-800 bg-gray-950 min-h-screen flex flex-col hidden md:flex shrink-0">
-      {/* Brand */}
-      <div className="p-4 border-b border-gray-800 flex items-center justify-between">
+    <aside className="w-64 border-r border-border-dark bg-surface-dark min-h-screen flex flex-col hidden md:flex shrink-0 select-none">
+      {/* Brand Header */}
+      <div className="h-16 px-5 border-b border-border-dark flex items-center justify-between">
         <Logo size="sm" href={getRoleHome()} />
-        {user?.role && (
-          <span
-            className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${
-              role === 'MENTOR'
-                ? 'bg-accent-500/20 text-accent-300 border-accent-500/30'
-                : role === 'PARENT'
-                  ? 'bg-rose-500/20 text-rose-300 border-rose-500/30'
-                  : role === 'RECRUITER'
-                    ? 'bg-blue-500/20 text-blue-300 border-blue-500/30'
-                    : 'bg-primary-500/20 text-primary-300 border-primary-500/30'
-            }`}
-          >
-            {user.role}
-          </span>
-        )}
+        <span
+          className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider border ${
+            role === 'MENTOR'
+              ? 'bg-accent-500/10 text-accent-400 border-accent-500/30'
+              : role === 'PARENT'
+                ? 'bg-gold-500/10 text-gold-400 border-gold-500/30'
+                : role === 'RECRUITER'
+                  ? 'bg-danger-500/10 text-danger-400 border-danger-500/30'
+                  : 'bg-primary-500/10 text-primary-400 border-primary-500/30'
+          }`}
+        >
+          {role}
+        </span>
       </div>
 
-      {/* User Identity Card */}
-      {user && (
-        <div className="p-4 border-b border-gray-800 bg-gray-900/40">
-          <div className="flex items-center gap-3">
-            <img
-              src={
-                user.avatarUrl ||
-                (role === 'MENTOR'
-                  ? 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=250'
-                  : role === 'PARENT'
-                    ? 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=250'
-                    : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250')
-              }
-              alt={user.name}
-              className={`w-11 h-11 rounded-xl object-cover border ${
-                role === 'MENTOR'
-                  ? 'border-accent-500/50'
-                  : role === 'PARENT'
-                    ? 'border-rose-500/50'
-                    : 'border-primary-500/50'
-              }`}
-            />
-            <div className="min-w-0 flex-1">
-              <div className="font-bold text-sm text-white truncate">{user.name}</div>
-              {role === 'STUDENT' ? (
-                <div className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
-                  <Flame className="w-3.5 h-3.5 text-orange-400 fill-orange-400" />
-                  <span>{user.streak}d streak</span>
-                  <span>•</span>
-                  <span className="text-amber-400 font-semibold">{user.xp} XP</span>
-                </div>
-              ) : (
-                <div className="text-[11px] text-gray-400 truncate mt-0.5">
-                  {user.headline || `${role.charAt(0) + role.slice(1).toLowerCase()} Account`}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Student public portfolio shortcut */}
-          {role === 'STUDENT' && user.id && (
-            <Link
-              href={`/portfolio/${user.id}`}
-              target="_blank"
-              className="mt-3 w-full py-1.5 px-3 bg-gray-950 hover:bg-gray-800 border border-gray-800 rounded-lg text-xs text-primary-300 hover:text-white transition-colors flex items-center justify-center gap-1.5 font-medium"
-            >
-              <Share2 className="w-3 h-3" />
-              View Public Portfolio
-            </Link>
-          )}
+      {/* Navigation Group */}
+      <div className="flex-1 py-5 px-3 space-y-1">
+        <div className="px-3 pb-2">
+          <p className="text-[11px] font-body font-medium uppercase tracking-wider text-slate-500">
+            {config.title}
+          </p>
         </div>
-      )}
 
-      {/* Role-Specific Navigation */}
-      <div className="flex-1 py-4 flex flex-col gap-4 px-3 overflow-y-auto">
-        <div className="space-y-1">
-          <div className="px-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
-            {navSection.title}
-          </div>
-          {navSection.links.map((link, idx) => {
-            const isActive = pathname === link.href;
+        <nav className="space-y-1">
+          {config.links.map((link) => {
             const Icon = link.icon;
+            const isActive =
+              pathname === link.href ||
+              (link.href.includes('?') && pathname === link.href.split('?')[0]);
+
             return (
               <Link
-                key={idx}
+                key={link.label}
                 href={link.href}
-                className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all text-xs font-semibold ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-sm font-body font-medium transition-all ${
                   isActive
-                    ? role === 'MENTOR'
-                      ? 'bg-accent-600 text-white shadow-md shadow-accent-600/20'
-                      : role === 'PARENT'
-                        ? 'bg-rose-600 text-white shadow-md shadow-rose-600/20'
-                        : 'bg-primary-600 text-white shadow-md shadow-primary-600/20'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-900'
+                    ? `${config.accentClass} text-white font-semibold shadow-sm`
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-surface-raised/60'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <Icon className="w-4 h-4" />
-                  <span>{link.label}</span>
-                </div>
-
-                {'badge' in link && (link as any).badge && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-accent-500/20 text-accent-300 font-mono border border-accent-500/30">
-                    {(link as any).badge}
-                  </span>
-                )}
-
-                {'tag' in link && (link as any).tag && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-950 border border-gray-800 text-gray-400 font-mono">
-                    {(link as any).tag}
-                  </span>
-                )}
+                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-current' : 'text-slate-400'}`} />
+                <span className="truncate">{link.label}</span>
               </Link>
             );
           })}
-        </div>
+        </nav>
       </div>
 
-      {/* Logout */}
-      <div className="p-3 border-t border-gray-800">
-        <button
-          onClick={logout}
-          className="flex items-center gap-3 px-3.5 py-2.5 w-full rounded-xl text-xs font-semibold text-gray-400 hover:text-red-400 hover:bg-red-950/20 transition-colors"
-        >
-          <LogOut className="w-4 h-4" />
-          <span>Sign Out</span>
-        </button>
-      </div>
-    </div>
+      {/* Gamification Summary (Students) */}
+      {role === 'STUDENT' && user && (
+        <div className="mx-3 mb-3 p-3.5 rounded-[12px] bg-night border border-border-dark space-y-2">
+          <div className="flex items-center justify-between text-xs font-mono">
+            <span className="text-slate-400">Total XP</span>
+            <span className="text-accent-400 font-semibold">{user.xp || 0}</span>
+          </div>
+          <div className="flex items-center justify-between text-xs font-mono">
+            <span className="text-slate-400">Day Streak</span>
+            <span className="inline-flex items-center gap-1 text-gold-400 font-semibold">
+              <Flame className="w-3 h-3 fill-gold-500" />
+              {user.streak || 0}d
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* User Footer Card */}
+      {user && (
+        <div className="p-3 border-t border-border-dark bg-night/50">
+          <div className="flex items-center justify-between p-2 rounded-[10px] bg-surface-dark border border-border-dark">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <Avatar name={user.name} size="sm" variant={config.badgeVariant} />
+              <div className="min-w-0">
+                <p className="text-xs font-medium text-slate-200 truncate">{user.name}</p>
+                <p className="text-[11px] text-slate-500 truncate">{user.email}</p>
+              </div>
+            </div>
+            <button
+              onClick={logout}
+              className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-surface-raised rounded-md transition-colors"
+              title="Log out"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+    </aside>
   );
 }

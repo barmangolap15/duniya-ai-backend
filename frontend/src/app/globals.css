@@ -3,32 +3,76 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --bg: #0B1020;
+    --surface: #131A2E;
+    --surface-subtle: #1B2440;
+    --border: #1E293B;
+    --border-strong: #334155;
+
+    --text: #E2E8F0;
+    --text-secondary: #94A3B8;
+    --text-muted: #94A3B8;
+
+    --primary: #4F46E5;
+    --primary-hover: #4338CA;
+    --primary-pressed: #3730A3;
+    --primary-tint: #E0E7FF;
+    --on-primary: #FFFFFF;
+
+    --accent: #14B8A6;
+    --accent-text: #0F766E;
+    --gold: #F59E0B;
+    --gold-text: #B45309;
+    --danger: #E11D48;
+
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
   html {
     scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: #0B1020;
+    color: #E2E8F0;
+    font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif;
   }
 }
 
-/* Custom Scrollbar */
+/* Number-heavy elements should have tabular-nums */
+.tabular-nums, .font-mono {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom Sleek Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #030712; /* gray-950 */
+  background: #0B1020;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1f2937; /* gray-800 */
-  border-radius: 4px;
+  background: #1E293B;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #374151; /* gray-700 */
+  background: #334155;
 }
 
 /* ============================================
-   GAMIFICATION ANIMATIONS
+   GAMIFICATION & FEEDBACK ANIMATIONS
    ============================================ */
 
 /* Confetti falling animation */
@@ -54,7 +98,7 @@
     opacity: 0;
   }
   30% {
-    transform: translate(-50%, -50%) scale(1.2);
+    transform: translate(-50%, -50%) scale(1.15);
     opacity: 1;
   }
   60% {
@@ -74,11 +118,11 @@
 /* Mission complete entrance */
 @keyframes mission-complete {
   0% {
-    transform: scale(0.5);
+    transform: scale(0.85);
     opacity: 0;
   }
-  50% {
-    transform: scale(1.1);
+  60% {
+    transform: scale(1.03);
   }
   100% {
     transform: scale(1);
@@ -87,32 +131,32 @@
 }
 
 .animate-mission-complete {
-  animation: mission-complete 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation: mission-complete 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Step completion glow pulse */
 @keyframes step-glow {
   0%, 100% {
-    box-shadow: 0 0 5px rgba(34, 197, 94, 0.3);
+    box-shadow: 0 0 5px rgba(20, 184, 166, 0.2);
   }
   50% {
-    box-shadow: 0 0 20px rgba(34, 197, 94, 0.6), 0 0 40px rgba(34, 197, 94, 0.2);
+    box-shadow: 0 0 16px rgba(20, 184, 166, 0.5), 0 0 24px rgba(20, 184, 166, 0.15);
   }
 }
 
 .animate-step-glow {
-  animation: step-glow 1s ease-in-out 2;
+  animation: step-glow 0.8s ease-in-out 2;
 }
 
 /* Active step pulse */
 @keyframes step-pulse {
   0%, 100% {
-    border-color: rgba(59, 130, 246, 0.5);
-    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.2);
+    border-color: rgba(79, 70, 229, 0.4);
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.15);
   }
   50% {
-    border-color: rgba(59, 130, 246, 0.8);
-    box-shadow: 0 0 15px 0 rgba(59, 130, 246, 0.3);
+    border-color: rgba(79, 70, 229, 0.8);
+    box-shadow: 0 0 12px 0 rgba(79, 70, 229, 0.25);
   }
 }
 
@@ -120,16 +164,10 @@
   animation: step-pulse 2s ease-in-out infinite;
 }
 
-/* Typewriter effect for auto-fill */
-@keyframes typewriter {
-  from { width: 0; }
-  to { width: 100%; }
-}
-
-/* Slide up for new step */
+/* Slide up */
 @keyframes slide-up-in {
   from {
-    transform: translateY(20px);
+    transform: translateY(14px);
     opacity: 0;
   }
   to {
@@ -139,53 +177,26 @@
 }
 
 .animate-slide-up {
-  animation: slide-up-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation: slide-up-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* XP counter increment */
 @keyframes xp-increment {
   0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-30px); opacity: 0; }
+  100% { transform: translateY(-24px); opacity: 0; }
 }
 
 .animate-xp-increment {
-  animation: xp-increment 1s ease-out forwards;
+  animation: xp-increment 0.8s ease-out forwards;
 }
 
-/* Shake animation for wrong answer */
+/* Shake animation for error */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
-  20%, 40%, 60%, 80% { transform: translateX(4px); }
+  15%, 45%, 75% { transform: translateX(-4px); }
+  30%, 60%, 90% { transform: translateX(4px); }
 }
 
 .animate-shake {
-  animation: shake 0.5s ease-in-out;
-}
-
-/* Tab badge glow when target tab is indicated */
-@keyframes tab-glow {
-  0%, 100% {
-    background-color: rgba(59, 130, 246, 0.1);
-    color: #60a5fa;
-  }
-  50% {
-    background-color: rgba(59, 130, 246, 0.3);
-    color: #93c5fd;
-  }
-}
-
-.animate-tab-glow {
-  animation: tab-glow 1.5s ease-in-out infinite;
-}
-
-/* Gradient animation for hero text */
-@keyframes gradient-x {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.animate-gradient-x {
-  background-size: 200% 200%;
-  animation: gradient-x 3s ease infinite;
+  animation: shake 0.4s ease-in-out;
 }
