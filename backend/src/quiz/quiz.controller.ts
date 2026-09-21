@@ -16,4 +16,10 @@ export class QuizController {
   submitQuiz(@Request() req: any, @Body('answers') answers: any[]) {
     return this.quizService.submitQuiz(req.user.userId, answers);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('recommendation')
+  getLatestRecommendation(@Request() req: any) {
+    return this.quizService.getLatestRecommendation(req.user.userId);
+  }
 }

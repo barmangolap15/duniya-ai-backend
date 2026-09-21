@@ -25,8 +25,12 @@ export default function SignupPage() {
       await login(res.token);
       toast.success(`Account created! Welcome to DuniyaAI, ${res.user.name}.`);
 
-      const targetRoute = getRoleHomeRoute(res.user.role);
-      router.push(targetRoute);
+      if (res.user.role === 'STUDENT') {
+        router.push('/quiz');
+      } else {
+        const targetRoute = getRoleHomeRoute(res.user.role);
+        router.push(targetRoute);
+      }
     } catch (error: any) {
       toast.error(error.message || 'Signup failed. Please try again.');
     } finally {

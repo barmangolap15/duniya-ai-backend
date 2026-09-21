@@ -28,6 +28,7 @@ import {
   Layout,
   Check,
   X,
+  Rocket,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -84,6 +85,13 @@ export default function Dashboard() {
           </p>
         </div>
         <div className="flex items-center gap-3 self-start sm:self-auto flex-wrap">
+          <Link
+            href="/quiz"
+            className="px-4 py-2.5 bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 rounded-xl text-xs font-bold transition-all flex items-center gap-2 hover:scale-105"
+          >
+            <Sparkles className="w-4 h-4 text-purple-400" />
+            <span>{user.quizCompleted ? 'Recalibrate Quiz / Skills' : 'Personalize Learning Path'}</span>
+          </Link>
           <button
             onClick={() => setShowTrackModal(true)}
             className="px-4 py-2.5 bg-primary-600/20 hover:bg-primary-600/30 text-primary-300 border border-primary-500/30 rounded-xl text-xs font-bold transition-all flex items-center gap-2 hover:scale-105"
@@ -100,6 +108,42 @@ export default function Dashboard() {
           </Link>
         </div>
       </div>
+
+      {/* Uncompleted Assessment Banner */}
+      {!user.quizCompleted && (
+        <div className="bg-gradient-to-r from-purple-950/60 via-indigo-950/50 to-gray-900 border-2 border-purple-500/40 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl shadow-purple-950/30 animate-in fade-in">
+          <div className="flex items-start gap-4">
+            <div className="p-3 bg-purple-500/20 border border-purple-500/40 rounded-xl shrink-0 mt-0.5">
+              <Sparkles className="w-6 h-6 text-purple-300 animate-pulse" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded bg-purple-500/30 text-purple-200 border border-purple-500/40">
+                  Recommended Next Step
+                </span>
+                <span className="text-xs text-amber-300 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
+                  +50 XP Bonus
+                </span>
+              </div>
+              <h2 className="text-lg font-bold text-white">
+                Complete your 2-minute skill & interest assessment
+              </h2>
+              <p className="text-xs text-gray-300 mt-1 max-w-xl leading-relaxed">
+                Answer 5 quick questions so our system can recommend the optimal career track, courses, and tailored first coding missions for you.
+              </p>
+            </div>
+          </div>
+
+          <Link
+            href="/quiz"
+            className="px-5 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold rounded-xl shrink-0 shadow-lg shadow-purple-600/30 transition-all flex items-center justify-center gap-2 hover:scale-105"
+          >
+            <Rocket className="w-4 h-4" />
+            <span>Take Quick Assessment</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      )}
 
       {/* Active Subject / Track Banner */}
       <div className="bg-gradient-to-r from-primary-950/40 via-gray-900 to-gray-900 border border-primary-500/30 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl">
