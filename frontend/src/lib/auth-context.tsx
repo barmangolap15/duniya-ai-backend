@@ -20,10 +20,11 @@ export interface User {
   quizCompleted: boolean;
 }
 
-export function getRoleHomeRoute(role?: UserRole): string {
+export function getRoleHomeRoute(role?: UserRole, quizCompleted?: boolean): string {
   if (role === 'MENTOR') return '/mentor';
   if (role === 'PARENT') return '/parent';
   if (role === 'RECRUITER') return '/recruiter';
+  if (role === 'STUDENT' && quizCompleted === false) return '/quiz';
   return '/dashboard';
 }
 
@@ -107,7 +108,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     toast.success('Logged out successfully');
   };
 
-  const getRoleHome = () => getRoleHomeRoute(user?.role);
+  const getRoleHome = () => getRoleHomeRoute(user?.role, user?.quizCompleted);
 
   return (
     <AuthContext.Provider

@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
@@ -33,9 +34,17 @@ import {
 import toast from 'react-hot-toast';
 
 export default function Dashboard() {
+  const router = useRouter();
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [showTrackModal, setShowTrackModal] = useState(false);
+
+  // Mandatory AI Onboarding Assessment Guard for Students
+  useEffect(() => {
+    if (user && user.role === 'STUDENT' && user.quizCompleted === false) {
+      router.replace('/quiz');
+    }
+  }, [user, router]);
 
   const { data, isLoading } = useQuery({
     queryKey: ['dashboard'],
@@ -61,6 +70,17 @@ export default function Dashboard() {
   });
 
   if (isLoading || !user) return <LoadingSpinner />;
+
+  if (user.role === 'STUDENT' && user.quizCompleted === false) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] gap-3">
+        <LoadingSpinner />
+        <p className="text-xs text-primary-400 font-semibold animate-pulse">
+          Directing you to your AI skill & interest assessment...
+        </p>
+      </div>
+    );
+  }
 
   const latestCheer = data?.recentCheers?.[0];
   const activeMentorThreads = data?.mentorshipThreads || [];
