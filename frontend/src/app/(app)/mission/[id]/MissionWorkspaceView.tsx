@@ -12,8 +12,8 @@ import { oneDark } from '@codemirror/theme-one-dark';
 import { api } from '@/lib/api';
 import { soundManager } from '@/lib/sounds';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import Confetti, { XPPopup, MissionCompleteOverlay } from '@/components/Confetti';
-import { ArrowLeft, Play, Save, Check, ChevronRight, Lightbulb, Keyboard, Lock, Eye, EyeOff, MessageSquare, Send, Sparkles, Code2, X, ShieldCheck } from 'lucide-react';
+import Confetti, { XPPopup } from '@/components/Confetti';
+import { ArrowLeft, ArrowRight, Play, Save, Check, ChevronRight, Lightbulb, Keyboard, Lock, Eye, EyeOff, MessageSquare, Send, Sparkles, Code2, X, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -385,11 +385,6 @@ export default function MissionWorkspace() {
       {/* Celebration effects */}
       <Confetti active={showConfetti} />
       <XPPopup xp={stepXPAmount} show={showStepXP} />
-      <MissionCompleteOverlay
-        show={showMissionComplete}
-        xp={mission.xpReward}
-        onContinue={() => submitMutation.mutate()}
-      />
 
       {/* ─── HEADER ─── */}
       <header className="h-14 border-b border-gray-800 bg-gray-950 flex items-center justify-between px-4 shrink-0">
@@ -577,11 +572,50 @@ export default function MissionWorkspace() {
               <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider">
                 Steps
               </h2>
-              <span className="text-xs text-gray-500">
-                {completedSteps.size}/{steps.length} Complete
+              <span className={`text-xs font-semibold ${allStepsCompleted ? 'text-green-400' : 'text-gray-500'}`}>
+                {completedSteps.size}/{steps.length} Complete {allStepsCompleted && '✓'}
               </span>
             </div>
           </div>
+
+          {/* Mission Complete Card in Right Panel */}
+          {(allStepsCompleted || showMissionComplete) && (
+            <div className="p-4 bg-gradient-to-b from-green-950/40 via-gray-900 to-gray-900 border-b border-green-500/30 shrink-0 animate-slide-up space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-2xl bg-green-500/20 border border-green-500/40 flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(34,197,94,0.3)] shrink-0">
+                  🏆
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-bold text-green-400 uppercase tracking-wider">Mission Complete!</div>
+                  <div className="text-sm font-bold text-white truncate">All steps solved</div>
+                </div>
+                <div className="text-right">
+                  <span className="text-sm font-extrabold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded-lg border border-amber-400/20 shadow-xs">
+                    +{mission.xpReward} XP
+                  </span>
+                </div>
+              </div>
+
+              <p className="text-xs text-gray-300 leading-relaxed">
+                Great job! Your code and output preview are visible on the left. Click Continue to submit your solution.
+              </p>
+
+              <button
+                onClick={() => submitMutation.mutate()}
+                disabled={submitMutation.isPending}
+                className="w-full py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-gray-950 font-black rounded-xl transition-all shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] hover:scale-[1.01] active:scale-98 disabled:opacity-50 flex items-center justify-center gap-2 text-sm cursor-pointer"
+              >
+                {submitMutation.isPending ? (
+                  <span>Submitting...</span>
+                ) : (
+                  <>
+                    <span>Continue</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </div>
+          )}
 
           {/* Steps list */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
@@ -722,22 +756,6 @@ export default function MissionWorkspace() {
               );
             })}
 
-            {/* All steps completed message */}
-            {allStepsCompleted && !showMissionComplete && (
-              <div className="mt-4 p-4 bg-green-500/10 border border-green-500/30 rounded-xl text-center animate-slide-up">
-                <div className="text-3xl mb-2">🎉</div>
-                <div className="text-green-400 font-bold mb-1">All Steps Complete!</div>
-                <div className="text-sm text-gray-400 mb-4">Submit your work to earn XP</div>
-                <button
-                  onClick={() => submitMutation.mutate()}
-                  disabled={submitMutation.isPending}
-                  className="w-full px-6 py-3 bg-green-500 hover:bg-green-400 text-gray-950 font-bold rounded-lg transition-all text-base disabled:opacity-50 hover:scale-[1.02] active:scale-95"
-                >
-                  <Play className="w-5 h-5 inline mr-2 fill-current" />
-                  Submit & Complete (+{mission.xpReward} XP)
-                </button>
-              </div>
-            )}
           </div>
 
           {/* Bottom: Mission info */}
