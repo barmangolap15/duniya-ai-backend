@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: levelup-backend
+    env: node
+    plan: free
+    region: oregon
+    rootDir: backend
+    buildCommand: npm install --include=dev && npx prisma generate && npm run build
+    startCommand: npx prisma migrate deploy && npm run start:prod
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        value: https://duniyaai-ddc79.web.app
+      - key: DATABASE_URL
+        fromDatabase:
+          name: levelup-db
+          property: connectionString
+
+databases:
+  - name: levelup-db
+    plan: free
+    region: oregon
+    databaseName: levelup
+    user: levelup_user

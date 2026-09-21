@@ -1,0 +1,259 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  MENTOR
+  PARENT
+  RECRUITER
+  ADMIN
+}
+
+enum SubmissionStatus {
+  IN_PROGRESS
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id            String       @id @default(cuid())
+  email         String       @unique
+  name          String
+  passwordHash  String
+  role          Role         @default(STUDENT)
+  headline      String?      @default("Aspiring Software Engineer")
+  bio           String?      @default("Learning by building real-world projects on LevelUp.")
+  githubUrl     String?
+  linkedinUrl   String?
+  xp            Int          @default(0)
+  level         Int          @default(1)
+  streak        Int          @default(0)
+  avatarUrl     String?
+  quizCompleted Boolean      @default(false)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  quizResponse  QuizResponse?
+  roadmap       UserRoadmap?
+  submissions   Submission[]
+  progress      UserMissionProgress[]
+
+  // Parent relations
+  parentLinks   ParentStudent[] @relation("StudentLink")
+  childLinks    ParentStudent[] @relation("ParentLink")
+  parentCheersSent  ParentCheer[]   @relation("ParentSentCheers")
+  studentCheersRecv ParentCheer[]   @relation("StudentReceivedCheers")
+
+  // Mentor relations
+  reviewsGiven  Review[]        @relation("MentorReviews")
+  studentThreads MentorshipThread[] @relation("StudentThreads")
+  mentorThreads  MentorshipThread[] @relation("MentorThreads")
+  sentMessages   MentorshipMessage[] @relation("UserSentMessages")
+
+  // Recruiter relations
+  savedByRecruiters SavedCandidate[] @relation("CandidateSaved")
+  recruiterSaved    SavedCandidate[] @relation("RecruiterBookmarks")
+}
+
+model ParentStudent {
+  id        String   @id @default(cuid())
+  parentId  String
+  studentId String
+  createdAt DateTime @default(now())
+
+  parent    User     @relation("ParentLink", fields: [parentId], references: [id])
+  student   User     @relation("StudentLink", fields: [studentId], references: [id])
+
+  @@unique([parentId, studentId])
+}
+
+model Review {
+  id           String     @id @default(cuid())
+  submissionId String
+  mentorId     String
+  feedback     String
+  rating       Int        @default(5) // 1-5 scale
+  createdAt    DateTime   @default(now())
+
+  submission   Submission @relation(fields: [submissionId], references: [id])
+  mentor       User       @relation("MentorReviews", fields: [mentorId], references: [id])
+}
+
+model SavedCandidate {
+  id          String   @id @default(cuid())
+  recruiterId String
+  studentId   String
+  notes       String?  @default("")
+  createdAt   DateTime @default(now())
+
+  recruiter   User     @relation("RecruiterBookmarks", fields: [recruiterId], references: [id])
+  student     User     @relation("CandidateSaved", fields: [studentId], references: [id])
+
+  @@unique([recruiterId, studentId])
+}
+
+model CareerTrack {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String
+  icon        String?
+  color       String?
+  createdAt   DateTime @default(now())
+
+  courses     Course[]
+  roadmaps    UserRoadmap[]
+  quizResults QuizResponse[]
+}
+
+model Course {
+  id            String      @id @default(cuid())
+  careerTrackId String
+  name          String
+  description   String
+  order         Int
+  imageUrl      String?
+  createdAt     DateTime    @default(now())
+
+  careerTrack   CareerTrack @relation(fields: [careerTrackId], references: [id])
+  missions      Mission[]
+}
+
+model Mission {
+  id            String   @id @default(cuid())
+  courseId      String
+  title         String
+  description   String
+  instructions  String
+  xpReward      Int      @default(50)
+  order         Int
+  languages     String[] @default(["html", "css", "js"])
+  starterHtml   String   @default("")
+  starterCss    String   @default("")
+  starterJs     String   @default("")
+  expectedOutput String?
+  steps         Json     @default("[]")
+  createdAt     DateTime @default(now())
+
+  course        Course   @relation(fields: [courseId], references: [id])
+  submissions   Submission[]
+  progress      UserMissionProgress[]
+  mentorshipThreads MentorshipThread[]
+}
+
+model Submission {
+  id          String           @id @default(cuid())
+  userId      String
+  missionId   String
+  htmlCode    String           @default("")
+  cssCode     String           @default("")
+  jsCode      String           @default("")
+  status      SubmissionStatus @default(IN_PROGRESS)
+  xpEarned    Int              @default(0)
+  submittedAt DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  user        User             @relation(fields: [userId], references: [id])
+  mission     Mission          @relation(fields: [missionId], references: [id])
+  reviews     Review[]
+
+  @@unique([userId, missionId])
+}
+
+model UserMissionProgress {
+  id         String   @id @default(cuid())
+  userId     String
+  missionId  String
+  completed  Boolean  @default(false)
+  unlockedAt DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id])
+  mission    Mission  @relation(fields: [missionId], references: [id])
+
+  @@unique([userId, missionId])
+}
+
+model QuizResponse {
+  id            String      @id @default(cuid())
+  userId        String      @unique
+  answers       Json
+  careerTrackId String?
+  createdAt     DateTime    @default(now())
+
+  user          User        @relation(fields: [userId], references: [id])
+  careerTrack   CareerTrack? @relation(fields: [careerTrackId], references: [id])
+}
+
+model UserRoadmap {
+  id            String      @id @default(cuid())
+  userId        String      @unique
+  careerTrackId String
+  milestones    Json?
+  createdAt     DateTime    @default(now())
+
+  user          User        @relation(fields: [userId], references: [id])
+  careerTrack   CareerTrack @relation(fields: [careerTrackId], references: [id])
+}
+
+enum ThreadStatus {
+  OPEN
+  WAITING_ON_STUDENT
+  WAITING_ON_MENTOR
+  RESOLVED
+}
+
+enum ThreadPriority {
+  NORMAL
+  URGENT
+  CODE_REVIEW
+}
+
+model MentorshipThread {
+  id          String              @id @default(cuid())
+  studentId   String
+  mentorId    String
+  missionId   String?
+  subject     String
+  status      ThreadStatus        @default(OPEN)
+  priority    ThreadPriority      @default(NORMAL)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  student     User                @relation("StudentThreads", fields: [studentId], references: [id], onDelete: Cascade)
+  mentor      User                @relation("MentorThreads", fields: [mentorId], references: [id], onDelete: Cascade)
+  mission     Mission?            @relation(fields: [missionId], references: [id])
+  messages    MentorshipMessage[]
+}
+
+model MentorshipMessage {
+  id          String            @id @default(cuid())
+  threadId    String
+  senderId    String
+  senderRole  Role
+  content     String
+  codeSnippet String?
+  stepNumber  Int?
+  createdAt   DateTime          @default(now())
+
+  thread      MentorshipThread  @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  sender      User              @relation("UserSentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+model ParentCheer {
+  id          String            @id @default(cuid())
+  parentId    String
+  studentId   String
+  message     String
+  xpAwarded   Int               @default(15)
+  createdAt   DateTime          @default(now())
+
+  parent      User              @relation("ParentSentCheers", fields: [parentId], references: [id], onDelete: Cascade)
+  student     User              @relation("StudentReceivedCheers", fields: [studentId], references: [id], onDelete: Cascade)
+}

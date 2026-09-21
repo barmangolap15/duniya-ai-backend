@@ -1,0 +1,26 @@
+{
+  "hosting": {
+    "public": "frontend/out",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "cleanUrls": true,
+    "trailingSlash": true,
+    "rewrites": [
+      {
+        "source": "/mission/**",
+        "destination": "/mission/workspace/index.html"
+      },
+      {
+        "source": "/portfolio/**",
+        "destination": "/portfolio/preview/index.html"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
