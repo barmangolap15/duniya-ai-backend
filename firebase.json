@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "duniya-ai-app",
     "public": "frontend/out",
     "ignore": [
       "firebase.json",

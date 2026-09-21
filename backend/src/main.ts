@@ -7,6 +7,10 @@ async function bootstrap() {
   
   const allowedOrigins = [
     'http://localhost:3000',
+    'https://duniya-ai-app.web.app',
+    'https://duniya-ai-app.firebaseapp.com',
+    'https://duniyaai-app.web.app',
+    'https://duniyaai-app.firebaseapp.com',
     'https://duniyaai-ddc79.web.app',
     'https://duniyaai-ddc79.firebaseapp.com',
     process.env.FRONTEND_URL,
