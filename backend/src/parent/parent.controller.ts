@@ -30,4 +30,9 @@ export class ParentController {
   getChildCommunications(@Request() req: any, @Param('studentId') studentId: string) {
     return this.parentService.getChildCommunications(req.user.userId, studentId);
   }
+
+  @Get('children/:studentId/report')
+  getChildReport(@Request() req: any, @Param('studentId') studentId: string) {
+    return this.parentService.getChildReport(req.user.userId, studentId);
+  }
 }

@@ -71,6 +71,7 @@ export const api = {
   },
   parent: {
     getChildren: () => apiFetch('/parent/children'),
+    getChildReport: (studentId: string) => apiFetch(`/parent/children/${studentId}/report`),
     getChildCommunications: (studentId: string) => apiFetch(`/parent/children/${studentId}/communications`),
     link: (studentEmail: string) =>
       apiFetch('/parent/link', { method: 'POST', body: JSON.stringify({ studentEmail }) }),

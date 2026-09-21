@@ -21,7 +21,6 @@ import {
   TrendingUp,
   ShieldCheck,
   Send,
-  MessageSquare,
   Code2,
   Lock,
   ChevronDown,
@@ -29,6 +28,12 @@ import {
   Award,
   AlertCircle,
   HelpCircle,
+  FileText,
+  Printer,
+  Compass,
+  Layers,
+  Check,
+  Zap,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -37,11 +42,10 @@ export default function ParentPage() {
   const queryClient = useQueryClient();
 
   const [selectedChildIndex, setSelectedChildIndex] = useState(0);
-  const [activeParentTab, setActiveParentTab] = useState<'OVERVIEW' | 'COMMUNICATIONS' | 'CHEERS'>('OVERVIEW');
+  const [activeParentTab, setActiveParentTab] = useState<'OVERVIEW' | 'REPORTS' | 'CHEERS'>('OVERVIEW');
   const [linkEmail, setLinkEmail] = useState('');
   const [showLinkModal, setShowLinkModal] = useState(false);
   const [cheerNote, setCheerNote] = useState('Super proud of your consistency! Keep building! 🚀');
-  const [expandedThreadId, setExpandedThreadId] = useState<string | null>(null);
 
   // Fetch parent's linked children
   const { data: children, isLoading: loadingChildren } = useQuery({
@@ -51,10 +55,10 @@ export default function ParentPage() {
 
   const currentChild = children?.[selectedChildIndex] || null;
 
-  // Fetch full child communications when on COMMUNICATIONS tab
-  const { data: communicationsData, isLoading: loadingComms } = useQuery({
-    queryKey: ['child-communications', currentChild?.id],
-    queryFn: () => (currentChild?.id ? api.parent.getChildCommunications(currentChild.id) : null),
+  // Fetch child report (curriculum progress, mentor evaluations, assessment results)
+  const { data: reportData, isLoading: loadingReport } = useQuery({
+    queryKey: ['child-report', currentChild?.id],
+    queryFn: () => (currentChild?.id ? api.parent.getChildReport(currentChild.id) : null),
     enabled: !!currentChild?.id,
   });
 
@@ -80,7 +84,7 @@ export default function ParentPage() {
       soundManager.playXP();
       toast.success(data.message || 'Cheer sent! +15 XP rewarded!');
       queryClient.invalidateQueries({ queryKey: ['parent-children'] });
-      queryClient.invalidateQueries({ queryKey: ['child-communications', currentChild?.id] });
+      queryClient.invalidateQueries({ queryKey: ['child-report', currentChild?.id] });
       setCheerNote('');
     },
     onError: (err: any) => {
@@ -88,12 +92,11 @@ export default function ParentPage() {
     },
   });
 
-  // Cheer preset templates
   const cheerTemplates = [
     'Super proud of your consistency! Keep crushing your streak! 🚀',
-    "Loved seeing Elena's feedback on your code! You're making real progress! 👏",
-    'Take a well-deserved break! Proud of your hard work today! ☕',
-    'Every line of code brings you closer to your dream role! Keep it up! 🌟',
+    "Great work on your latest coding milestone! You're making real progress! 👏",
+    'Take a well-deserved break! Proud of your dedication today! ☕',
+    'Every mission completed brings you closer to your dream role! Keep it up! 🌟',
   ];
 
   if (loadingChildren) return <LoadingSpinner />;
@@ -110,12 +113,12 @@ export default function ParentPage() {
             </span>
             <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold flex items-center gap-1">
               <ShieldCheck className="w-3 h-3 text-emerald-400" />
-              Verified Safe Mentoring
+              Verified Educational Reports
             </span>
           </div>
           <h1 className="text-3xl font-extrabold text-white">Family Learning Dashboard</h1>
           <p className="text-gray-400 text-sm mt-1">
-            Real-time transparency into your student's learning velocity, mentor interactions, and portfolio milestones.
+            Track your student's curriculum mastery, milestone reports, and mentor evaluation results.
           </p>
         </div>
 
@@ -129,14 +132,14 @@ export default function ParentPage() {
       </div>
 
       {/* If No Children Linked */}
-      {(!children || children.length === 0) ? (
+      {!children || children.length === 0 ? (
         <div className="bg-gray-900 border border-gray-800 rounded-3xl p-12 text-center max-w-xl mx-auto space-y-4">
           <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 mx-auto">
             <Heart className="w-8 h-8" />
           </div>
           <h2 className="text-xl font-bold text-white">No Children Linked Yet</h2>
           <p className="text-gray-400 text-sm">
-            Enter your child's student email address below to monitor their progress, verify their projects, and send encouragement.
+            Enter your child's student email address below to monitor their progress, verify their projects, and review official evaluation reports.
           </p>
           <div className="flex gap-3 pt-2">
             <input
@@ -230,10 +233,10 @@ export default function ParentPage() {
           )}
 
           {/* Tab Navigation */}
-          <div className="flex items-center gap-2 border-b border-gray-800 pb-3">
+          <div className="flex items-center gap-2 border-b border-gray-800 pb-3 overflow-x-auto scrollbar-thin">
             <button
               onClick={() => setActiveParentTab('OVERVIEW')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shrink-0 ${
                 activeParentTab === 'OVERVIEW'
                   ? 'bg-rose-600 text-white shadow-md'
                   : 'bg-gray-900 text-gray-400 hover:text-white'
@@ -244,25 +247,25 @@ export default function ParentPage() {
             </button>
 
             <button
-              onClick={() => setActiveParentTab('COMMUNICATIONS')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                activeParentTab === 'COMMUNICATIONS'
+              onClick={() => setActiveParentTab('REPORTS')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shrink-0 ${
+                activeParentTab === 'REPORTS'
                   ? 'bg-rose-600 text-white shadow-md'
                   : 'bg-gray-900 text-gray-400 hover:text-white'
               }`}
             >
-              <MessageSquare className="w-4 h-4" />
-              <span>Mentor Communications & Safety Oversight</span>
-              {currentChild?.mentorCommunications?.waitingOnMentorCount > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-amber-500 text-gray-950 font-mono text-[10px] font-bold">
-                  {currentChild.mentorCommunications.waitingOnMentorCount}
+              <FileText className="w-4 h-4" />
+              <span>Progress & Assessment Reports</span>
+              {reportData?.mentorEvaluations?.length > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full bg-emerald-500 text-gray-950 font-mono text-[10px] font-bold">
+                  {reportData.mentorEvaluations.length}
                 </span>
               )}
             </button>
 
             <button
               onClick={() => setActiveParentTab('CHEERS')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shrink-0 ${
                 activeParentTab === 'CHEERS'
                   ? 'bg-rose-600 text-white shadow-md'
                   : 'bg-gray-900 text-gray-400 hover:text-white'
@@ -298,224 +301,346 @@ export default function ParentPage() {
                   <div className="w-10 h-10 rounded-xl bg-primary-500/10 border border-primary-500/30 flex items-center justify-center text-primary-400 mb-3">
                     <Clock className="w-5 h-5" />
                   </div>
-                  <div className="text-xs text-gray-400">Estimated Practice</div>
-                  <div className="text-2xl font-bold text-white mt-1">~{currentChild.estimatedHours} Hours</div>
-                  <div className="text-[11px] text-gray-500 mt-0.5">Based on earned XP</div>
+                  <div className="text-xs text-gray-400">Estimated Effort</div>
+                  <div className="text-2xl font-bold text-white mt-1">
+                    ~{currentChild.estimatedHours || 1} Hours
+                  </div>
+                  <div className="text-[11px] text-primary-400 mt-0.5 font-medium">Focused code execution</div>
+                </div>
+
+                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                  <div className="w-10 h-10 rounded-xl bg-accent-500/10 border border-accent-500/30 flex items-center justify-center text-accent-400 mb-3">
+                    <Trophy className="w-5 h-5" />
+                  </div>
+                  <div className="text-xs text-gray-400">Total Experience</div>
+                  <div className="text-2xl font-bold text-white mt-1">{currentChild.xp} XP</div>
+                  <div className="text-[11px] text-accent-400 mt-0.5 font-medium">Gamified progress points</div>
                 </div>
 
                 <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
                   <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-3">
                     <CheckCircle2 className="w-5 h-5" />
                   </div>
-                  <div className="text-xs text-gray-400">Verified Projects</div>
-                  <div className="text-2xl font-bold text-emerald-400 mt-1">
-                    {currentChild.completedMissionsCount} Missions
+                  <div className="text-xs text-gray-400">Missions Completed</div>
+                  <div className="text-2xl font-bold text-white mt-1">
+                    {currentChild.completedMissionsCount} Projects
                   </div>
-                  <div className="text-[11px] text-gray-500 mt-0.5">Reviewed by mentors</div>
-                </div>
-
-                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-3">
-                    <Trophy className="w-5 h-5" />
-                  </div>
-                  <div className="text-xs text-gray-400">Total Accumulated XP</div>
-                  <div className="text-2xl font-bold text-amber-400 mt-1">{currentChild.xp} XP</div>
-                  <div className="text-[11px] text-gray-500 mt-0.5">Curriculum velocity</div>
+                  <div className="text-[11px] text-emerald-400 mt-0.5 font-medium">Interactive challenges</div>
                 </div>
               </div>
 
-              {/* Recent Activity & Mentor Reviews Feed */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-bold text-white">Recent Project Milestones & Mentor Reviews</h3>
-                  <span className="text-xs text-gray-500">Live verified updates</span>
+              {/* Progress Summary Card */}
+              <div className="bg-gradient-to-r from-gray-900 to-gray-950 border border-gray-800 rounded-3xl p-6 sm:p-8 space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h3 className="text-lg font-bold text-white">Curriculum Track Progression</h3>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      Enrolled in <strong className="text-primary-400">{currentChild.trackName}</strong>
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-2xl font-extrabold text-white">
+                      {currentChild.completionRate}%
+                    </span>
+                    <span className="text-xs text-gray-400 block">Relative milestone rate</span>
+                  </div>
                 </div>
 
-                <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden divide-y divide-gray-800">
-                  {currentChild.recentActivity?.map((activity: any, idx: number) => (
-                    <div key={idx} className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <div className="space-y-1.5">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-semibold text-accent-400">{activity.courseName}</span>
-                          <span className="text-gray-600">•</span>
-                          <h4 className="font-bold text-white text-sm">{activity.missionTitle}</h4>
-                          <span
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                              activity.status === 'APPROVED'
-                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                                : 'bg-amber-500/10 text-amber-400 border border-amber-500/30'
-                            }`}
-                          >
-                            {activity.status}
+                <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-rose-500 via-primary-500 to-accent-500 transition-all duration-500"
+                    style={{ width: `${Math.max(5, currentChild.completionRate)}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Recent Verified Activities */}
+              <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 space-y-4">
+                <h3 className="text-base font-bold text-white">Recent Project Submissions</h3>
+                {!currentChild.recentActivity || currentChild.recentActivity.length === 0 ? (
+                  <p className="text-xs text-gray-500">No project submissions logged yet.</p>
+                ) : (
+                  <div className="space-y-3">
+                    {currentChild.recentActivity.map((act: any, idx: number) => (
+                      <div
+                        key={idx}
+                        className="p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 flex items-center justify-between gap-4 text-xs"
+                      >
+                        <div className="space-y-1">
+                          <div className="font-bold text-white text-sm">{act.missionTitle}</div>
+                          <div className="text-gray-400">
+                            Course: <span className="text-gray-200">{act.courseName}</span> •{' '}
+                            <span>{new Date(act.date).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold font-mono">
+                            +{act.xp} XP
+                          </span>
+                          <span className="px-2.5 py-1 rounded-full bg-gray-800 text-gray-300 font-medium">
+                            {act.status}
                           </span>
                         </div>
-
-                        {activity.review && (
-                          <div className="p-3 bg-gray-950/70 border border-gray-800 rounded-xl text-xs text-gray-300 flex items-start gap-2.5">
-                            <Star className="w-4 h-4 text-amber-400 fill-amber-400 mt-0.5 shrink-0" />
-                            <div>
-                              <p className="italic">"{activity.review}"</p>
-                              <span className="text-[11px] text-accent-400 font-semibold mt-1 block">
-                                — Evaluated by {activity.mentorName || 'Elena Rostova (Staff Mentor)'}
-                              </span>
-                            </div>
-                          </div>
-                        )}
                       </div>
-
-                      <div className="text-right shrink-0">
-                        <span className="text-xs font-bold text-amber-400">+{activity.xp} XP</span>
-                        <div className="text-[11px] text-gray-500 mt-0.5">
-                          {new Date(activity.date).toLocaleDateString()}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           )}
 
           {/* ─────────────────────────────────────────────────────────────
-              TAB 2: MENTOR COMMUNICATIONS & SAFETY OVERSIGHT
+              TAB 2: PROGRESS REPORTS & EVALUATION RESULTS (REPLACED CHAT)
               ───────────────────────────────────────────────────────────── */}
-          {activeParentTab === 'COMMUNICATIONS' && currentChild && (
-            <div className="space-y-6">
-              {/* Safety & Compliance Card */}
-              <div className="bg-gradient-to-r from-emerald-950/30 via-gray-900 to-gray-900 border border-emerald-500/30 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
-                    <ShieldCheck className="w-6 h-6" />
+          {activeParentTab === 'REPORTS' && currentChild && (
+            <div className="space-y-8">
+              {/* Report Header Card */}
+              <div className="bg-gradient-to-r from-gray-900 via-gray-900 to-primary-950/20 border border-gray-800 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl">
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/30 text-primary-300 text-xs font-bold uppercase tracking-wider">
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>Official Academic & Progress Report</span>
                   </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-white">Full Parental Transparency Guarantee</h4>
-                    <p className="text-xs text-gray-400 mt-0.5">
-                      All technical questions and mentor guidance are logged here in full. Mentors are certified industry professionals adhering to strict educational conduct policies.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="text-xs text-emerald-400 font-mono font-semibold px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl self-start sm:self-auto shrink-0">
-                  100% Monitored & Safe
-                </div>
-              </div>
-
-              {/* Discussions Accordion */}
-              {loadingComms ? (
-                <LoadingSpinner />
-              ) : !communicationsData?.threads || communicationsData.threads.length === 0 ? (
-                <div className="bg-gray-900 border border-gray-800 rounded-3xl p-12 text-center text-gray-500 space-y-2">
-                  <MessageSquare className="w-10 h-10 mx-auto text-gray-600" />
-                  <h3 className="text-base font-bold text-white">No mentor inquiries yet</h3>
-                  <p className="text-xs max-w-md mx-auto">
-                    When {currentChild.name} asks a question or gets code guidance from mentors, every conversation and code snippet will appear here for your review.
+                  <h2 className="text-2xl font-bold text-white pt-1">
+                    {currentChild.name}’s Learning Report Card
+                  </h2>
+                  <p className="text-xs text-gray-400 max-w-xl">
+                    Comprehensive skill evaluation, curriculum mastery status, and certified mentor evaluations.
                   </p>
                 </div>
+
+                <button
+                  onClick={() => window.print()}
+                  className="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-white rounded-xl text-xs font-bold transition-all border border-gray-700 flex items-center gap-2 self-start sm:self-auto shadow-sm"
+                >
+                  <Printer className="w-4 h-4 text-primary-400" />
+                  <span>Print / Save Report</span>
+                </button>
+              </div>
+
+              {loadingReport ? (
+                <LoadingSpinner />
               ) : (
-                <div className="space-y-4">
-                  {communicationsData.threads.map((thread: any) => {
-                    const isExpanded = expandedThreadId === thread.id;
-                    const mentor = thread.mentor;
-
-                    return (
-                      <div
-                        key={thread.id}
-                        className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-accent-500/40 transition-all"
-                      >
-                        {/* Summary Bar */}
-                        <button
-                          onClick={() => setExpandedThreadId(isExpanded ? null : thread.id)}
-                          className="w-full p-5 text-left flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gray-900/60"
-                        >
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs font-semibold text-accent-400">
-                                {thread.mission?.title || 'General Code Consultation'}
-                              </span>
-                              <span className="text-gray-600">•</span>
-                              <span
-                                className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
-                                  thread.status === 'RESOLVED'
-                                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                                    : 'bg-accent-500/10 text-accent-300 border border-accent-500/30'
-                                }`}
-                              >
-                                {thread.status === 'RESOLVED' ? 'Resolved' : 'Active Guidance'}
-                              </span>
-                            </div>
-                            <h3 className="text-base font-bold text-white">{thread.subject}</h3>
-                            <div className="flex items-center gap-2 text-xs text-gray-400 pt-0.5">
-                              <span>Mentor: <strong className="text-gray-200">{mentor?.name || 'Elena Rostova'}</strong></span>
-                              <span>•</span>
-                              <span>{thread.messages?.length || 0} messages exchanged</span>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-3 self-end md:self-auto">
-                            <span className="text-xs text-gray-500">
-                              {new Date(thread.updatedAt).toLocaleDateString()}
-                            </span>
-                            <div className="p-1.5 bg-gray-800 rounded-lg text-gray-400">
-                              {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-                            </div>
-                          </div>
-                        </button>
-
-                        {/* Expanded Conversation Log */}
-                        {isExpanded && (
-                          <div className="p-5 border-t border-gray-800 bg-gray-950/60 space-y-4">
-                            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
-                              Full Conversation Transcript
-                            </div>
-
-                            <div className="space-y-3">
-                              {thread.messages?.map((msg: any) => {
-                                const isChild = msg.senderRole === 'STUDENT';
-                                return (
-                                  <div
-                                    key={msg.id}
-                                    className={`p-4 rounded-xl text-xs sm:text-sm leading-relaxed ${
-                                      isChild
-                                        ? 'bg-primary-950/40 border border-primary-500/30'
-                                        : 'bg-gray-850 border border-accent-500/30'
-                                    }`}
-                                  >
-                                    <div className="flex items-center justify-between text-xs mb-2">
-                                      <div className="flex items-center gap-2">
-                                        <strong className={isChild ? 'text-primary-300' : 'text-accent-300'}>
-                                          {isChild ? `${currentChild.name} (Student)` : `${mentor?.name || 'Staff Mentor'} (Certified)`}
-                                        </strong>
-                                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-gray-950 text-gray-400 font-mono">
-                                          {msg.senderRole}
-                                        </span>
-                                      </div>
-                                      <span className="text-gray-500 text-[11px]">
-                                        {new Date(msg.createdAt).toLocaleString()}
-                                      </span>
-                                    </div>
-
-                                    <p className="text-gray-200 whitespace-pre-wrap">{msg.content}</p>
-
-                                    {msg.codeSnippet && (
-                                      <div className="mt-3 p-3 bg-gray-950 rounded-xl border border-gray-800">
-                                        <div className="text-[10px] font-mono text-accent-400 mb-1 flex items-center gap-1 font-semibold">
-                                          <Code2 className="w-3 h-3" />
-                                          Code Excerpt {msg.stepNumber ? `(Step ${msg.stepNumber})` : ''}
-                                        </div>
-                                        <pre className="text-xs font-mono text-emerald-300 overflow-x-auto whitespace-pre">
-                                          <code>{msg.codeSnippet}</code>
-                                        </pre>
-                                      </div>
-                                    )}
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        )}
+                <div className="space-y-8">
+                  {/* 1. AI Placement & Skill Assessment Results */}
+                  <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 space-y-6">
+                    <div className="flex items-center justify-between border-b border-gray-800 pb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-primary-500/10 border border-primary-500/30 rounded-xl text-primary-400">
+                          <Compass className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h3 className="text-base font-bold text-white">AI Skill Assessment & Placement Results</h3>
+                          <p className="text-xs text-gray-400">
+                            Diagnostic evaluation performed upon student onboarding
+                          </p>
+                        </div>
                       </div>
-                    );
-                  })}
+
+                      <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-xs font-bold flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        {reportData?.assessmentResult?.completed ? 'Verified Assessment' : 'Pending Diagnostic'}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="p-4 bg-gray-950/80 rounded-2xl border border-gray-800/80 space-y-1.5">
+                        <span className="text-[11px] font-bold text-primary-400 uppercase tracking-wider">
+                          Assigned Career Subject Path
+                        </span>
+                        <div className="text-lg font-bold text-white">
+                          {reportData?.assessmentResult?.trackName || currentChild.trackName}
+                        </div>
+                        <p className="text-xs text-gray-400 leading-relaxed">
+                          {reportData?.assessmentResult?.trackDescription ||
+                            'Curriculum tailored to build modern interactive projects with industry code standards.'}
+                        </p>
+                      </div>
+
+                      <div className="p-4 bg-gray-950/80 rounded-2xl border border-gray-800/80 space-y-2">
+                        <span className="text-[11px] font-bold text-accent-400 uppercase tracking-wider">
+                          Competency Milestones
+                        </span>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div className="p-2 bg-gray-900 rounded-xl border border-gray-800">
+                            <span className="text-gray-400 block text-[10px]">Total Missions</span>
+                            <span className="text-sm font-bold text-white">
+                              {reportData?.track?.totalMissions || 0} Missions
+                            </span>
+                          </div>
+                          <div className="p-2 bg-gray-900 rounded-xl border border-gray-800">
+                            <span className="text-gray-400 block text-[10px]">Completed</span>
+                            <span className="text-sm font-bold text-emerald-400">
+                              {reportData?.track?.completedMissions || 0} Passed
+                            </span>
+                          </div>
+                          <div className="p-2 bg-gray-900 rounded-xl border border-gray-800">
+                            <span className="text-gray-400 block text-[10px]">Academic Level</span>
+                            <span className="text-sm font-bold text-white">Level {currentChild.level}</span>
+                          </div>
+                          <div className="p-2 bg-gray-900 rounded-xl border border-gray-800">
+                            <span className="text-gray-400 block text-[10px]">Active Habit</span>
+                            <span className="text-sm font-bold text-orange-400">{currentChild.streak} Day Streak</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 2. Course-by-Course Curriculum Mastery Breakdown */}
+                  <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 space-y-6">
+                    <div className="flex items-center justify-between border-b border-gray-800 pb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-accent-500/10 border border-accent-500/30 rounded-xl text-accent-400">
+                          <Layers className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h3 className="text-base font-bold text-white">Curriculum Progress Breakdown</h3>
+                          <p className="text-xs text-gray-400">
+                            Step-by-step course completion and unit mastery
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="text-right">
+                        <span className="text-sm font-bold text-white">
+                          Overall: {reportData?.track?.overallPercentage || 0}%
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      {reportData?.coursesProgress?.map((course: any, idx: number) => (
+                        <div
+                          key={course.id || idx}
+                          className="p-5 bg-gray-950/80 rounded-2xl border border-gray-800/80 space-y-3"
+                        >
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <h4 className="text-sm font-bold text-white">{course.name}</h4>
+                                {course.isCompleted ? (
+                                  <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">
+                                    Mastered ✅
+                                  </span>
+                                ) : course.completedMissions > 0 ? (
+                                  <span className="px-2 py-0.5 rounded-md bg-primary-500/20 text-primary-300 border border-primary-500/30 text-[10px] font-bold">
+                                    In Progress ⚡
+                                  </span>
+                                ) : (
+                                  <span className="px-2 py-0.5 rounded-md bg-gray-800 text-gray-400 text-[10px] font-medium">
+                                    Upcoming
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-xs text-gray-400 mt-0.5">{course.description}</p>
+                            </div>
+
+                            <div className="text-right shrink-0">
+                              <span className="text-xs font-mono font-bold text-gray-200">
+                                {course.completedMissions} / {course.totalMissions} Missions
+                              </span>
+                              <span className="text-[11px] text-gray-500 ml-2 font-bold">
+                                ({course.percentage}%)
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="w-full h-2 bg-gray-900 rounded-full overflow-hidden border border-gray-800">
+                            <div
+                              className={`h-full transition-all duration-500 ${
+                                course.isCompleted
+                                  ? 'bg-emerald-500'
+                                  : 'bg-gradient-to-r from-primary-500 to-accent-500'
+                              }`}
+                              style={{ width: `${course.percentage}%` }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 3. Certified Mentor Evaluation Reports (Grades & Written Feedback) */}
+                  <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 space-y-6">
+                    <div className="flex items-center justify-between border-b border-gray-800 pb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400">
+                          <Award className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h3 className="text-base font-bold text-white">
+                            Certified Mentor Evaluations & Code Reviews
+                          </h3>
+                          <p className="text-xs text-gray-400">
+                            Official grading and qualitative feedback on completed project code
+                          </p>
+                        </div>
+                      </div>
+
+                      <span className="text-xs text-emerald-400 font-semibold px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
+                        100% Industry Verified
+                      </span>
+                    </div>
+
+                    {!reportData?.mentorEvaluations || reportData.mentorEvaluations.length === 0 ? (
+                      <div className="text-center py-10 p-6 bg-gray-950/60 border border-gray-800/80 rounded-2xl space-y-2">
+                        <Award className="w-10 h-10 mx-auto text-gray-600" />
+                        <h4 className="text-sm font-bold text-white">No Mentor Evaluations Yet</h4>
+                        <p className="text-xs text-gray-400 max-w-md mx-auto">
+                          When {currentChild.name} completes coding challenges, industry mentors review and grade their code here.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {reportData.mentorEvaluations.map((item: any) => (
+                          <div
+                            key={item.submissionId}
+                            className="p-5 bg-gray-950/80 rounded-2xl border border-gray-800/80 space-y-3 hover:border-emerald-500/30 transition-colors"
+                          >
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-800/60 pb-3">
+                              <div>
+                                <h4 className="text-sm font-bold text-white">{item.missionTitle}</h4>
+                                <div className="text-xs text-gray-400">
+                                  Course: <strong className="text-gray-300">{item.courseName}</strong> • Evaluated on{' '}
+                                  {new Date(item.date).toLocaleDateString()}
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-3">
+                                {/* Star Rating */}
+                                <div className="flex items-center gap-1 bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-xl text-xs font-bold text-amber-300">
+                                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                                  <span>{item.review?.rating || 5} / 5</span>
+                                </div>
+
+                                <span className="px-2.5 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
+                                  Approved ✅
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Written Mentor Feedback */}
+                            <div className="space-y-1.5 pt-1">
+                              <div className="flex items-center gap-2 text-xs">
+                                <span className="font-bold text-accent-400">
+                                  {item.review?.mentorName || 'Certified Mentor'}
+                                </span>
+                                <span className="text-gray-500">•</span>
+                                <span className="text-gray-400 text-[11px]">
+                                  {item.review?.mentorHeadline || 'Staff Software Engineer'}
+                                </span>
+                              </div>
+                              <p className="text-xs text-gray-300 bg-gray-900/60 p-3.5 rounded-xl border border-gray-800 leading-relaxed italic">
+                                "{item.review?.feedback}"
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -528,28 +653,27 @@ export default function ParentPage() {
             <div className="space-y-8">
               {/* Send Cheer Form */}
               <div className="bg-gradient-to-r from-rose-950/30 via-gray-900 to-gray-900 border border-rose-500/30 rounded-3xl p-6 sm:p-8 space-y-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
-                    <Heart className="w-6 h-6 fill-rose-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white">Send Encouragement to {currentChild.name}</h3>
-                    <p className="text-xs text-gray-400">
-                      Sending a cheer awards a <strong className="text-rose-400">+15 XP motivation boost</strong> directly to their account.
-                    </p>
-                  </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white">Send Encouragement to {currentChild.name}</h3>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Your cheers appear on {currentChild.name}’s dashboard and reward them with{' '}
+                    <strong className="text-rose-400">+15 XP</strong> to boost their streak!
+                  </p>
                 </div>
 
-                {/* Quick Cheer Templates */}
+                {/* Preset Cheer Chips */}
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-gray-300">Quick Encouragement Templates</label>
+                  <label className="text-xs font-semibold text-gray-300">Quick Templates</label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {cheerTemplates.map((template, idx) => (
                       <button
                         key={idx}
-                        type="button"
                         onClick={() => setCheerNote(template)}
-                        className="p-3 bg-gray-950 hover:bg-gray-800 border border-gray-800 hover:border-rose-500/40 rounded-xl text-left text-xs text-gray-300 transition-colors"
+                        className={`p-3 rounded-xl text-left text-xs border transition-all ${
+                          cheerNote === template
+                            ? 'bg-rose-600/20 border-rose-500 text-rose-200'
+                            : 'bg-gray-950/60 border-gray-800 text-gray-400 hover:text-white hover:bg-gray-800'
+                        }`}
                       >
                         {template}
                       </button>
@@ -557,62 +681,57 @@ export default function ParentPage() {
                   </div>
                 </div>
 
-                {/* Custom Note */}
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold text-gray-300">Personalized Note</label>
+                <div className="space-y-3">
                   <textarea
                     rows={3}
                     value={cheerNote}
                     onChange={(e) => setCheerNote(e.target.value)}
-                    placeholder="Write a custom cheer or motivational message..."
-                    className="w-full bg-gray-950 border border-gray-800 rounded-xl p-3.5 text-xs text-white focus:outline-none focus:border-rose-500 resize-none leading-relaxed"
+                    placeholder="Write a personal encouragement note..."
+                    className="w-full bg-gray-950 border border-gray-800 rounded-2xl p-4 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-rose-500 transition-colors"
                   />
-                </div>
 
-                <button
-                  onClick={() => {
-                    if (!cheerNote.trim()) {
-                      toast.error('Please write an encouragement note');
-                      return;
+                  <button
+                    onClick={() =>
+                      cheerMutation.mutate({
+                        childId: currentChild.id,
+                        message: cheerNote,
+                      })
                     }
-                    cheerMutation.mutate({
-                      childId: currentChild.id,
-                      message: cheerNote.trim(),
-                    });
-                  }}
-                  disabled={!cheerNote.trim() || cheerMutation.isPending}
-                  className="px-6 py-3 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50 flex items-center gap-2 shadow-lg shadow-rose-600/20 hover:scale-[1.02] active:scale-95"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>Send Cheer (+15 XP Boost)</span>
-                </button>
+                    disabled={!cheerNote.trim() || cheerMutation.isPending}
+                    className="px-6 py-3 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-rose-600/20 flex items-center gap-2 disabled:opacity-50 hover:scale-[1.02] active:scale-95"
+                  >
+                    <Send className="w-4 h-4" />
+                    <span>Send Cheer (+15 XP to {currentChild.name})</span>
+                  </button>
+                </div>
               </div>
 
-              {/* Past Cheers Timeline */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-bold text-white">Cheer & Motivation History</h3>
-                {communicationsData?.cheers?.length === 0 ? (
-                  <div className="p-8 bg-gray-900 border border-gray-800 rounded-2xl text-center text-gray-500 text-xs">
-                    No cheers sent yet. Use the form above to send your first encouragement boost!
-                  </div>
+              {/* Past Cheers List */}
+              <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 space-y-4">
+                <h3 className="text-base font-bold text-white">Recent Cheers Sent</h3>
+                {!currentChild.cheers || currentChild.cheers.length === 0 ? (
+                  <p className="text-xs text-gray-500">No encouragement cheers sent yet.</p>
                 ) : (
-                  <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden divide-y divide-gray-800">
-                    {communicationsData?.cheers?.map((cheer: any) => (
-                      <div key={cheer.id} className="p-4 flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 shrink-0">
+                  <div className="space-y-3">
+                    {currentChild.cheers.map((cheer: any) => (
+                      <div
+                        key={cheer.id}
+                        className="p-4 bg-gray-950/60 rounded-2xl border border-gray-800/80 flex items-start justify-between gap-4 text-xs"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="p-2 bg-rose-500/10 border border-rose-500/30 rounded-xl text-rose-400 mt-0.5">
                             <Heart className="w-4 h-4 fill-rose-400" />
                           </div>
                           <div>
-                            <p className="text-xs sm:text-sm text-gray-200 font-medium">"{cheer.message}"</p>
-                            <span className="text-[11px] text-gray-500">
-                              Sent on {new Date(cheer.createdAt).toLocaleDateString()} at {new Date(cheer.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            <p className="text-gray-200">{cheer.message}</p>
+                            <span className="text-[11px] text-gray-500 mt-1 block">
+                              Sent on {new Date(cheer.createdAt).toLocaleString()}
                             </span>
                           </div>
                         </div>
 
-                        <span className="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/30 text-xs font-bold shrink-0">
-                          +{cheer.xpAwarded} XP
+                        <span className="px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-300 font-bold font-mono shrink-0">
+                          +15 XP
                         </span>
                       </div>
                     ))}
@@ -624,56 +743,37 @@ export default function ParentPage() {
         </div>
       )}
 
-      {/* Modal: Link Another Child */}
+      {/* Link Child Modal */}
       {showLinkModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-gray-900 border border-gray-800 rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-800">
-              <div className="flex items-center gap-2">
-                <UserPlus className="w-5 h-5 text-primary-400" />
-                <h3 className="text-lg font-bold text-white">Link Student Account</h3>
-              </div>
-              <button
-                onClick={() => setShowLinkModal(false)}
-                className="text-gray-400 hover:text-white text-sm"
-              >
-                ✕
-              </button>
-            </div>
-
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-4">
+            <h3 className="text-lg font-bold text-white">Link a Student Account</h3>
             <p className="text-xs text-gray-400 leading-relaxed">
-              Enter your child's registered email address on DuniyaAI. You will immediately gain access to their progress, study velocity, and mentor guidance.
+              Enter the email address registered by your child on DuniyaAI. You'll gain access to their progress reports and milestone reviews.
             </p>
 
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1.5">Child's Email Address</label>
-                <input
-                  type="email"
-                  placeholder="e.g. student@duniyaai.com"
-                  value={linkEmail}
-                  onChange={(e) => setLinkEmail(e.target.value)}
-                  className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primary-500"
-                />
-              </div>
+            <input
+              type="email"
+              placeholder="student@levelup.com"
+              value={linkEmail}
+              onChange={(e) => setLinkEmail(e.target.value)}
+              className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primary-500"
+            />
 
-              <div className="flex gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowLinkModal(false)}
-                  className="flex-1 px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-xs font-semibold transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={() => linkMutation.mutate(linkEmail)}
-                  disabled={!linkEmail || linkMutation.isPending}
-                  className="flex-1 px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50"
-                >
-                  Link Account
-                </button>
-              </div>
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                onClick={() => setShowLinkModal(false)}
+                className="px-4 py-2 text-xs font-semibold text-gray-400 hover:text-white transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => linkMutation.mutate(linkEmail)}
+                disabled={!linkEmail || linkMutation.isPending}
+                className="px-5 py-2 bg-primary-600 hover:bg-primary-500 text-white rounded-xl text-xs font-bold transition-colors disabled:opacity-50 shadow-lg shadow-primary-600/30"
+              >
+                {linkMutation.isPending ? 'Linking...' : 'Confirm Link'}
+              </button>
             </div>
           </div>
         </div>

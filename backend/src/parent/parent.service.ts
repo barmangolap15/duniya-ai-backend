@@ -151,23 +151,20 @@ export class ParentService {
       throw new ForbiddenException('Student is not linked to your parent account');
     }
 
+    // High-level consultation metadata only - no messages/transcripts
     const threads = await this.prisma.mentorshipThread.findMany({
       where: { studentId },
       orderBy: { updatedAt: 'desc' },
-      include: {
+      select: {
+        id: true,
+        subject: true,
+        status: true,
+        updatedAt: true,
         mentor: {
-          select: { id: true, name: true, avatarUrl: true, headline: true, email: true },
+          select: { id: true, name: true, avatarUrl: true, headline: true },
         },
         mission: {
           select: { id: true, title: true, course: { select: { name: true } } },
-        },
-        messages: {
-          orderBy: { createdAt: 'asc' },
-          include: {
-            sender: {
-              select: { id: true, name: true, avatarUrl: true, role: true },
-            },
-          },
         },
       },
     });
@@ -199,6 +196,161 @@ export class ParentService {
       threads,
       reviews,
       cheers,
+    };
+  }
+
+  async getChildReport(parentId: string, studentId: string) {
+    const link = await this.prisma.parentStudent.findUnique({
+      where: {
+        parentId_studentId: {
+          parentId,
+          studentId,
+        },
+      },
+      include: {
+        student: {
+          include: {
+            quizResponse: {
+              include: { careerTrack: true },
+            },
+            roadmap: {
+              include: {
+                careerTrack: {
+                  include: {
+                    courses: {
+                      orderBy: { order: 'asc' },
+                      include: {
+                        missions: {
+                          orderBy: { order: 'asc' },
+                          include: {
+                            submissions: {
+                              where: { userId: studentId },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            submissions: {
+              orderBy: { updatedAt: 'desc' },
+              include: {
+                mission: {
+                  include: { course: true },
+                },
+                reviews: {
+                  include: {
+                    mentor: {
+                      select: { id: true, name: true, avatarUrl: true, headline: true },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!link) {
+      throw new ForbiddenException('Student is not linked to your parent account');
+    }
+
+    const student = link.student;
+    const roadmapTrack = student.roadmap?.careerTrack;
+    const allMissions = roadmapTrack?.courses?.flatMap((c) => c.missions) || [];
+    const completedSubmissions = student.submissions.filter(
+      (s) => s.status === 'SUBMITTED' || s.status === 'APPROVED',
+    );
+
+    // Calculate progress per course
+    const coursesProgress = (roadmapTrack?.courses || []).map((course) => {
+      const courseMissions = course.missions || [];
+      const completedCount = courseMissions.filter((m) =>
+        m.submissions.some((s) => s.status === 'SUBMITTED' || s.status === 'APPROVED'),
+      ).length;
+      const percentage =
+        courseMissions.length > 0
+          ? Math.round((completedCount / courseMissions.length) * 100)
+          : 0;
+
+      return {
+        id: course.id,
+        name: course.name,
+        description: course.description,
+        order: course.order,
+        totalMissions: courseMissions.length,
+        completedMissions: completedCount,
+        percentage,
+        isCompleted: percentage === 100,
+      };
+    });
+
+    // Extract mentor evaluation feedback (no chat transcripts)
+    const mentorEvaluations = student.submissions
+      .filter((s) => s.reviews && s.reviews.length > 0)
+      .map((s) => ({
+        submissionId: s.id,
+        missionTitle: s.mission?.title || 'Coding Mission',
+        courseName: s.mission?.course?.name || 'Curriculum',
+        date: s.updatedAt,
+        status: s.status,
+        xpEarned: s.xpEarned,
+        review: {
+          id: s.reviews[0].id,
+          rating: s.reviews[0].rating,
+          feedback: s.reviews[0].feedback,
+          mentorName: s.reviews[0].mentor?.name || 'Certified Mentor',
+          mentorHeadline: s.reviews[0].mentor?.headline || 'Senior Software Engineer',
+          mentorAvatar: s.reviews[0].mentor?.avatarUrl || null,
+        },
+      }));
+
+    // Assessment Results Summary
+    const quizResponse = student.quizResponse;
+    const assessmentResult = quizResponse
+      ? {
+          completed: true,
+          trackName: quizResponse.careerTrack?.name || roadmapTrack?.name || 'Exploring Tracks',
+          trackDescription: quizResponse.careerTrack?.description || roadmapTrack?.description,
+          dateCompleted: quizResponse.createdAt,
+          answers: quizResponse.answers,
+        }
+      : {
+          completed: false,
+          trackName: roadmapTrack?.name || 'In Progress',
+          trackDescription: roadmapTrack?.description,
+        };
+
+    const overallPercentage =
+      allMissions.length > 0
+        ? Math.round((completedSubmissions.length / allMissions.length) * 100)
+        : 0;
+
+    return {
+      student: {
+        id: student.id,
+        name: student.name,
+        email: student.email,
+        avatarUrl: student.avatarUrl,
+        level: student.level,
+        xp: student.xp,
+        streak: student.streak,
+        headline: student.headline,
+        joinedDate: student.createdAt,
+      },
+      assessmentResult,
+      track: {
+        name: roadmapTrack?.name || 'Custom Learning Track',
+        description: roadmapTrack?.description,
+        totalMissions: allMissions.length,
+        completedMissions: completedSubmissions.length,
+        overallPercentage,
+      },
+      coursesProgress,
+      mentorEvaluations,
     };
   }
 
