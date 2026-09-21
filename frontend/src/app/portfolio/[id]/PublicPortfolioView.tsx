@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Link from 'next/link';
+import Logo from '@/components/Logo';
 import {
   ShieldCheck,
   Flame,
@@ -72,7 +73,7 @@ export default function PublicPortfolioPage() {
           href="/"
           className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 rounded-lg text-white font-medium transition-colors"
         >
-          Back to LevelUp
+          Back to DuniyaAI
         </Link>
       </div>
     );
@@ -85,14 +86,12 @@ export default function PublicPortfolioPage() {
       {/* Top Banner */}
       <div className="border-b border-gray-800 bg-gray-900/60 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-accent-500">
-              LevelUp
-            </span>
+          <div className="flex items-center gap-2 group">
+            <Logo size="sm" href="/" />
             <span className="text-xs text-gray-500 hidden sm:inline group-hover:text-gray-400">
               • Verified Talent Network
             </span>
-          </Link>
+          </div>
 
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
@@ -145,7 +144,7 @@ export default function PublicPortfolioPage() {
                 </div>
 
                 <p className="text-primary-300 font-medium text-sm sm:text-base">
-                  {profile.headline || 'Frontend Developer | LevelUp Certified'}
+                  {profile.headline || 'Frontend Developer | DuniyaAI Certified'}
                 </p>
 
                 <p className="text-gray-400 text-sm max-w-2xl leading-relaxed">
@@ -340,7 +339,7 @@ export default function PublicPortfolioPage() {
         <section className="p-8 rounded-3xl bg-gradient-to-r from-primary-950/60 to-accent-950/60 border border-primary-800/40 text-center space-y-4">
           <h3 className="text-xl sm:text-2xl font-bold text-white">Interested in hiring or interviewing {profile.name}?</h3>
           <p className="text-sm text-gray-400 max-w-xl mx-auto">
-            This developer's submissions have been validated on the LevelUp platform. Recruiters can connect directly or send official job invitations.
+            This developer's submissions have been validated on the DuniyaAI platform. Recruiters can connect directly or send official job invitations.
           </p>
           <div className="flex items-center justify-center gap-4 pt-2">
             <Link

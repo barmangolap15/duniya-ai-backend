@@ -6,8 +6,8 @@ import { Providers } from '@/lib/providers';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'LevelUp - Gamified Learning',
-  description: 'Level up your career with gamified learning',
+  title: 'DuniyaAI - AI-Powered Learning & Career Platform',
+  description: 'Learn by building real-world projects with DuniyaAI verified code mentorship',
 };
 
 export default function RootLayout({

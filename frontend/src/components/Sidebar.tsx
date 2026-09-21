@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth, UserRole } from '@/lib/auth-context';
+import Logo from '@/components/Logo';
 import {
   LayoutDashboard,
   Target,
@@ -75,13 +76,8 @@ export default function Sidebar() {
   return (
     <div className="w-64 border-r border-gray-800 bg-gray-950 min-h-screen flex flex-col hidden md:flex shrink-0">
       {/* Brand */}
-      <div className="p-5 border-b border-gray-800 flex items-center justify-between">
-        <Link
-          href={getRoleHome()}
-          className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary-400 via-accent-400 to-primary-500"
-        >
-          LevelUp
-        </Link>
+      <div className="p-4 border-b border-gray-800 flex items-center justify-between">
+        <Logo size="sm" href={getRoleHome()} />
         {user?.role && (
           <span
             className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${

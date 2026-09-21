@@ -4,6 +4,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
+import Logo from '@/components/Logo';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -15,7 +16,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         
         {/* Mobile Navbar */}
         <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-gray-950 border-b border-gray-800 z-50 flex items-center justify-between px-4">
-          <Link href="/dashboard" className="text-xl font-bold text-white">LevelUp</Link>
+          <Logo size="sm" href="/dashboard" />
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-gray-400">
             {mobileMenuOpen ? <X /> : <Menu />}
           </button>

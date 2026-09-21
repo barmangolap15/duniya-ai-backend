@@ -3,15 +3,16 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { api } from '@/lib/api';
-import { useAuth } from '@/lib/auth-context';
+import { useAuth, getRoleHomeRoute, UserRole } from '@/lib/auth-context';
 import toast from 'react-hot-toast';
-import { UserPlus, Sparkles, Heart, Code2 } from 'lucide-react';
+import { UserPlus, Sparkles, GraduationCap, Users, HeartHandshake, Briefcase, Code2, Heart } from 'lucide-react';
+import Logo from '@/components/Logo';
 
 export default function SignupPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<'STUDENT' | 'MENTOR' | 'PARENT'>('STUDENT');
+  const [role, setRole] = useState<UserRole>('STUDENT');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { login } = useAuth();
@@ -22,15 +23,10 @@ export default function SignupPage() {
     try {
       const res = await api.auth.register({ name: name.trim(), email: email.trim(), password, role });
       await login(res.token);
-      toast.success('Account created successfully!');
+      toast.success(`Account created! Welcome to DuniyaAI, ${res.user.name}.`);
 
-      if (role === 'MENTOR') {
-        router.push('/mentor');
-      } else if (role === 'PARENT') {
-        router.push('/parent');
-      } else {
-        router.push('/quiz');
-      }
+      const targetRoute = getRoleHomeRoute(res.user.role);
+      router.push(targetRoute);
     } catch (error: any) {
       toast.error(error.message || 'Signup failed. Please try again.');
     } finally {
@@ -41,12 +37,9 @@ export default function SignupPage() {
   return (
     <div className="bg-gray-900 border border-gray-800 p-8 rounded-3xl shadow-2xl max-w-md w-full">
       <div className="text-center mb-6 space-y-2">
-        <Link
-          href="/"
-          className="inline-block text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary-400 via-accent-400 to-primary-500"
-        >
-          LevelUp
-        </Link>
+        <div className="flex justify-center mb-2">
+          <Logo size="md" href="/" />
+        </div>
         <h2 className="text-xl font-bold text-white">Create Your Account</h2>
         <p className="text-xs text-gray-400">
           Choose your role to get your customized workspace

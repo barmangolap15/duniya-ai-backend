@@ -34,14 +34,14 @@ export default function LandingPage() {
             </div>
 
             <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-tight">
-              <span>Level Up Your </span>
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-400 via-accent-400 to-primary-400 animate-gradient-x">
-                Tech Career
+              <span>Master Tech with </span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-400 via-accent-400 to-pink-400 animate-gradient-x">
+                DuniyaAI
               </span>
             </h1>
 
             <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-              Stop watching passive video tutorials. Build real applications in a live browser sandbox. Produce 100% verified proof-of-work reviewed by senior industry mentors and tracked by parents.
+              Stop watching passive video tutorials. Build real applications with interactive sandbox missions, verified industry mentor reviews, and AI-powered learning paths.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
@@ -187,7 +187,7 @@ export default function LandingPage() {
       </main>
 
       <footer className="border-t border-gray-800 py-8 text-center text-gray-500 text-xs">
-        <p>&copy; {new Date().getFullYear()} LevelUp. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} DuniyaAI. All rights reserved.</p>
       </footer>
     </div>
   );

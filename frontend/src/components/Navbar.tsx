@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useAuth, getRoleHomeRoute } from '@/lib/auth-context';
 import { LogOut, User, ArrowRight } from 'lucide-react';
+import Logo from '@/components/Logo';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -12,11 +13,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center gap-8">
-            <Link href={user ? homeRoute : '/'} className="flex items-center space-x-2">
-              <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary-400 via-accent-400 to-primary-500">
-                LevelUp
-              </span>
-            </Link>
+            <Logo size="md" href={user ? homeRoute : '/'} />
           </div>
 
           <div className="flex items-center space-x-3 sm:space-x-4">

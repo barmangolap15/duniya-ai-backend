@@ -141,7 +141,7 @@ export default function ParentPage() {
           <div className="flex gap-3 pt-2">
             <input
               type="email"
-              placeholder="e.g. student@levelup.com"
+              placeholder="e.g. student@duniyaai.com"
               value={linkEmail}
               onChange={(e) => setLinkEmail(e.target.value)}
               className="flex-1 bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-primary-500"
@@ -642,7 +642,7 @@ export default function ParentPage() {
             </div>
 
             <p className="text-xs text-gray-400 leading-relaxed">
-              Enter your child's registered email address on LevelUp. You will immediately gain access to their progress, study velocity, and mentor guidance.
+              Enter your child's registered email address on DuniyaAI. You will immediately gain access to their progress, study velocity, and mentor guidance.
             </p>
 
             <div className="space-y-4">
@@ -650,7 +650,7 @@ export default function ParentPage() {
                 <label className="block text-xs font-semibold text-gray-300 mb-1.5">Child's Email Address</label>
                 <input
                   type="email"
-                  placeholder="e.g. student@levelup.com"
+                  placeholder="e.g. student@duniyaai.com"
                   value={linkEmail}
                   onChange={(e) => setLinkEmail(e.target.value)}
                   className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primary-500"

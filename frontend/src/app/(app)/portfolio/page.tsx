@@ -28,7 +28,7 @@ export default function PortfolioPage() {
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [profileForm, setProfileForm] = useState({
     headline: user?.headline || 'Aspiring Frontend Web Developer',
-    bio: user?.bio || 'Learning by building real-world projects on LevelUp.',
+    bio: user?.bio || 'Learning by building real-world projects on DuniyaAI.',
     githubUrl: 'https://github.com',
     linkedinUrl: 'https://linkedin.com',
   });

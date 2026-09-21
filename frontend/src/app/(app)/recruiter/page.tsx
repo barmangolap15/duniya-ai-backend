@@ -32,7 +32,7 @@ export default function RecruiterPage() {
   const [outreachForm, setOutreachForm] = useState({
     roleTitle: 'Junior Frontend Developer (Apprentice)',
     company: 'NextGen Tech Partners',
-    note: "Hi! We reviewed your verified submissions on LevelUp and were very impressed with your code quality. We'd love to chat regarding an open engineering role.",
+    note: "Hi! We reviewed your verified submissions on DuniyaAI and were very impressed with your code quality. We'd love to chat regarding an open engineering role.",
   });
 
   // Candidates query

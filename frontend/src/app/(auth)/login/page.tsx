@@ -6,6 +6,7 @@ import { api } from '@/lib/api';
 import { useAuth, getRoleHomeRoute } from '@/lib/auth-context';
 import toast from 'react-hot-toast';
 import { LogIn, Sparkles } from 'lucide-react';
+import Logo from '@/components/Logo';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -35,12 +36,9 @@ export default function LoginPage() {
   return (
     <div className="bg-gray-900 border border-gray-800 p-8 rounded-3xl shadow-2xl max-w-md w-full">
       <div className="text-center mb-8 space-y-2">
-        <Link
-          href="/"
-          className="inline-block text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary-400 via-accent-400 to-primary-500"
-        >
-          LevelUp
-        </Link>
+        <div className="flex justify-center mb-2">
+          <Logo size="md" href="/" />
+        </div>
         <h2 className="text-xl font-bold text-white">Sign In to Your Account</h2>
         <p className="text-xs text-gray-400">
           Access your personalized workspace based on your role
