@@ -25,13 +25,13 @@ export default function MissionCard({ id, title, courseName, xpReward }: Mission
       </div>
       
       <div className="mt-6 relative z-10">
-        <Link 
-          href={`/mission/${id}`}
+        <a 
+          href={`/mission/${id}/`}
           className="flex items-center justify-center w-full py-2 bg-gray-800 hover:bg-primary-600 text-white rounded-lg transition-colors font-medium group-hover:bg-primary-600"
         >
           Start Mission
           <ArrowRight className="w-4 h-4 ml-2" />
-        </Link>
+        </a>
       </div>
     </div>
   );

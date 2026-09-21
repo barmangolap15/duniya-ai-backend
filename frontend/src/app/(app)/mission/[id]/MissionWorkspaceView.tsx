@@ -60,7 +60,7 @@ export default function MissionWorkspace() {
     }
   }, [params]);
 
-  const missionId = actualMissionId || (params?.id as string);
+  const missionId = actualMissionId || (params?.id as string) || 'workspace';
 
   // Editor state
   const [activeTab, setActiveTab] = useState<string>('html');
@@ -93,12 +93,14 @@ export default function MissionWorkspace() {
   const { data: mission, isLoading: loadingMission } = useQuery({
     queryKey: ['mission', missionId],
     queryFn: () => api.missions.getOne(missionId),
+    enabled: Boolean(missionId),
   });
 
   // Fetch existing submission
   const { data: submission, isLoading: loadingSub } = useQuery({
     queryKey: ['submission', missionId],
     queryFn: () => api.missions.getSubmission(missionId).catch(() => null),
+    enabled: Boolean(missionId),
   });
 
   // Fetch threads to see if a conversation already exists for this mission

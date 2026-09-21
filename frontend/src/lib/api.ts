@@ -23,10 +23,12 @@ export async function apiFetch(path: string, options?: RequestInit) {
     },
   });
   if (!res.ok) {
-    const error = await res.json().catch(() => ({ message: 'Request failed' }));
-    throw new Error(error.message || 'Request failed');
+    const error = await res.json().catch(() => ({ message: `Request failed (${res.status})` }));
+    const err: any = new Error(error.message || `Request failed with status ${res.status}`);
+    err.status = res.status;
+    throw err;
   }
-  return res.json();
+  return res.json().catch(() => ({}));
 }
 
 export const api = {

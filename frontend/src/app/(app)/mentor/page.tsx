@@ -551,13 +551,13 @@ export default function MentorPage() {
                         {activeThread.mission?.title ? `Mission: ${activeThread.mission.title}` : 'General Consultation'}
                       </span>
                       {activeThread.missionId && (
-                        <Link
-                          href={`/mission/${activeThread.missionId}`}
+                        <a
+                          href={`/mission/${activeThread.missionId}/`}
                           className="text-[11px] text-primary-400 hover:text-primary-300 flex items-center gap-1"
                         >
                           <ExternalLink className="w-3 h-3" />
                           View Task
-                        </Link>
+                        </a>
                       )}
                     </div>
                     <h2 className="text-base sm:text-lg font-bold text-white">{activeThread.subject}</h2>

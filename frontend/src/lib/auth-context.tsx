@@ -57,17 +57,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       if (token) {
         const userData = await api.auth.me();
-        setUser(userData);
-        return userData;
+        if (userData && userData.id) {
+          setUser(userData);
+          return userData;
+        } else {
+          console.warn('Invalid user data returned from /auth/me');
+          setUser(null);
+          return null;
+        }
       } else {
         setUser(null);
         return null;
       }
-    } catch (error) {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('token');
+    } catch (error: any) {
+      console.error('loadUser error:', error);
+      // ONLY clear token if backend explicitly returned a 401 Unauthorized status
+      if (error?.status === 401 || error?.message?.toLowerCase().includes('unauthorized')) {
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('token');
+        }
+        setUser(null);
+      } else {
+        console.warn('Transient error in loadUser; retaining session token:', error?.message);
       }
-      setUser(null);
       return null;
     } finally {
       setLoading(false);

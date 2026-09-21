@@ -190,9 +190,9 @@ export default function RoadmapPage() {
                   {/* Missions under this course */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
                     {missions.map((m: any) => (
-                      <Link
+                      <a
                         key={m.id}
-                        href={`/mission/${m.id}`}
+                        href={`/mission/${m.id}/`}
                         className="p-3.5 bg-gray-950/80 hover:bg-gray-800/60 border border-gray-800 rounded-xl transition-all flex items-center justify-between gap-2 group"
                       >
                         <div className="space-y-0.5">
@@ -202,7 +202,7 @@ export default function RoadmapPage() {
                           <span className="text-[10px] text-amber-400 font-medium">+{m.xpReward} XP</span>
                         </div>
                         <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all" />
-                      </Link>
+                      </a>
                     ))}
                   </div>
                 </div>

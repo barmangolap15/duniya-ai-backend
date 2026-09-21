@@ -21,31 +21,32 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     const role = user.role;
 
     // Strict role isolation:
-    // Mentors only access /mentor routes
+    const isMentorPortal = pathname === '/mentor' || pathname.startsWith('/mentor/');
+    const isParentPortal = pathname === '/parent' || pathname.startsWith('/parent/');
+    const isRecruiterPortal = pathname === '/recruiter' || pathname.startsWith('/recruiter/');
+
+    // Mentors access /mentor and /mentorship
     if (role === 'MENTOR') {
-      if (!pathname.startsWith('/mentor')) {
+      if (!isMentorPortal && !pathname.startsWith('/mentorship')) {
         router.push('/mentor');
       }
     }
     // Parents only access /parent routes
     else if (role === 'PARENT') {
-      if (!pathname.startsWith('/parent')) {
+      if (!isParentPortal) {
         router.push('/parent');
       }
     }
     // Recruiters only access /recruiter routes
     else if (role === 'RECRUITER') {
-      if (!pathname.startsWith('/recruiter')) {
+      if (!isRecruiterPortal) {
         router.push('/recruiter');
       }
     }
-    // Students only access Student routes (cannot access /mentor, /parent, /recruiter)
+    // Students only access Student routes (cannot access /mentor portal, /parent portal, /recruiter portal)
+    // Note: /mentorship is a valid student Q&A route!
     else if (role === 'STUDENT') {
-      if (
-        pathname.startsWith('/mentor') ||
-        pathname.startsWith('/parent') ||
-        pathname.startsWith('/recruiter')
-      ) {
+      if (isMentorPortal || isParentPortal || isRecruiterPortal) {
         router.push('/dashboard');
       }
     }

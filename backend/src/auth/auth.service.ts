@@ -70,6 +70,10 @@ export class AuthService {
       },
     });
 
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
     if (user && user.role === 'STUDENT' && !user.roadmap) {
       const defaultTrack = await this.prisma.careerTrack.findFirst({
         include: {
