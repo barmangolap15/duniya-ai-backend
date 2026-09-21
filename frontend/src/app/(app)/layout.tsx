@@ -15,8 +15,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <ProtectedRoute>
-      <div className="flex min-h-screen bg-night text-slate-100">
-        {!hideSidebar && <Sidebar />}
+      <div className="flex h-screen overflow-hidden bg-night text-slate-100">
+        {/* Desktop Fixed Sidebar (100vh, permanently pinned) */}
+        {!hideSidebar && (
+          <div className="hidden md:block shrink-0 h-screen">
+            <Sidebar />
+          </div>
+        )}
 
         {/* Mobile Navbar */}
         {!hideSidebar && (
@@ -34,18 +39,22 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Drawer Menu */}
         {!hideSidebar && mobileMenuOpen && (
-          <div className="md:hidden fixed inset-0 top-16 z-40 bg-night/95 backdrop-blur-md p-4 overflow-y-auto">
-            <Sidebar />
+          <div className="md:hidden fixed inset-0 top-16 z-40 bg-surface-dark">
+            <Sidebar
+              onNavigate={() => setMobileMenuOpen(false)}
+              className="w-full h-full border-r-0"
+            />
           </div>
         )}
 
-        <div
-          className={`flex-1 flex flex-col min-w-0 ${
-            hideSidebar ? 'w-full' : 'w-full md:ml-0 mt-16 md:mt-0'
-          } overflow-y-auto`}
+        {/* Main Content Area (Independent scroll container) */}
+        <main
+          className={`flex-1 flex flex-col min-w-0 h-full overflow-y-auto ${
+            hideSidebar ? 'w-full' : 'w-full mt-16 md:mt-0'
+          }`}
         >
           {children}
-        </div>
+        </main>
       </div>
     </ProtectedRoute>
   );
