@@ -37,7 +37,10 @@ export const api = {
     get: () => apiFetch('/dashboard'),
   },
   missions: {
-    getAll: () => apiFetch('/missions'),
+    getAll: (trackId?: string) => apiFetch(`/missions${trackId ? `?trackId=${trackId}` : ''}`),
+    getTracks: () => apiFetch('/missions/tracks'),
+    switchTrack: (trackId: string) =>
+      apiFetch('/missions/switch-track', { method: 'POST', body: JSON.stringify({ trackId }) }),
     getOne: (id: string) => apiFetch(`/missions/${id}`),
     getSubmission: (id: string) => apiFetch(`/missions/${id}/submission`),
   },

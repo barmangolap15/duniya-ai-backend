@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, UseGuards, Request } from '@nestjs/common';
 import { MissionsService } from './missions.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -7,9 +7,19 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 export class MissionsController {
   constructor(private readonly missionsService: MissionsService) {}
 
+  @Get('tracks')
+  getAllTracks() {
+    return this.missionsService.getAllTracks();
+  }
+
+  @Post('switch-track')
+  switchTrack(@Request() req: any, @Body() body: { trackId: string }) {
+    return this.missionsService.switchTrack(req.user.userId, body.trackId);
+  }
+
   @Get()
-  getMissions(@Request() req: any) {
-    return this.missionsService.getMissionsForUser(req.user.userId);
+  getMissions(@Request() req: any, @Query('trackId') trackId?: string) {
+    return this.missionsService.getMissionsForUser(req.user.userId, trackId);
   }
 
   @Get(':id')
