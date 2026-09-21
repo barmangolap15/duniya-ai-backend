@@ -27,7 +27,16 @@ export class AuthService {
     });
 
     const token = this.jwtService.sign({ userId: user.id, email: user.email, role: user.role });
-    return { token, user: { id: user.id, email: user.email, name: user.name, role: user.role } };
+    return {
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        quizCompleted: user.quizCompleted,
+      },
+    };
   }
 
   async login(dto: LoginDto) {
@@ -51,7 +60,16 @@ export class AuthService {
     if (!isValid) throw new UnauthorizedException('Invalid email or password');
 
     const token = this.jwtService.sign({ userId: user.id, email: user.email, role: user.role });
-    return { token, user: { id: user.id, email: user.email, name: user.name, role: user.role } };
+    return {
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        quizCompleted: user.quizCompleted,
+      },
+    };
   }
 
   async getProfile(userId: string) {

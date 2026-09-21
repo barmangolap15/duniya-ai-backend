@@ -23,9 +23,13 @@ export default function LoginPage() {
       await login(res.token);
       toast.success(`Welcome back, ${res.user.name}!`);
 
-      // Redirect directly to the user's role-specific workbench
-      const targetRoute = getRoleHomeRoute(res.user.role);
-      router.push(targetRoute);
+      // Redirect directly to the user's role-specific workbench or quiz if onboarding needed
+      if (res.user.role === 'STUDENT' && res.user.quizCompleted === false) {
+        router.push('/quiz');
+      } else {
+        const targetRoute = getRoleHomeRoute(res.user.role);
+        router.push(targetRoute);
+      }
     } catch (error: any) {
       toast.error(error.message || 'Login failed. Please check your email and password.');
     } finally {

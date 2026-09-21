@@ -265,6 +265,50 @@ export class QuizService {
     },
   ];
 
+  getTrackPersona(trackName: string) {
+    const lower = (trackName || '').toLowerCase();
+    if (lower.includes('frontend')) {
+      return {
+        personaTitle: 'Frontend Developer',
+        personaDescription: 'Based on your answers, you have a keen eye for design and enjoy building interactive user experiences.',
+        avatarBadge: '🎨',
+      };
+    }
+    if (lower.includes('backend')) {
+      return {
+        personaTitle: 'Backend Systems Developer',
+        personaDescription: 'Based on your answers, you love solving architectural puzzles, working with data, and building scalable cloud APIs.',
+        avatarBadge: '⚙️',
+      };
+    }
+    if (lower.includes('full-stack') || lower.includes('fullstack')) {
+      return {
+        personaTitle: 'Full-Stack Engineer',
+        personaDescription: 'Based on your answers, you thrive on connecting client interfaces and cloud server databases end-to-end.',
+        avatarBadge: '🚀',
+      };
+    }
+    if (lower.includes('mobile')) {
+      return {
+        personaTitle: 'Mobile App Developer',
+        personaDescription: 'Based on your answers, you are passionate about building mobile-first native applications with touch interfaces.',
+        avatarBadge: '📱',
+      };
+    }
+    if (lower.includes('ux') || lower.includes('ui') || lower.includes('design')) {
+      return {
+        personaTitle: 'Product UX/UI Designer',
+        personaDescription: 'Based on your answers, you enjoy understanding user psychology and crafting delightful digital workflows.',
+        avatarBadge: '✨',
+      };
+    }
+    return {
+      personaTitle: `${trackName} Specialist`,
+      personaDescription: 'Based on your answers, this specialized path provides the best balance of challenge, growth, and real-world projects.',
+      avatarBadge: '💡',
+    };
+  }
+
   getQuestions() {
     return this.questions;
   }
@@ -397,12 +441,18 @@ export class QuizService {
       },
     });
 
+    const persona = this.getTrackPersona(chosenTrack.name);
+    const secondaryPersona = secondaryRanked ? this.getTrackPersona(secondaryRanked.track.name) : null;
+
     return {
       success: true,
       bonusXpAwarded: isFirstTime ? 50 : 0,
       recommendedTrack: {
         id: chosenTrack.id,
         name: chosenTrack.name,
+        personaTitle: persona.personaTitle,
+        personaDescription: persona.personaDescription,
+        avatarBadge: persona.avatarBadge,
         description: chosenTrack.description,
         icon: chosenTrack.icon,
         matchScore: topMatchPct,
@@ -432,6 +482,7 @@ export class QuizService {
         ? {
             id: secondaryRanked.track.id,
             name: secondaryRanked.track.name,
+            personaTitle: secondaryPersona?.personaTitle,
             description: secondaryRanked.track.description,
             matchScore: secondaryMatchPct,
           }
