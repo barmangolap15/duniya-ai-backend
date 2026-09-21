@@ -1,4 +1,16 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || '/api';
+const DEFAULT_PROD_API = 'https://levelup-backend-hyzf.onrender.com';
+
+const API_BASE = (() => {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (envUrl && envUrl !== '/api') return envUrl;
+  if (typeof window !== 'undefined') {
+    // If running in production browser on Firebase (or any domain other than localhost)
+    if (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+      return DEFAULT_PROD_API;
+    }
+  }
+  return envUrl || 'http://localhost:4000';
+})();
 
 export async function apiFetch(path: string, options?: RequestInit) {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
