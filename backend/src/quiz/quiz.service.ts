@@ -38,11 +38,15 @@ export class QuizService {
       }
     });
 
-    await this.prisma.userRoadmap.create({
-      data: {
+    await this.prisma.userRoadmap.upsert({
+      where: { userId },
+      create: {
         userId,
         careerTrackId: chosenTrack.id,
-      }
+      },
+      update: {
+        careerTrackId: chosenTrack.id,
+      },
     });
 
     await this.prisma.user.update({

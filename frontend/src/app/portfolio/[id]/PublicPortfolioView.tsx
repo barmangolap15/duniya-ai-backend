@@ -26,7 +26,19 @@ import toast from 'react-hot-toast';
 
 export default function PublicPortfolioPage() {
   const params = useParams();
-  const userId = params.id as string;
+
+  const [actualUserId, setActualUserId] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const parts = window.location.pathname.split('/').filter(Boolean);
+      const idx = parts.indexOf('portfolio');
+      if (idx !== -1 && parts[idx + 1] && parts[idx + 1] !== 'preview') {
+        return parts[idx + 1];
+      }
+    }
+    return (params?.id as string) || '';
+  });
+
+  const userId = actualUserId || (params?.id as string);
   const [selectedSub, setSelectedSub] = useState<any>(null);
   const [activeCodeTab, setActiveCodeTab] = useState<'preview' | 'html' | 'css' | 'js'>('preview');
 

@@ -11,7 +11,18 @@ export class DashboardService {
       include: { roadmap: { include: { careerTrack: true } } },
     });
 
-    const careerTrackId = user?.roadmap?.careerTrackId;
+    let careerTrackId = user?.roadmap?.careerTrackId;
+    if (!careerTrackId) {
+      const defaultTrack = await this.prisma.careerTrack.findFirst();
+      if (defaultTrack) {
+        careerTrackId = defaultTrack.id;
+        await this.prisma.userRoadmap.upsert({
+          where: { userId },
+          create: { userId, careerTrackId: defaultTrack.id },
+          update: { careerTrackId: defaultTrack.id },
+        }).catch(() => {});
+      }
+    }
 
     // Get all missions for the user's career track
     const courses = careerTrackId

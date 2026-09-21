@@ -6,7 +6,17 @@ export class MissionsService {
   constructor(private prisma: PrismaService) {}
 
   async getMissionsForUser(userId: string) {
-    const roadmap = await this.prisma.userRoadmap.findUnique({ where: { userId } });
+    let roadmap = await this.prisma.userRoadmap.findUnique({ where: { userId } });
+    if (!roadmap) {
+      const defaultTrack = await this.prisma.careerTrack.findFirst();
+      if (defaultTrack) {
+        roadmap = await this.prisma.userRoadmap.upsert({
+          where: { userId },
+          create: { userId, careerTrackId: defaultTrack.id },
+          update: { careerTrackId: defaultTrack.id },
+        });
+      }
+    }
     if (!roadmap) return [];
 
     const courses = await this.prisma.course.findMany({
@@ -16,25 +26,37 @@ export class MissionsService {
           orderBy: { order: 'asc' },
           include: {
             submissions: { where: { userId } },
-            progress: { where: { userId } }
-          }
-        }
+            progress: { where: { userId } },
+          },
+        },
       },
-      orderBy: { order: 'asc' }
+      orderBy: { order: 'asc' },
     });
     return courses;
   }
 
   async getMissionDetail(missionId: string) {
-    const mission = await this.prisma.mission.findUnique({ where: { id: missionId } });
+    let mission = await this.prisma.mission.findUnique({ where: { id: missionId } });
+    if (!mission) {
+      // Fallback: if 'workspace' or invalid placeholder passed, grab the first available mission
+      mission = await this.prisma.mission.findFirst({ orderBy: { order: 'asc' } });
+    }
     if (!mission) throw new NotFoundException('Mission not found');
     return mission;
   }
 
   async getMissionSubmission(userId: string, missionId: string) {
-    const submission = await this.prisma.submission.findUnique({
-      where: { userId_missionId: { userId, missionId } }
+    let submission = await this.prisma.submission.findUnique({
+      where: { userId_missionId: { userId, missionId } },
     });
+    if (!submission && (missionId === 'workspace' || missionId === 'demo')) {
+      const firstMission = await this.prisma.mission.findFirst({ orderBy: { order: 'asc' } });
+      if (firstMission) {
+        submission = await this.prisma.submission.findUnique({
+          where: { userId_missionId: { userId, missionId: firstMission.id } },
+        });
+      }
+    }
     return submission || {};
   }
 }

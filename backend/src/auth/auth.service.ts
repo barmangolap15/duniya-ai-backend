@@ -42,10 +42,83 @@ export class AuthService {
   }
 
   async getProfile(userId: string) {
-    const user = await this.prisma.user.findUnique({
+    let user = await this.prisma.user.findUnique({
       where: { id: userId },
-      select: { id: true, email: true, name: true, role: true, avatarUrl: true, xp: true, level: true, streak: true, quizCompleted: true },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        avatarUrl: true,
+        xp: true,
+        level: true,
+        streak: true,
+        quizCompleted: true,
+        roadmap: {
+          include: {
+            careerTrack: {
+              include: {
+                courses: {
+                  include: {
+                    missions: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
-    return user;
+
+    if (user && user.role === 'STUDENT' && !user.roadmap) {
+      const defaultTrack = await this.prisma.careerTrack.findFirst({
+        include: {
+          courses: {
+            include: {
+              missions: true,
+            },
+          },
+        },
+      });
+
+      if (defaultTrack) {
+        await this.prisma.userRoadmap.upsert({
+          where: { userId },
+          create: { userId, careerTrackId: defaultTrack.id },
+          update: { careerTrackId: defaultTrack.id },
+        }).catch(() => {});
+
+        user = {
+          ...user,
+          roadmap: {
+            id: 'auto',
+            userId,
+            careerTrackId: defaultTrack.id,
+            createdAt: new Date(),
+            careerTrack: defaultTrack,
+          } as any,
+        };
+      }
+    }
+
+    const track = user?.roadmap?.careerTrack
+      ? {
+          id: user.roadmap.careerTrack.id,
+          name: user.roadmap.careerTrack.name,
+          description: user.roadmap.careerTrack.description,
+          courses: user.roadmap.careerTrack.courses.map((c) => ({
+            id: c.id,
+            title: c.name,
+            name: c.name,
+            description: c.description,
+            missions: c.missions,
+          })),
+        }
+      : null;
+
+    return {
+      ...user,
+      track,
+    };
   }
 }

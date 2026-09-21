@@ -184,11 +184,21 @@ export class MentorshipService {
       }
     }
 
+    let validMissionId: string | null = null;
+    if (data.missionId) {
+      const missionExists = await this.prisma.mission.findUnique({
+        where: { id: data.missionId },
+      });
+      if (missionExists) {
+        validMissionId = missionExists.id;
+      }
+    }
+
     const thread = await this.prisma.mentorshipThread.create({
       data: {
         studentId,
         mentorId,
-        missionId: data.missionId || null,
+        missionId: validMissionId,
         subject: data.subject,
         priority: data.priority || ThreadPriority.NORMAL,
         status: user.role === Role.STUDENT ? ThreadStatus.WAITING_ON_MENTOR : ThreadStatus.WAITING_ON_STUDENT,

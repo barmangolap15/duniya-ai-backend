@@ -33,7 +33,32 @@ export default function MissionWorkspace() {
   const params = useParams();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const missionId = params.id as string;
+
+  // Resolve actual missionId in client static hosting
+  const [actualMissionId, setActualMissionId] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const parts = window.location.pathname.split('/').filter(Boolean);
+      const missionIdx = parts.indexOf('mission');
+      if (missionIdx !== -1 && parts[missionIdx + 1] && parts[missionIdx + 1] !== 'workspace') {
+        return parts[missionIdx + 1];
+      }
+    }
+    return (params?.id as string) || '';
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const parts = window.location.pathname.split('/').filter(Boolean);
+      const missionIdx = parts.indexOf('mission');
+      if (missionIdx !== -1 && parts[missionIdx + 1] && parts[missionIdx + 1] !== 'workspace') {
+        setActualMissionId(parts[missionIdx + 1]);
+      } else if (params?.id && params.id !== 'workspace') {
+        setActualMissionId(params.id as string);
+      }
+    }
+  }, [params]);
+
+  const missionId = actualMissionId || (params?.id as string);
 
   // Editor state
   const [activeTab, setActiveTab] = useState<Tab>('html');
@@ -826,8 +851,8 @@ export default function MissionWorkspace() {
                       return;
                     }
                     askMentorMutation.mutate({
-                      missionId,
-                      subject: `Help with ${mission.title}${currentStep ? ` (Step ${currentStep.id})` : ''}`,
+                      missionId: mission?.id || (missionId && missionId !== 'workspace' ? missionId : undefined),
+                      subject: `Help with ${mission?.title || 'Mission'}${currentStep ? ` (Step ${currentStep.id})` : ''}`,
                       message: mentorQuestion.trim(),
                       codeSnippet: code[activeTab] || undefined,
                       stepNumber: currentStep?.id,
