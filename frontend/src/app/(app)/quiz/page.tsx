@@ -34,12 +34,14 @@ import {
   RefreshCw,
   Layout,
   BrainCircuit,
+  LogOut,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import Logo from '@/components/Logo';
 
 export default function QuizPage() {
   const router = useRouter();
-  const { user, refreshUser } = useAuth();
+  const { user, refreshUser, logout } = useAuth();
   const queryClient = useQueryClient();
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -342,7 +344,24 @@ export default function QuizPage() {
 
   // Active Questionnaire Flow with Animated Stepper
   return (
-    <div className="max-w-3xl mx-auto w-full p-4 sm:p-6 min-h-[calc(100vh-80px)] flex flex-col justify-between py-8">
+    <div className="max-w-3xl mx-auto w-full p-4 sm:p-6 min-h-screen flex flex-col justify-between py-6">
+      {/* Top Brand Bar */}
+      <div className="flex items-center justify-between pb-4 border-b border-gray-800/80 mb-6">
+        <Logo size="sm" href="/" />
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-gray-400">
+            Student: <strong className="text-gray-200">{user?.name}</strong>
+          </span>
+          <button
+            onClick={() => logout()}
+            className="text-xs text-gray-500 hover:text-rose-400 flex items-center gap-1.5 transition-colors px-2.5 py-1 rounded-lg hover:bg-gray-900 border border-transparent hover:border-gray-800"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Sign Out</span>
+          </button>
+        </div>
+      </div>
+
       {/* Header & Progress Indicator */}
       <div className="space-y-4 mb-6">
         <div className="flex items-center justify-between">

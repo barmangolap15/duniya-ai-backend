@@ -45,7 +45,10 @@ export const api = {
   },
   quiz: {
     getQuestions: () => apiFetch('/quiz/questions'),
-    submit: (answers: any) => apiFetch('/quiz/submit', { method: 'POST', body: JSON.stringify(answers) }),
+    submit: (answers: any) => {
+      const payload = Array.isArray(answers) ? { answers } : answers?.answers ? answers : { answers: [] };
+      return apiFetch('/quiz/submit', { method: 'POST', body: JSON.stringify(payload) });
+    },
     getRecommendation: () => apiFetch('/quiz/recommendation'),
   },
   dashboard: {

@@ -13,7 +13,12 @@ export class QuizController {
 
   @UseGuards(JwtAuthGuard)
   @Post('submit')
-  submitQuiz(@Request() req: any, @Body('answers') answers: any[]) {
+  submitQuiz(@Request() req: any, @Body() body: any) {
+    const answers = Array.isArray(body)
+      ? body
+      : Array.isArray(body?.answers)
+      ? body.answers
+      : [];
     return this.quizService.submitQuiz(req.user.userId, answers);
   }
 
