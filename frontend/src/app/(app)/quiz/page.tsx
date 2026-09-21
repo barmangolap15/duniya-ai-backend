@@ -137,6 +137,8 @@ export default function QuizPage() {
         return <Zap className="w-5 h-5 text-amber-400" />;
       case 'Flame':
         return <Flame className="w-5 h-5 text-rose-400" />;
+      case 'BrainCircuit':
+        return <BrainCircuit className="w-5 h-5 text-rose-400" />;
       default:
         return <Sparkles className="w-5 h-5 text-primary-400" />;
     }

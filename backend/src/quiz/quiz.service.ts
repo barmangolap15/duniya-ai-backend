@@ -34,24 +34,24 @@ export class QuizService {
           description: 'Never coded before. Ready to learn the fundamentals from the ground up.',
           icon: 'Sprout',
           trackWeights: {
-            'Frontend Web Development': 30,
-            'UX/UI Design': 25,
+            'Frontend Web Development': 20,
+            'Python & AI Logic': 20,
             'Full-Stack Development': 15,
+            'Mobile App Development': 15,
             'Backend Development': 10,
-            'Mobile App Development': 10,
           },
         },
         {
           id: 'some_basics',
           label: 'Familiar with Basics',
-          description: 'Know basic HTML/CSS or tried a few syntax tutorials in Python/JS.',
+          description: 'Know basic syntax or tried a few tutorials in HTML/CSS/Python/JS.',
           icon: 'Code2',
           trackWeights: {
-            'Frontend Web Development': 25,
-            'Full-Stack Development': 25,
-            'Backend Development': 20,
-            'Mobile App Development': 20,
-            'UX/UI Design': 15,
+            'Frontend Web Development': 15,
+            'Full-Stack Development': 20,
+            'Backend Development': 15,
+            'Mobile App Development': 15,
+            'Python & AI Logic': 15,
           },
         },
         {
@@ -60,11 +60,11 @@ export class QuizService {
           description: 'Built small projects, understand OOP/data structures, seeking production-grade skills.',
           icon: 'Rocket',
           trackWeights: {
-            'Full-Stack Development': 35,
-            'Backend Development': 30,
-            'Mobile App Development': 25,
-            'Frontend Web Development': 15,
-            'UX/UI Design': 10,
+            'Full-Stack Development': 25,
+            'Backend Development': 25,
+            'Python & AI Logic': 20,
+            'Mobile App Development': 20,
+            'Frontend Web Development': 10,
           },
         },
       ],
@@ -81,9 +81,8 @@ export class QuizService {
           description: 'Sleek UI animations, dynamic user interactions, responsive modern layouts.',
           icon: 'Layout',
           trackWeights: {
-            'Frontend Web Development': 45,
-            'UX/UI Design': 20,
-            'Full-Stack Development': 15,
+            'Frontend Web Development': 100,
+            'Full-Stack Development': 25,
           },
         },
         {
@@ -92,8 +91,9 @@ export class QuizService {
           description: 'High-performance databases, microservices, authentication, and secure servers.',
           icon: 'Server',
           trackWeights: {
-            'Backend Development': 45,
-            'Full-Stack Development': 20,
+            'Backend Development': 100,
+            'Full-Stack Development': 25,
+            'Python & AI Logic': 20,
           },
         },
         {
@@ -102,9 +102,9 @@ export class QuizService {
           description: 'Mastering both client-side interfaces and cloud databases together seamlessly.',
           icon: 'Layers',
           trackWeights: {
-            'Full-Stack Development': 45,
-            'Frontend Web Development': 20,
-            'Backend Development': 20,
+            'Full-Stack Development': 100,
+            'Frontend Web Development': 25,
+            'Backend Development': 25,
           },
         },
         {
@@ -113,18 +113,18 @@ export class QuizService {
           description: 'Touch gestures, camera integration, mobile sensors, and App Store products.',
           icon: 'Smartphone',
           trackWeights: {
-            'Mobile App Development': 45,
-            'Frontend Web Development': 15,
+            'Mobile App Development': 100,
+            'Frontend Web Development': 20,
           },
         },
         {
-          id: 'design',
-          label: 'Product UX/UI & Visual Prototypes',
-          description: 'Design systems, user research, wireframing, and creating delightful experiences.',
-          icon: 'Palette',
+          id: 'ai_python',
+          label: 'AI Systems, Python & Data Processing',
+          description: 'Neural models, algorithm pipelines, data analysis, and intelligent automation.',
+          icon: 'BrainCircuit',
           trackWeights: {
-            'UX/UI Design': 45,
-            'Frontend Web Development': 25,
+            'Python & AI Logic': 100,
+            'Backend Development': 30,
           },
         },
       ],
@@ -141,10 +141,11 @@ export class QuizService {
           description: 'Build a recruiter-ready portfolio, complete verified code reviews, and earn badges.',
           icon: 'Briefcase',
           trackWeights: {
-            'Full-Stack Development': 30,
-            'Frontend Web Development': 25,
-            'Backend Development': 25,
-            'Mobile App Development': 20,
+            'Full-Stack Development': 20,
+            'Backend Development': 20,
+            'Frontend Web Development': 15,
+            'Python & AI Logic': 15,
+            'Mobile App Development': 15,
           },
         },
         {
@@ -153,10 +154,11 @@ export class QuizService {
           description: 'Build MVP products quickly, launch full applications, and iterate fast.',
           icon: 'Sparkles',
           trackWeights: {
-            'Full-Stack Development': 30,
+            'Full-Stack Development': 25,
             'Mobile App Development': 25,
-            'Frontend Web Development': 25,
-            'UX/UI Design': 20,
+            'Frontend Web Development': 15,
+            'Python & AI Logic': 15,
+            'Backend Development': 10,
           },
         },
         {
@@ -165,9 +167,11 @@ export class QuizService {
           description: 'Master CS concepts, ace exams, and build a strong foundational understanding.',
           icon: 'GraduationCap',
           trackWeights: {
-            'Backend Development': 30,
-            'Frontend Web Development': 25,
-            'Full-Stack Development': 20,
+            'Python & AI Logic': 25,
+            'Backend Development': 20,
+            'Frontend Web Development': 15,
+            'Full-Stack Development': 15,
+            'Mobile App Development': 10,
           },
         },
         {
@@ -176,9 +180,11 @@ export class QuizService {
           description: 'Solve interactive puzzles, try new technologies, and learn at my own leisure.',
           icon: 'Compass',
           trackWeights: {
-            'Frontend Web Development': 25,
-            'UX/UI Design': 25,
-            'Mobile App Development': 20,
+            'Frontend Web Development': 20,
+            'Python & AI Logic': 20,
+            'Mobile App Development': 15,
+            'Full-Stack Development': 15,
+            'Backend Development': 10,
           },
         },
       ],
@@ -196,8 +202,8 @@ export class QuizService {
           icon: 'Eye',
           trackWeights: {
             'Frontend Web Development': 25,
-            'UX/UI Design': 25,
-            'Mobile App Development': 20,
+            'Mobile App Development': 25,
+            'Full-Stack Development': 15,
           },
         },
         {
@@ -207,7 +213,8 @@ export class QuizService {
           icon: 'Cpu',
           trackWeights: {
             'Backend Development': 30,
-            'Full-Stack Development': 25,
+            'Python & AI Logic': 30,
+            'Full-Stack Development': 15,
           },
         },
         {
@@ -217,8 +224,10 @@ export class QuizService {
           icon: 'Hammer',
           trackWeights: {
             'Full-Stack Development': 30,
-            'Frontend Web Development': 20,
             'Mobile App Development': 20,
+            'Backend Development': 15,
+            'Frontend Web Development': 15,
+            'Python & AI Logic': 15,
           },
         },
       ],
@@ -236,7 +245,8 @@ export class QuizService {
           icon: 'Clock',
           trackWeights: {
             'Frontend Web Development': 15,
-            'UX/UI Design': 15,
+            'Python & AI Logic': 15,
+            'Mobile App Development': 10,
           },
         },
         {
@@ -246,19 +256,23 @@ export class QuizService {
           icon: 'Zap',
           trackWeights: {
             'Full-Stack Development': 20,
-            'Frontend Web Development': 20,
             'Backend Development': 20,
+            'Frontend Web Development': 15,
+            'Mobile App Development': 15,
+            'Python & AI Logic': 15,
           },
         },
         {
           id: 'intensive',
           label: 'Fast-Track Bootcamp (8+ Hours / week)',
-          description: 'Accelerated immersion to build full-stack mastery in record time.',
+          description: 'Accelerated immersion to build mastery in record time.',
           icon: 'Flame',
           trackWeights: {
             'Full-Stack Development': 25,
             'Backend Development': 25,
+            'Python & AI Logic': 25,
             'Mobile App Development': 20,
+            'Frontend Web Development': 10,
           },
         },
       ],
@@ -295,6 +309,13 @@ export class QuizService {
         avatarBadge: '📱',
       };
     }
+    if (lower.includes('python') || lower.includes('ai')) {
+      return {
+        personaTitle: 'AI & Python Systems Engineer',
+        personaDescription: 'Based on your answers, you excel at algorithmic logic, intelligent automation, data processing, and AI orchestration.',
+        avatarBadge: '🤖',
+      };
+    }
     if (lower.includes('ux') || lower.includes('ui') || lower.includes('design')) {
       return {
         personaTitle: 'Product UX/UI Designer',
@@ -315,7 +336,7 @@ export class QuizService {
 
   async submitQuiz(userId: string, answers: Array<{ questionId: string; optionId: string } | any>) {
     // 1. Fetch all tracks with courses and missions
-    const tracks = await this.prisma.careerTrack.findMany({
+    const allTracks = await this.prisma.careerTrack.findMany({
       include: {
         courses: {
           include: {
@@ -329,14 +350,20 @@ export class QuizService {
       orderBy: { name: 'asc' },
     });
 
-    if (!tracks || tracks.length === 0) {
+    if (!allTracks || allTracks.length === 0) {
       throw new NotFoundException('No career tracks available in the system');
     }
+
+    // Filter to tracks that have active courses & missions
+    const activeTracks = allTracks.filter((t) =>
+      t.courses.some((c) => c.missions && c.missions.length > 0),
+    );
+    const tracks = activeTracks.length > 0 ? activeTracks : allTracks;
 
     // 2. Compute affinity scores per track
     const trackScores: Record<string, number> = {};
     for (const track of tracks) {
-      trackScores[track.id] = 10; // Baseline score
+      trackScores[track.id] = 5; // Baseline score
     }
 
     const learnerProfile: Record<string, string> = {};
@@ -372,7 +399,7 @@ export class QuizService {
     const rankedTracks = tracks
       .map((track) => ({
         track,
-        score: trackScores[track.id] || 10,
+        score: trackScores[track.id] || 5,
       }))
       .sort((a, b) => b.score - a.score);
 
@@ -380,24 +407,24 @@ export class QuizService {
     const chosenTrack = topRanked.track;
     const secondaryRanked = rankedTracks.length > 1 ? rankedTracks[1] : null;
 
-    // Calculate match percentage (normalize between 88% and 99% for best match feel)
+    // Calculate match percentage (normalize between 88% and 99%)
     const maxScore = Math.max(...rankedTracks.map((r) => r.score), 50);
     const topMatchPct = Math.min(99, Math.max(88, Math.round((topRanked.score / maxScore) * 98)));
     const secondaryMatchPct = secondaryRanked
-      ? Math.min(topMatchPct - 5, Math.max(72, Math.round((secondaryRanked.score / maxScore) * 94)))
+      ? Math.min(topMatchPct - 6, Math.max(70, Math.round((secondaryRanked.score / maxScore) * 94)))
       : 80;
 
     // 4. Extract recommended first course and first mission
-    const firstCourse = chosenTrack.courses?.[0] || null;
+    const firstCourse = chosenTrack.courses?.find((c) => c.missions && c.missions.length > 0) || chosenTrack.courses?.[0] || null;
     const firstMission = firstCourse?.missions?.[0] || null;
     const allMissions = chosenTrack.courses?.flatMap((c) => c.missions) || [];
     const totalXpReward = allMissions.reduce((acc, m) => acc + (m.xpReward || 50), 0);
 
     // 5. Generate tailored match reasons
     const matchReasons: string[] = [
-      `Tailored to your goal: "${learnerProfile.goal || 'Master practical coding'}"`,
-      `Optimal match for your preferred style: "${learnerProfile.interest || chosenTrack.name}"`,
-      `Hands-on interactive missions with live compiler and mentor feedback`,
+      `Tailored to your goal: "${learnerProfile.goal || 'Build production-ready skills'}"`,
+      `Optimal match for your interest: "${learnerProfile.interest || chosenTrack.name}"`,
+      `Includes ${allMissions.length} hands-on interactive missions with live mentor code reviews`,
     ];
 
     // 6. Upsert QuizResponse & UserRoadmap
@@ -465,7 +492,7 @@ export class QuizService {
               id: firstCourse.id,
               name: firstCourse.name,
               description: firstCourse.description,
-              missionsCount: firstCourse.missions.length,
+              missionsCount: firstCourse.missions?.length || 0,
             }
           : null,
         firstMission: firstMission
@@ -535,15 +562,18 @@ export class QuizService {
     const track = user.roadmap?.careerTrack || user.quizResponse?.careerTrack;
     if (!track) return null;
 
-    const firstCourse = track.courses?.[0] || null;
+    const firstCourse = track.courses?.find((c) => c.missions && c.missions.length > 0) || track.courses?.[0] || null;
     const firstMission = firstCourse?.missions?.[0] || null;
     const allMissions = track.courses?.flatMap((c) => c.missions) || [];
+    const persona = this.getTrackPersona(track.name);
 
     return {
       quizCompleted: user.quizCompleted,
       track: {
         id: track.id,
         name: track.name,
+        personaTitle: persona.personaTitle,
+        personaDescription: persona.personaDescription,
         description: track.description,
         firstMission: firstMission
           ? {
