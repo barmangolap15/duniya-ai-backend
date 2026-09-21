@@ -30,3 +30,7 @@ ui-debug.log*
 # Temporary files
 scratch.py
 scratch/
+
+# Markdown files
+*.md
+**/*.md
