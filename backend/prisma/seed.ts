@@ -4,6 +4,11 @@ import * as bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
+  const existingTracks = await prisma.careerTrack.count();
+  if (existingTracks > 0 && process.env.FORCE_SEED !== 'true') {
+    console.log('✅ Database already initialized with career tracks. Skipping seed.');
+    return;
+  }
   console.log('🌱 Starting comprehensive seed...');
 
   // Clean existing data
