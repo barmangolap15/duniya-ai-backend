@@ -39,10 +39,10 @@ export default function LoginPage() {
   };
 
   const demoAccounts = [
-    { role: 'Student', email: 'student@levelup.com', color: 'hover:border-primary-500/50 hover:bg-primary-500/10 text-primary-300' },
-    { role: 'Mentor', email: 'mentor@levelup.com', color: 'hover:border-accent-500/50 hover:bg-accent-500/10 text-accent-300' },
-    { role: 'Parent', email: 'parent@levelup.com', color: 'hover:border-gold-500/50 hover:bg-gold-500/10 text-gold-400' },
-    { role: 'Recruiter', email: 'recruiter@levelup.com', color: 'hover:border-danger-500/50 hover:bg-danger-500/10 text-danger-400' },
+    { role: 'Student', email: 'student@levelup.com' },
+    { role: 'Mentor', email: 'mentor@levelup.com' },
+    { role: 'Parent', email: 'parent@levelup.com' },
+    { role: 'Recruiter', email: 'recruiter@levelup.com' },
   ];
 
   const fillDemo = (demoEmail: string) => {
@@ -51,9 +51,9 @@ export default function LoginPage() {
   };
 
   return (
-    <Card className="w-full shadow-2xl border-border-dark bg-surface-dark">
+    <Card className="w-full shadow-lg border border-zinc-200 bg-white">
       <CardHeader className="text-center space-y-1">
-        <CardTitle className="text-xl">Sign in to your account</CardTitle>
+        <CardTitle className="text-xl text-zinc-950">Sign in to your account</CardTitle>
         <CardDescription>
           Enter your credentials to access your dedicated workbench
         </CardDescription>
@@ -61,10 +61,10 @@ export default function LoginPage() {
 
       <CardContent className="space-y-4">
         {/* Quick Demo Fill Buttons */}
-        <div className="p-3 rounded-[10px] bg-night border border-border-dark space-y-2">
-          <div className="flex items-center justify-between text-[11px] font-body text-slate-400">
-            <span className="flex items-center gap-1.5 text-primary-400 font-medium">
-              <Sparkles className="w-3.5 h-3.5" />
+        <div className="p-3 rounded-[10px] bg-zinc-50 border border-zinc-200 space-y-2">
+          <div className="flex items-center justify-between text-[11px] font-body text-zinc-600">
+            <span className="flex items-center gap-1.5 text-zinc-900 font-semibold">
+              <Sparkles className="w-3.5 h-3.5 text-zinc-900" />
               Quick Demo Logins (Password: 12345678)
             </span>
           </div>
@@ -74,8 +74,10 @@ export default function LoginPage() {
                 key={d.role}
                 type="button"
                 onClick={() => fillDemo(d.email)}
-                className={`py-1.5 px-2 rounded-md text-[11px] font-medium border border-border-dark bg-surface-dark transition-all text-center ${d.color} ${
-                  email === d.email ? 'border-primary-500 ring-1 ring-primary-500' : ''
+                className={`py-1.5 px-2 rounded-md text-[11px] font-medium border transition-all text-center ${
+                  email === d.email
+                    ? 'border-zinc-950 bg-zinc-950 text-white'
+                    : 'border-zinc-300 bg-white text-zinc-800 hover:bg-zinc-100 hover:border-zinc-400'
                 }`}
               >
                 {d.role}
@@ -86,7 +88,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-3.5">
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-slate-300">Email address</label>
+            <label className="text-xs font-medium text-zinc-700">Email address</label>
             <Input
               type="email"
               required
@@ -97,7 +99,7 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-slate-300">Password</label>
+            <label className="text-xs font-medium text-zinc-700">Password</label>
             <Input
               type="password"
               required
@@ -113,10 +115,10 @@ export default function LoginPage() {
         </form>
       </CardContent>
 
-      <CardFooter className="flex flex-col border-t border-border-dark pt-4 text-center text-xs text-slate-400 space-y-2">
+      <CardFooter className="flex flex-col border-t border-zinc-200 pt-4 text-center text-xs text-zinc-500 space-y-2">
         <p>
           Don't have an account?{' '}
-          <Link href="/signup" className="text-primary-400 hover:text-primary-300 font-medium underline underline-offset-4">
+          <Link href="/signup" className="text-zinc-950 hover:text-black font-semibold underline underline-offset-4">
             Sign up
           </Link>
         </p>

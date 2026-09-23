@@ -14,7 +14,7 @@ interface Particle {
   shape: 'square' | 'circle' | 'star';
 }
 
-const COLORS = ['#3b82f6', '#a855f7', '#22c55e', '#f59e0b', '#ef4444', '#ec4899', '#06b6d4'];
+const COLORS = ['#000000', '#18181b', '#3f3f46', '#71717a', '#a1a1aa', '#d4d4d8', '#09090b'];
 
 export default function Confetti({ active, duration = 3000 }: { active: boolean; duration?: number }) {
   const [particles, setParticles] = useState<Particle[]>([]);
@@ -91,12 +91,12 @@ export function XPPopup({ xp, show }: { xp: number; show: boolean }) {
 
   return (
     <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] pointer-events-none">
-      <div className="animate-xp-popup text-center">
-        <div className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-400 drop-shadow-lg">
+      <div className="animate-xp-popup text-center bg-white/95 border border-zinc-300 shadow-2xl p-6 rounded-2xl backdrop-blur-md">
+        <div className="text-6xl font-black text-zinc-950 font-mono">
           +{xp} XP
         </div>
-        <div className="text-2xl font-bold text-white mt-2 animate-bounce">
-          🎉 Step Complete!
+        <div className="text-xl font-bold text-zinc-800 mt-2">
+          Step Complete!
         </div>
       </div>
     </div>
@@ -108,16 +108,16 @@ export function MissionCompleteOverlay({ show, xp, onContinue }: { show: boolean
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[99] flex items-center justify-center">
-      <div className="text-center animate-mission-complete">
-        <div className="text-8xl mb-6">🏆</div>
-        <h2 className="text-5xl font-black text-white mb-4">Mission Complete!</h2>
-        <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-400 mb-8">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[99] flex items-center justify-center p-4">
+      <div className="text-center animate-mission-complete bg-white border border-zinc-300 p-8 sm:p-10 rounded-2xl max-w-md w-full shadow-2xl space-y-4">
+        <div className="text-7xl">🏆</div>
+        <h2 className="text-3xl font-black text-zinc-950 tracking-tight">Mission Complete!</h2>
+        <div className="text-2xl font-bold font-mono text-zinc-900">
           +{xp} XP Earned
         </div>
         <button
           onClick={onContinue}
-          className="px-8 py-4 bg-primary-600 hover:bg-primary-500 text-white font-bold text-xl rounded-xl transition-all shadow-[0_0_30px_rgba(37,99,235,0.5)] hover:shadow-[0_0_40px_rgba(37,99,235,0.7)] hover:scale-105"
+          className="w-full px-6 py-3 bg-black hover:bg-zinc-800 text-white font-bold text-base rounded-xl transition-all shadow-md"
         >
           Continue →
         </button>

@@ -165,22 +165,22 @@ export default function MentorshipHubPage() {
   return (
     <div className="p-6 sm:p-10 max-w-7xl mx-auto w-full space-y-8">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border-dark">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-zinc-200">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-accent-500/10 border border-accent-500/30 text-accent-400 text-xs font-semibold flex items-center gap-1.5 font-body">
-              <Sparkles className="w-3.5 h-3.5" />
+            <span className="px-2.5 py-0.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-900 text-xs font-semibold flex items-center gap-1.5 font-body">
+              <Sparkles className="w-3.5 h-3.5 text-zinc-700" />
               <span>1-on-1 Engineering Guidance</span>
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-primary-500/10 border border-primary-500/30 text-primary-300 text-xs font-semibold flex items-center gap-1.5 font-body">
-              <ShieldCheck className="w-3.5 h-3.5" />
+            <span className="px-2.5 py-0.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-900 text-xs font-semibold flex items-center gap-1.5 font-body">
+              <ShieldCheck className="w-3.5 h-3.5 text-zinc-700" />
               <span>Verified Mentor Support</span>
             </span>
           </div>
-          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-white tracking-tight">
+          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-zinc-950 tracking-tight">
             Mentorship & Code Guidance
           </h1>
-          <p className="text-slate-400 text-sm font-body mt-1">
+          <p className="text-zinc-600 text-sm font-body mt-1">
             Connect directly with verified senior engineers. Get code feedback, ask architectural questions, and debug your mission work.
           </p>
         </div>
@@ -196,24 +196,24 @@ export default function MentorshipHubPage() {
       </div>
 
       {/* Mentor Spotlight Card */}
-      <Card className="border-accent-500/25 bg-gradient-to-r from-surface-dark via-surface-dark to-accent-950/15">
+      <Card className="border-zinc-200 bg-white">
         <CardContent className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Avatar name={primaryMentor.name} size="lg" variant="mentor" />
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-heading text-base font-bold text-white">{primaryMentor.name}</h3>
+                <h3 className="font-heading text-base font-bold text-zinc-950">{primaryMentor.name}</h3>
                 <Badge variant="verified" size="sm">
                   Staff Mentor
                 </Badge>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5 font-body">{primaryMentor.headline}</p>
+              <p className="text-xs text-zinc-600 mt-0.5 font-body">{primaryMentor.headline}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-slate-400 font-mono">
-            <Clock className="w-3.5 h-3.5 text-accent-400" />
-            <span>Avg response: <strong className="text-white">Under 15 mins</strong></span>
+          <div className="flex items-center gap-2 text-xs text-zinc-600 font-mono">
+            <Clock className="w-3.5 h-3.5 text-zinc-700" />
+            <span>Avg response: <strong className="text-zinc-950">Under 15 mins</strong></span>
           </div>
         </CardContent>
       </Card>
@@ -223,18 +223,18 @@ export default function MentorshipHubPage() {
         {/* Left Column: Threads List (5 cols) */}
         <div className="lg:col-span-5 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono font-medium text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-mono font-medium text-zinc-500 uppercase tracking-wider">
               Discussions ({filteredThreads.length})
             </span>
-            <div className="flex items-center gap-1 bg-surface-dark p-1 rounded-[8px] border border-border-dark font-body text-xs">
+            <div className="flex items-center gap-1 bg-zinc-100 p-1 rounded-[8px] border border-zinc-200 font-body text-xs">
               {(['ALL', 'OPEN', 'RESOLVED'] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setFilterStatus(tab)}
                   className={`px-2.5 py-1 text-[11px] font-semibold rounded-[6px] transition-colors ${
                     filterStatus === tab
-                      ? 'bg-primary-600 text-white shadow-sm'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-black text-white shadow-sm'
+                      : 'text-zinc-600 hover:text-zinc-950'
                   }`}
                 >
                   {tab === 'ALL' ? 'All' : tab === 'OPEN' ? 'Active' : 'Resolved'}
@@ -244,7 +244,7 @@ export default function MentorshipHubPage() {
           </div>
 
           {filteredThreads.length === 0 ? (
-            <Card className="p-8 text-center text-slate-400 text-xs">
+            <Card className="p-8 text-center text-zinc-500 text-xs">
               No discussions in this filter.
             </Card>
           ) : (
@@ -257,20 +257,20 @@ export default function MentorshipHubPage() {
                     onClick={() => setSelectedThreadId(t.id)}
                     className={`p-4 rounded-[12px] border cursor-pointer transition-all space-y-1.5 ${
                       isSelected
-                        ? 'border-primary-500 bg-primary-500/10 shadow-sm'
-                        : 'border-border-dark bg-surface-dark hover:border-slate-700 hover:bg-surface-raised'
+                        ? 'border-zinc-950 bg-zinc-100 shadow-sm'
+                        : 'border-zinc-200 bg-white hover:border-zinc-400 hover:bg-zinc-50'
                     }`}
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <h4 className="font-semibold text-sm text-white truncate">{t.subject}</h4>
+                      <h4 className="font-semibold text-sm text-zinc-950 truncate">{t.subject}</h4>
                       <Badge variant={t.status === 'RESOLVED' ? 'verified' : 'streak'} size="sm">
                         {t.status}
                       </Badge>
                     </div>
-                    <p className="text-xs text-slate-400 font-body line-clamp-1">
+                    <p className="text-xs text-zinc-600 font-body line-clamp-1">
                       {t.messages?.[t.messages.length - 1]?.content || t.messages?.[0]?.content}
                     </p>
-                    <p className="text-[11px] text-slate-500 font-mono">
+                    <p className="text-[11px] text-zinc-400 font-mono">
                       {new Date(t.updatedAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -284,12 +284,12 @@ export default function MentorshipHubPage() {
         <div className="lg:col-span-7">
           {activeThread ? (
             <Card className="flex flex-col min-h-[500px]">
-              <CardHeader className="border-b border-border-dark pb-4">
+              <CardHeader className="border-b border-zinc-200 pb-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5 min-w-0">
                     <CardTitle className="text-base truncate">{activeThread.subject}</CardTitle>
                     <CardDescription>
-                      Course mission: <strong className="text-white">{activeThread.mission?.title || 'General Code Inquiry'}</strong>
+                      Course mission: <strong className="text-zinc-900">{activeThread.mission?.title || 'General Code Inquiry'}</strong>
                     </CardDescription>
                   </div>
 
@@ -317,29 +317,29 @@ export default function MentorshipHubPage() {
                       key={msg.id}
                       className={`p-4 rounded-[12px] text-xs space-y-2 ${
                         isMentor
-                          ? 'bg-accent-950/20 border border-accent-500/30 ml-4 sm:ml-8'
-                          : 'bg-night border border-border-dark mr-4 sm:mr-8'
+                          ? 'bg-zinc-100 border border-zinc-300 ml-4 sm:ml-8'
+                          : 'bg-white border border-zinc-200 mr-4 sm:mr-8'
                       }`}
                     >
                       <div className="flex items-center justify-between text-[11px] font-mono">
-                        <span className={`font-semibold ${isMentor ? 'text-accent-400' : 'text-primary-300'}`}>
+                        <span className={`font-semibold ${isMentor ? 'text-zinc-950' : 'text-zinc-900'}`}>
                           {msg.senderName} ({msg.senderRole})
                         </span>
-                        <span className="text-slate-500">{new Date(msg.createdAt).toLocaleTimeString()}</span>
+                        <span className="text-zinc-500">{new Date(msg.createdAt).toLocaleTimeString()}</span>
                       </div>
-                      <p className="text-slate-200 leading-relaxed font-body">{msg.content}</p>
+                      <p className="text-zinc-800 leading-relaxed font-body">{msg.content}</p>
                       {msg.codeSnippet && (
                         <div className="relative group">
-                          <pre className="p-3 bg-night rounded-[8px] border border-border-dark font-mono text-[11px] text-accent-300 overflow-x-auto">
+                          <pre className="p-3 bg-zinc-900 rounded-[8px] border border-zinc-800 font-mono text-[11px] text-zinc-100 overflow-x-auto">
                             <code>{msg.codeSnippet}</code>
                           </pre>
                           <button
                             onClick={() => handleCopyCode(msg.codeSnippet, msg.id)}
-                            className="absolute top-2 right-2 p-1 bg-surface-raised rounded text-slate-400 hover:text-white"
+                            className="absolute top-2 right-2 p-1 bg-zinc-800 rounded text-zinc-300 hover:text-white"
                             title="Copy code"
                           >
                             {copiedSnippetId === msg.id ? (
-                              <Check className="w-3.5 h-3.5 text-accent-400" />
+                              <Check className="w-3.5 h-3.5 text-zinc-200" />
                             ) : (
                               <Copy className="w-3.5 h-3.5" />
                             )}
@@ -352,13 +352,13 @@ export default function MentorshipHubPage() {
               </CardContent>
 
               {/* Reply Form */}
-              <form onSubmit={handleSendReply} className="p-4 border-t border-border-dark bg-night/60 space-y-3">
+              <form onSubmit={handleSendReply} className="p-4 border-t border-zinc-200 bg-zinc-50/70 space-y-3">
                 <textarea
                   rows={2}
                   placeholder="Type your message or follow-up question..."
                   value={replyText}
                   onChange={(e) => setReplyText(e.target.value)}
-                  className="w-full bg-surface-dark border border-border-dark rounded-[10px] p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 font-body"
+                  className="w-full bg-white border border-zinc-300 rounded-[10px] p-3 text-xs text-zinc-950 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-black font-body"
                 />
 
                 {showCodeInput && (
@@ -367,7 +367,7 @@ export default function MentorshipHubPage() {
                     placeholder="// Paste relevant code snippet here..."
                     value={replyCode}
                     onChange={(e) => setReplyCode(e.target.value)}
-                    className="w-full bg-night border border-border-dark rounded-[10px] p-3 text-xs font-mono text-accent-300 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-[10px] p-3 text-xs font-mono text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-400"
                   />
                 )}
 
@@ -375,7 +375,7 @@ export default function MentorshipHubPage() {
                   <button
                     type="button"
                     onClick={() => setShowCodeInput(!showCodeInput)}
-                    className="text-xs text-primary-400 hover:text-primary-300 font-medium"
+                    className="text-xs text-zinc-600 hover:text-zinc-950 font-medium"
                   >
                     {showCodeInput ? '− Remove code block' : '+ Attach code snippet'}
                   </button>
@@ -394,7 +394,7 @@ export default function MentorshipHubPage() {
               </form>
             </Card>
           ) : (
-            <Card className="h-full flex items-center justify-center p-12 text-slate-500 text-xs font-body">
+            <Card className="h-full flex items-center justify-center p-12 text-zinc-500 text-xs font-body">
               Select an inquiry or click "Ask mentor a question" to start
             </Card>
           )}
@@ -403,13 +403,13 @@ export default function MentorshipHubPage() {
 
       {/* New Question Modal */}
       {showNewThreadModal && (
-        <div className="fixed inset-0 z-50 bg-night/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <Card className="max-w-lg w-full p-6 space-y-4 shadow-2xl animate-slide-up">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <Card className="max-w-lg w-full p-6 space-y-4 shadow-2xl animate-slide-up border-zinc-300">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">Ask a Senior Mentor</CardTitle>
               <button
                 onClick={() => setShowNewThreadModal(false)}
-                className="p-1 rounded-md text-slate-400 hover:text-white"
+                className="p-1 rounded-md text-zinc-400 hover:text-zinc-950"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -420,7 +420,7 @@ export default function MentorshipHubPage() {
 
             <form onSubmit={handleCreateQuestion} className="space-y-3 pt-2">
               <div className="space-y-1">
-                <label className="text-xs font-medium text-slate-300">Question subject</label>
+                <label className="text-xs font-medium text-zinc-700">Question subject</label>
                 <Input
                   type="text"
                   placeholder="e.g. CSS Grid auto-fit column overlapping on mobile"
@@ -431,25 +431,25 @@ export default function MentorshipHubPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-medium text-slate-300">Detailed explanation</label>
+                <label className="text-xs font-medium text-zinc-700">Detailed explanation</label>
                 <textarea
                   rows={3}
                   placeholder="Describe what you tried, what you expected, and what happened..."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   required
-                  className="w-full bg-night border border-border-dark rounded-[10px] p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 font-body"
+                  className="w-full bg-white border border-zinc-300 rounded-[10px] p-3 text-xs text-zinc-950 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-black font-body"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-medium text-slate-300">Code snippet (optional)</label>
+                <label className="text-xs font-medium text-zinc-700">Code snippet (optional)</label>
                 <textarea
                   rows={3}
                   placeholder="// Paste your CSS / HTML / JS code snippet here..."
                   value={newCodeSnippet}
                   onChange={(e) => setNewCodeSnippet(e.target.value)}
-                  className="w-full bg-night border border-border-dark rounded-[10px] p-3 text-xs font-mono text-accent-300 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-[10px] p-3 text-xs font-mono text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-400"
                 />
               </div>
 

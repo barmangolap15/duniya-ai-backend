@@ -10,23 +10,23 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'default', size = 'default', isLoading = false, children, disabled, ...props }, ref) => {
     const baseStyles =
-      'inline-flex items-center justify-center whitespace-nowrap rounded-[10px] font-body text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none';
+      'inline-flex items-center justify-center whitespace-nowrap rounded-[10px] font-body text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none';
 
     const variantStyles: Record<string, string> = {
       default:
-        'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 shadow-sm shadow-primary-600/20 dark:bg-primary-600 dark:hover:bg-primary-500',
+        'bg-black text-white hover:bg-zinc-800 active:bg-zinc-900 shadow-sm',
       secondary:
-        'bg-white text-ink border border-slate-200 hover:bg-slate-50 hover:border-slate-300 dark:bg-surface-dark dark:text-slate-200 dark:border-border-dark dark:hover:bg-surface-raised',
+        'bg-zinc-100 text-zinc-900 border border-zinc-200 hover:bg-zinc-200 active:bg-zinc-300',
       outline:
-        'border border-slate-200 bg-transparent hover:bg-slate-100/60 text-slate-700 dark:border-border-dark dark:text-slate-300 dark:hover:bg-surface-raised dark:hover:text-white',
+        'border border-zinc-300 bg-white hover:bg-zinc-100 text-zinc-900',
       ghost:
-        'text-slate-600 hover:bg-primary-50 hover:text-primary-700 dark:text-slate-300 dark:hover:bg-surface-raised dark:hover:text-primary-400',
+        'text-zinc-700 hover:bg-zinc-100 hover:text-black',
       destructive:
-        'bg-danger-600 text-white hover:bg-danger-700 shadow-sm shadow-danger-600/20 dark:bg-danger-600 dark:hover:bg-danger-500',
+        'bg-zinc-900 text-white hover:bg-black shadow-sm',
       accent:
-        'bg-accent-500 text-white hover:bg-accent-600 shadow-sm shadow-accent-500/20 dark:bg-accent-500 dark:hover:bg-accent-400 dark:text-slate-950 font-semibold',
+        'bg-black text-white hover:bg-zinc-800 shadow-sm font-semibold',
       amber:
-        'bg-gold-500 text-slate-950 hover:bg-gold-600 shadow-sm shadow-gold-500/20 font-semibold dark:bg-gold-400 dark:hover:bg-gold-500',
+        'bg-zinc-900 text-white hover:bg-black shadow-sm font-semibold',
     };
 
     const sizeStyles: Record<string, string> = {

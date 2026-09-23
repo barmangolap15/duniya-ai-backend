@@ -32,11 +32,11 @@ export function Avatar({
   };
 
   const variantClasses = {
-    default: 'bg-primary-950/60 text-primary-300 border border-primary-500/30',
-    student: 'bg-primary-950/60 text-primary-300 border border-primary-500/30',
-    parent: 'bg-amber-950/60 text-amber-300 border border-amber-500/30',
-    mentor: 'bg-teal-950/60 text-teal-300 border border-teal-500/30',
-    recruiter: 'bg-rose-950/60 text-rose-300 border border-rose-500/30',
+    default: 'bg-zinc-100 text-zinc-900 border border-zinc-300',
+    student: 'bg-black text-white border border-zinc-900',
+    parent: 'bg-zinc-100 text-zinc-900 border border-zinc-300',
+    mentor: 'bg-zinc-900 text-white border border-zinc-800',
+    recruiter: 'bg-zinc-200 text-zinc-900 border border-zinc-300',
   };
 
   return (

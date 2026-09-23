@@ -9,21 +9,21 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
 function Badge({ className, variant = 'default', size = 'default', ...props }: BadgeProps) {
   const variantStyles: Record<string, string> = {
     default:
-      'bg-primary-500/10 text-primary-400 border-primary-500/20 dark:bg-primary-950/50 dark:text-primary-300 dark:border-primary-500/30',
+      'bg-zinc-100 text-zinc-900 border-zinc-200',
     secondary:
-      'bg-surface-raised text-slate-300 border-border-dark',
+      'bg-zinc-50 text-zinc-700 border-zinc-200',
     outline:
-      'bg-transparent text-slate-300 border-border-dark',
+      'bg-white text-zinc-800 border-zinc-300',
     xp:
-      'bg-accent-500/10 text-accent-400 border-accent-500/25 font-mono font-medium',
+      'bg-black text-white border-black font-mono font-medium',
     streak:
-      'bg-gold-500/10 text-gold-400 border-gold-500/25 font-mono font-medium',
+      'bg-zinc-100 text-zinc-900 border-zinc-300 font-mono font-medium',
     danger:
-      'bg-danger-500/10 text-danger-400 border-danger-500/25',
+      'bg-zinc-100 text-zinc-900 border-zinc-300',
     verified:
-      'bg-accent-500/15 text-accent-400 border-accent-500/40 font-semibold',
+      'bg-black text-white border-black font-semibold',
     role:
-      'bg-slate-800 text-slate-300 border-slate-700 font-mono tracking-wider uppercase',
+      'bg-zinc-100 text-zinc-900 border-zinc-300 font-mono tracking-wider uppercase font-semibold',
   };
 
   const sizeStyles = {

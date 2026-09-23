@@ -88,11 +88,11 @@ export default function Dashboard() {
   const currentTrack = data?.careerTrack;
 
   const getTrackIcon = (name: string) => {
-    if (name?.includes('Backend')) return <Server className="w-5 h-5 text-accent-400" />;
-    if (name?.includes('Full-Stack')) return <Layers className="w-5 h-5 text-primary-400" />;
-    if (name?.includes('Mobile')) return <Smartphone className="w-5 h-5 text-gold-400" />;
-    if (name?.includes('Python') || name?.includes('AI')) return <Sparkles className="w-5 h-5 text-danger-400" />;
-    return <Layout className="w-5 h-5 text-primary-400" />;
+    if (name?.includes('Backend')) return <Server className="w-5 h-5 text-zinc-900" />;
+    if (name?.includes('Full-Stack')) return <Layers className="w-5 h-5 text-zinc-900" />;
+    if (name?.includes('Mobile')) return <Smartphone className="w-5 h-5 text-zinc-900" />;
+    if (name?.includes('Python') || name?.includes('AI')) return <Sparkles className="w-5 h-5 text-zinc-900" />;
+    return <Layout className="w-5 h-5 text-zinc-900" />;
   };
 
   return (
@@ -100,17 +100,17 @@ export default function Dashboard() {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-heading text-3xl sm:text-4xl font-bold tracking-tight text-white">
+          <h1 className="font-heading text-3xl sm:text-4xl font-bold tracking-tight text-zinc-950">
             Welcome back, {user.name}
           </h1>
-          <p className="text-slate-400 text-sm font-body mt-1">
+          <p className="text-zinc-600 text-sm font-body mt-1">
             Build interactive missions, sharpen skills, and get verified mentor code reviews.
           </p>
         </div>
         <div className="flex items-center gap-2.5 self-start sm:self-auto flex-wrap">
           <Link href="/quiz">
             <Button variant="outline" size="sm" className="gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-primary-400" />
+              <Sparkles className="w-3.5 h-3.5 text-zinc-900" />
               <span>{user.quizCompleted ? 'Recalibrate AI Match' : 'Personalize Path'}</span>
             </Button>
           </Link>
@@ -120,7 +120,7 @@ export default function Dashboard() {
             onClick={() => setShowTrackModal(true)}
             className="gap-2"
           >
-            <Compass className="w-3.5 h-3.5 text-slate-400" />
+            <Compass className="w-3.5 h-3.5 text-zinc-600" />
             <span>Switch Track</span>
           </Button>
           <Link href="/mentorship">
@@ -133,25 +133,25 @@ export default function Dashboard() {
       </div>
 
       {/* Active Learning Track Banner */}
-      <Card className="bg-gradient-to-r from-surface-dark via-surface-dark to-night border-primary-500/30">
+      <Card className="bg-zinc-50 border-zinc-200">
         <CardContent className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-primary-500/10 border border-primary-500/25 rounded-[12px] shrink-0">
+            <div className="p-3 bg-white border border-zinc-200 rounded-[12px] text-zinc-900 shrink-0 shadow-sm">
               {getTrackIcon(currentTrack?.name || '')}
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1.5">
-                <span className="text-[11px] font-mono font-medium uppercase tracking-wider text-primary-400">
+                <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-zinc-500">
                   Active Learning Track
                 </span>
-                <span className="text-xs text-slate-500 font-mono">
+                <span className="text-xs text-zinc-400 font-mono">
                   · {data?.totalMissions || 0} missions available
                 </span>
               </div>
-              <h2 className="font-heading text-xl font-bold text-white">
+              <h2 className="font-heading text-xl font-bold text-zinc-950">
                 {currentTrack?.name || 'Frontend Web Development'}
               </h2>
-              <p className="text-xs text-slate-400 mt-1 max-w-2xl font-body leading-relaxed">
+              <p className="text-xs text-zinc-600 mt-1 max-w-2xl font-body leading-relaxed">
                 {currentTrack?.description ||
                   'Build modern web applications with semantic HTML5, responsive CSS layouts, and dynamic JavaScript.'}
               </p>
@@ -184,12 +184,12 @@ export default function Dashboard() {
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-primary-500/10 border border-primary-500/25 rounded-[10px] text-primary-400">
+              <div className="p-2.5 bg-zinc-100 border border-zinc-200 rounded-[10px] text-zinc-900">
                 <Trophy className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-xs font-body text-slate-400">Current Level</p>
-                <p className="font-heading text-xl font-bold text-white">Level {user.level}</p>
+                <p className="text-xs font-body text-zinc-500">Current Level</p>
+                <p className="font-heading text-xl font-bold text-zinc-950">Level {user.level}</p>
               </div>
             </div>
           </CardHeader>
@@ -201,15 +201,15 @@ export default function Dashboard() {
         {/* Day Streak */}
         <Card>
           <CardContent className="p-6 flex items-center gap-4 h-full">
-            <div className="p-3 bg-gold-500/10 border border-gold-500/25 rounded-full text-gold-400">
-              <Flame className="w-7 h-7 fill-gold-500" />
+            <div className="p-3 bg-zinc-100 border border-zinc-200 rounded-full text-zinc-900">
+              <Flame className="w-7 h-7 fill-zinc-950 text-zinc-950" />
             </div>
             <div>
-              <p className="text-xs font-body text-slate-400">Daily Streak</p>
-              <p className="font-mono text-3xl font-bold text-white tabular-nums">
-                {data?.stats?.streak || 0} <span className="text-sm font-sans font-normal text-slate-400">days</span>
+              <p className="text-xs font-body text-zinc-500">Daily Streak</p>
+              <p className="font-mono text-3xl font-bold text-zinc-950 tabular-nums">
+                {data?.stats?.streak || 0} <span className="text-sm font-sans font-normal text-zinc-500">days</span>
               </p>
-              <p className="text-xs text-gold-400 mt-1 font-body">Consistency builds mastery</p>
+              <p className="text-xs text-zinc-500 mt-1 font-body">Consistency builds mastery</p>
             </div>
           </CardContent>
         </Card>
@@ -218,15 +218,15 @@ export default function Dashboard() {
         <Card>
           <CardContent className="p-6 flex items-center justify-between h-full">
             <div>
-              <p className="text-xs font-body text-slate-400">Track Progress</p>
-              <p className="font-mono text-3xl font-bold text-white tabular-nums">
+              <p className="text-xs font-body text-zinc-500">Track Progress</p>
+              <p className="font-mono text-3xl font-bold text-zinc-950 tabular-nums">
                 {data?.completionPercentage || 0}%
               </p>
-              <p className="text-xs text-slate-400 mt-1 font-mono">
+              <p className="text-xs text-zinc-500 mt-1 font-mono">
                 {data?.completedMissions || 0} of {data?.totalMissions || 0} missions
               </p>
             </div>
-            <div className="w-16 h-16 rounded-full border-4 border-slate-800 border-t-primary-500 flex items-center justify-center font-mono text-sm font-bold text-primary-400">
+            <div className="w-16 h-16 rounded-full border-4 border-zinc-200 border-t-zinc-950 flex items-center justify-center font-mono text-sm font-bold text-zinc-950">
               {data?.completionPercentage || 0}%
             </div>
           </CardContent>
@@ -236,13 +236,13 @@ export default function Dashboard() {
       {/* Parent Cheer & Mentor Q&A Highlights */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Parent Cheer */}
-        <Card className="border-gold-500/25 bg-gradient-to-br from-gold-950/10 to-surface-dark">
+        <Card className="border-zinc-200 bg-white">
           <CardHeader className="pb-3 flex flex-row items-center justify-between">
-            <div className="flex items-center gap-2 text-gold-400 font-semibold text-xs uppercase tracking-wider">
-              <Heart className="w-4 h-4 fill-gold-500 text-gold-500" />
+            <div className="flex items-center gap-2 text-zinc-950 font-semibold text-xs uppercase tracking-wider">
+              <Heart className="w-4 h-4 fill-zinc-950 text-zinc-950" />
               <span>Family Encouragement</span>
             </div>
-            <span className="text-xs text-slate-500 font-mono">Real-time</span>
+            <span className="text-xs text-zinc-500 font-mono">Real-time</span>
           </CardHeader>
           <CardContent className="space-y-3">
             {latestCheer ? (
@@ -251,25 +251,25 @@ export default function Dashboard() {
                   <Avatar name={latestCheer.parent?.name || 'Parent'} size="md" variant="parent" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-white">
+                      <span className="text-sm font-semibold text-zinc-950">
                         {latestCheer.parent?.name || 'Parent'}
                       </span>
-                      <span className="inline-flex items-center rounded-full bg-gold-500/15 border border-gold-500/30 px-2 py-0.5 font-mono text-[11px] font-semibold text-gold-400">
+                      <span className="inline-flex items-center rounded-full bg-zinc-100 border border-zinc-200 px-2 py-0.5 font-mono text-[11px] font-semibold text-zinc-900">
                         +{latestCheer.xpAwarded} XP Boost
                       </span>
                     </div>
-                    <p className="text-xs text-slate-300 italic mt-1 bg-night p-3 rounded-[10px] border border-border-dark leading-relaxed">
+                    <p className="text-xs text-zinc-700 italic mt-1 bg-zinc-50 p-3 rounded-[10px] border border-zinc-200 leading-relaxed">
                       "{latestCheer.message}"
                     </p>
                   </div>
                 </div>
-                <div className="text-[11px] text-slate-500 flex items-center gap-1 font-mono">
+                <div className="text-[11px] text-zinc-500 flex items-center gap-1 font-mono">
                   <Clock className="w-3.5 h-3.5" />
                   <span>Cheered {new Date(latestCheer.createdAt).toLocaleDateString()}</span>
                 </div>
               </div>
             ) : (
-              <div className="text-xs text-slate-400 py-3 leading-relaxed">
+              <div className="text-xs text-zinc-500 py-3 leading-relaxed">
                 Your family can track your milestone achievements and send motivational XP boosts through the Parent Portal.
               </div>
             )}
@@ -277,15 +277,15 @@ export default function Dashboard() {
         </Card>
 
         {/* Mentor Consultation */}
-        <Card className="border-accent-500/25 bg-gradient-to-br from-accent-950/10 to-surface-dark">
+        <Card className="border-zinc-200 bg-white">
           <CardHeader className="pb-3 flex flex-row items-center justify-between">
-            <div className="flex items-center gap-2 text-accent-400 font-semibold text-xs uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-zinc-950 font-semibold text-xs uppercase tracking-wider">
               <Sparkles className="w-4 h-4" />
               <span>Mentor Guidance</span>
             </div>
             <Link
               href="/mentorship"
-              className="text-xs text-primary-400 hover:text-primary-300 flex items-center gap-1 font-medium"
+              className="text-xs text-zinc-900 hover:text-black flex items-center gap-1 font-semibold"
             >
               <span>Ask Mentor</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -295,24 +295,24 @@ export default function Dashboard() {
             {activeMentorThreads.length > 0 ? (
               <div className="space-y-2.5">
                 <div className="flex items-center justify-between gap-2">
-                  <h4 className="text-sm font-semibold text-white truncate">
+                  <h4 className="text-sm font-semibold text-zinc-950 truncate">
                     {activeMentorThreads[0].subject}
                   </h4>
                   <Badge variant="outline" size="sm">
                     {activeMentorThreads[0].status}
                   </Badge>
                 </div>
-                <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                <p className="text-xs text-zinc-600 line-clamp-2 leading-relaxed">
                   {activeMentorThreads[0].messages?.[0]?.content || 'Mentorship inquiry in progress...'}
                 </p>
-                <div className="flex items-center gap-2 text-xs text-slate-400 pt-1">
+                <div className="flex items-center gap-2 text-xs text-zinc-600 pt-1">
                   <Avatar name={activeMentorThreads[0].mentor?.name || 'Mentor'} size="sm" variant="mentor" />
                   <span>With {activeMentorThreads[0].mentor?.name || 'Staff Mentor'}</span>
                 </div>
               </div>
             ) : (
-              <div className="space-y-2 py-1 text-xs text-slate-400 leading-relaxed">
-                <p className="text-white font-medium">Stuck on a tricky mission step?</p>
+              <div className="space-y-2 py-1 text-xs text-zinc-600 leading-relaxed">
+                <p className="text-zinc-950 font-medium">Stuck on a tricky mission step?</p>
                 <p>Senior engineering mentors are ready to review your code and guide you through blockers.</p>
                 <Link href="/mentorship" className="inline-block mt-1">
                   <Button variant="outline" size="sm" className="text-xs">
@@ -328,14 +328,14 @@ export default function Dashboard() {
       {/* Up Next in Track */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="font-heading text-2xl font-bold text-white">
+          <h2 className="font-heading text-2xl font-bold text-zinc-950">
             Up Next in {currentTrack?.name || 'Your Track'}
           </h2>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setShowTrackModal(true)}
-            className="text-xs text-primary-400 hover:text-primary-300 gap-1"
+            className="text-xs text-zinc-700 hover:text-black gap-1"
           >
             <span>Explore other subjects</span>
             <ChevronRight className="w-3.5 h-3.5" />
@@ -356,11 +356,11 @@ export default function Dashboard() {
           </div>
         ) : (
           <Card className="text-center p-8 space-y-3">
-            <div className="w-12 h-12 rounded-full bg-accent-500/10 border border-accent-500/30 flex items-center justify-center text-accent-400 mx-auto">
+            <div className="w-12 h-12 rounded-full bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-900 mx-auto">
               <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h3 className="font-heading text-base font-bold text-white">All missions completed in this track!</h3>
-            <p className="text-xs text-slate-400 max-w-md mx-auto">
+            <h3 className="font-heading text-base font-bold text-zinc-950">All missions completed in this track!</h3>
+            <p className="text-xs text-zinc-500 max-w-md mx-auto">
               You've completed every mission in this syllabus. Switch tracks to continue leveling up.
             </p>
             <Button size="sm" onClick={() => setShowTrackModal(true)}>
@@ -372,14 +372,14 @@ export default function Dashboard() {
 
       {/* Recent Activity & Reviews */}
       <div className="space-y-4">
-        <h2 className="font-heading text-2xl font-bold text-white">Recent Activity & Reviews</h2>
+        <h2 className="font-heading text-2xl font-bold text-zinc-950">Recent Activity & Reviews</h2>
         {data?.recentSubmissions?.length > 0 ? (
-          <Card className="divide-y divide-border-dark overflow-hidden">
+          <Card className="divide-y divide-zinc-200 overflow-hidden">
             {data.recentSubmissions.map((sub: any) => (
               <div key={sub.id} className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-white font-semibold text-sm">{sub.mission.title}</span>
+                    <span className="text-zinc-950 font-semibold text-sm">{sub.mission.title}</span>
                     <Badge
                       variant={
                         sub.status === 'APPROVED'
@@ -395,20 +395,20 @@ export default function Dashboard() {
                   </div>
                   {sub.reviews?.[0] ? (
                     <div className="flex items-start gap-2 pt-1">
-                      <Star className="w-3.5 h-3.5 text-gold-400 fill-gold-400 mt-0.5 shrink-0" />
-                      <p className="text-xs text-slate-300 italic font-body">
-                        "{sub.reviews[0].feedback}" — <span className="text-accent-400 font-medium">{sub.reviews[0].mentor?.name}</span>
+                      <Star className="w-3.5 h-3.5 text-zinc-900 fill-zinc-900 mt-0.5 shrink-0" />
+                      <p className="text-xs text-zinc-700 italic font-body">
+                        "{sub.reviews[0].feedback}" — <span className="text-zinc-950 font-semibold">{sub.reviews[0].mentor?.name}</span>
                       </p>
                     </div>
                   ) : (
-                    <p className="text-xs text-slate-500 font-mono">
+                    <p className="text-xs text-zinc-500 font-mono">
                       Submitted on {new Date(sub.updatedAt).toLocaleDateString()}
                     </p>
                   )}
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0">
-                  <span className="font-mono text-xs font-semibold text-accent-400">+{sub.xpEarned} XP</span>
+                  <span className="font-mono text-xs font-bold text-zinc-950">+{sub.xpEarned} XP</span>
                   <Link href={`/mission/${sub.mission.id}/`}>
                     <Button variant="outline" size="sm" className="text-xs">
                       View code
@@ -419,7 +419,7 @@ export default function Dashboard() {
             ))}
           </Card>
         ) : (
-          <Card className="p-6 text-center text-slate-400 text-xs font-body">
+          <Card className="p-6 text-center text-zinc-500 text-xs font-body">
             No submissions yet. Start your first mission to earn XP and receive verified mentor reviews!
           </Card>
         )}
@@ -427,18 +427,18 @@ export default function Dashboard() {
 
       {/* Switch Track Modal */}
       {showTrackModal && (
-        <div className="fixed inset-0 bg-night/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-surface-dark border border-border-dark rounded-[14px] max-w-2xl w-full p-6 space-y-5 shadow-2xl animate-slide-up">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white border border-zinc-200 rounded-[14px] max-w-2xl w-full p-6 space-y-5 shadow-2xl animate-slide-up">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-heading text-lg font-bold text-white">Switch Career Track</h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <h3 className="font-heading text-lg font-bold text-zinc-950">Switch Career Track</h3>
+                <p className="text-xs text-zinc-500 mt-0.5">
                   Select a tech stack to recalibrate your curriculum missions
                 </p>
               </div>
               <button
                 onClick={() => setShowTrackModal(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-surface-raised transition-colors"
+                className="p-1.5 rounded-lg text-zinc-500 hover:text-black hover:bg-zinc-100 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -453,28 +453,28 @@ export default function Dashboard() {
                     onClick={() => !isCurrent && switchTrackMutation.mutate(track.id)}
                     className={`p-4 rounded-[12px] border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
                       isCurrent
-                        ? 'border-primary-500 bg-primary-500/10'
-                        : 'border-border-dark bg-night hover:border-slate-700 hover:bg-surface-raised'
+                        ? 'border-zinc-950 bg-zinc-50'
+                        : 'border-zinc-200 bg-white hover:border-zinc-400 hover:bg-zinc-50'
                     }`}
                   >
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <span className="font-heading text-sm font-semibold text-white">{track.name}</span>
+                        <span className="font-heading text-sm font-semibold text-zinc-950">{track.name}</span>
                         {isCurrent && (
                           <Badge variant="default" size="sm">
                             Active
                           </Badge>
                         )}
                       </div>
-                      <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
+                      <p className="text-xs text-zinc-600 leading-relaxed line-clamp-2">
                         {track.description}
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between pt-2 border-t border-border-dark/60 text-xs font-mono">
-                      <span className="text-slate-500">{track.missions?.length || 0} missions</span>
+                    <div className="flex items-center justify-between pt-2 border-t border-zinc-200 text-xs font-mono">
+                      <span className="text-zinc-500">{track.missions?.length || 0} missions</span>
                       {!isCurrent && (
-                        <span className="text-primary-400 font-sans font-medium flex items-center gap-1">
+                        <span className="text-zinc-900 font-sans font-medium flex items-center gap-1">
                           Switch <ChevronRight className="w-3 h-3" />
                         </span>
                       )}

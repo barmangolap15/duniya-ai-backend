@@ -4,27 +4,27 @@
 
 @layer base {
   :root {
-    --bg: #0B1020;
-    --surface: #131A2E;
-    --surface-subtle: #1B2440;
-    --border: #1E293B;
-    --border-strong: #334155;
+    --bg: #FFFFFF;
+    --surface: #FFFFFF;
+    --surface-subtle: #F4F4F5;
+    --border: #E4E4E7;
+    --border-strong: #D4D4D8;
 
-    --text: #E2E8F0;
-    --text-secondary: #94A3B8;
-    --text-muted: #94A3B8;
+    --text: #09090B;
+    --text-secondary: #71717A;
+    --text-muted: #A1A1AA;
 
-    --primary: #4F46E5;
-    --primary-hover: #4338CA;
-    --primary-pressed: #3730A3;
-    --primary-tint: #E0E7FF;
+    --primary: #09090B;
+    --primary-hover: #27272A;
+    --primary-pressed: #000000;
+    --primary-tint: #F4F4F5;
     --on-primary: #FFFFFF;
 
-    --accent: #14B8A6;
-    --accent-text: #0F766E;
-    --gold: #F59E0B;
-    --gold-text: #B45309;
-    --danger: #E11D48;
+    --accent: #18181B;
+    --accent-text: #09090B;
+    --gold: #27272A;
+    --gold-text: #09090B;
+    --danger: #09090B;
 
     --radius-sm: 6px;
     --radius: 10px;
@@ -33,12 +33,12 @@
 
   html {
     scroll-behavior: smooth;
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   body {
-    background-color: #0B1020;
-    color: #E2E8F0;
+    background-color: #FFFFFF;
+    color: #09090B;
     font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   }
 
@@ -59,16 +59,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0B1020;
+  background: #F4F4F5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
+  background: #D4D4D8;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #A1A1AA;
 }
 
 /* ============================================
@@ -137,10 +137,10 @@
 /* Step completion glow pulse */
 @keyframes step-glow {
   0%, 100% {
-    box-shadow: 0 0 5px rgba(20, 184, 166, 0.2);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.08);
   }
   50% {
-    box-shadow: 0 0 16px rgba(20, 184, 166, 0.5), 0 0 24px rgba(20, 184, 166, 0.15);
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.18), 0 0 24px rgba(0, 0, 0, 0.08);
   }
 }
 
@@ -151,12 +151,12 @@
 /* Active step pulse */
 @keyframes step-pulse {
   0%, 100% {
-    border-color: rgba(79, 70, 229, 0.4);
-    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.15);
+    border-color: rgba(9, 9, 11, 0.3);
+    box-shadow: 0 0 0 0 rgba(9, 9, 11, 0.08);
   }
   50% {
-    border-color: rgba(79, 70, 229, 0.8);
-    box-shadow: 0 0 12px 0 rgba(79, 70, 229, 0.25);
+    border-color: rgba(9, 9, 11, 0.8);
+    box-shadow: 0 0 10px 0 rgba(9, 9, 11, 0.15);
   }
 }
 

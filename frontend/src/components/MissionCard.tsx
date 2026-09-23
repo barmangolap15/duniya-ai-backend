@@ -17,15 +17,15 @@ export default function MissionCard({ id, title, courseName, xpReward, completed
       <CardContent className="p-5 flex flex-col justify-between h-full space-y-4">
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-[11px] font-mono font-medium uppercase tracking-wider text-primary-400">
+            <span className="text-[11px] font-mono font-medium uppercase tracking-wider text-zinc-500">
               {courseName}
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full bg-accent-500/10 border border-accent-500/25 px-2 py-0.5 font-mono text-xs font-semibold text-accent-400 tabular-nums">
-              <Sparkles className="w-3 h-3" />
+            <span className="inline-flex items-center gap-1 rounded-full bg-zinc-100 border border-zinc-200 px-2 py-0.5 font-mono text-xs font-semibold text-zinc-900 tabular-nums">
+              <Sparkles className="w-3 h-3 text-zinc-700" />
               +{xpReward} XP
             </span>
           </div>
-          <h3 className="font-heading text-base font-semibold text-white group-hover:text-primary-300 transition-colors line-clamp-2">
+          <h3 className="font-heading text-base font-semibold text-zinc-950 group-hover:text-black transition-colors line-clamp-2">
             {title}
           </h3>
         </div>

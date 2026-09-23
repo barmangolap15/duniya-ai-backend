@@ -45,32 +45,32 @@ export default function SignupPage() {
       id: 'STUDENT' as UserRole,
       label: 'Student',
       icon: Code2,
-      activeClass: 'border-primary-500 bg-primary-500/10 text-primary-300 ring-1 ring-primary-500',
+      activeClass: 'border-zinc-950 bg-zinc-950 text-white shadow-sm',
     },
     {
       id: 'MENTOR' as UserRole,
       label: 'Mentor',
       icon: Eye,
-      activeClass: 'border-accent-500 bg-accent-500/10 text-accent-300 ring-1 ring-accent-500',
+      activeClass: 'border-zinc-950 bg-zinc-950 text-white shadow-sm',
     },
     {
       id: 'PARENT' as UserRole,
       label: 'Parent',
       icon: Heart,
-      activeClass: 'border-gold-500 bg-gold-500/10 text-gold-400 ring-1 ring-gold-500',
+      activeClass: 'border-zinc-950 bg-zinc-950 text-white shadow-sm',
     },
     {
       id: 'RECRUITER' as UserRole,
       label: 'Recruiter',
       icon: Search,
-      activeClass: 'border-danger-500 bg-danger-500/10 text-danger-400 ring-1 ring-danger-500',
+      activeClass: 'border-zinc-950 bg-zinc-950 text-white shadow-sm',
     },
   ];
 
   return (
-    <Card className="w-full shadow-2xl border-border-dark bg-surface-dark">
+    <Card className="w-full shadow-lg border border-zinc-200 bg-white">
       <CardHeader className="text-center space-y-1">
-        <CardTitle className="text-xl">Create your account</CardTitle>
+        <CardTitle className="text-xl text-zinc-950">Create your account</CardTitle>
         <CardDescription>
           Select your role to configure your dedicated workspace
         </CardDescription>
@@ -79,7 +79,7 @@ export default function SignupPage() {
       <CardContent className="space-y-4">
         {/* Role Selector Grid */}
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-slate-300">I am joining as a</label>
+          <label className="text-xs font-medium text-zinc-700">I am joining as a</label>
           <div className="grid grid-cols-4 gap-2">
             {roleOptions.map((opt) => {
               const Icon = opt.icon;
@@ -92,7 +92,7 @@ export default function SignupPage() {
                   className={`p-2.5 rounded-[10px] border text-center transition-all flex flex-col items-center gap-1.5 text-xs font-medium select-none ${
                     isSelected
                       ? opt.activeClass
-                      : 'border-border-dark bg-night text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                      : 'border-zinc-200 bg-zinc-50 text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100 hover:border-zinc-300'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -105,7 +105,7 @@ export default function SignupPage() {
 
         <form onSubmit={handleSubmit} className="space-y-3.5">
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-slate-300">Full name</label>
+            <label className="text-xs font-medium text-zinc-700">Full name</label>
             <Input
               type="text"
               required
@@ -116,7 +116,7 @@ export default function SignupPage() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-slate-300">Email address</label>
+            <label className="text-xs font-medium text-zinc-700">Email address</label>
             <Input
               type="email"
               required
@@ -127,7 +127,7 @@ export default function SignupPage() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-slate-300">Password</label>
+            <label className="text-xs font-medium text-zinc-700">Password</label>
             <Input
               type="password"
               required
@@ -143,10 +143,10 @@ export default function SignupPage() {
         </form>
       </CardContent>
 
-      <CardFooter className="flex flex-col border-t border-border-dark pt-4 text-center text-xs text-slate-400 space-y-2">
+      <CardFooter className="flex flex-col border-t border-zinc-200 pt-4 text-center text-xs text-zinc-500 space-y-2">
         <p>
           Already have an account?{' '}
-          <Link href="/login" className="text-primary-400 hover:text-primary-300 font-medium underline underline-offset-4">
+          <Link href="/login" className="text-zinc-950 hover:text-black font-semibold underline underline-offset-4">
             Sign in
           </Link>
         </p>

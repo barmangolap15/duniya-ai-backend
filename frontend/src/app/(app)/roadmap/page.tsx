@@ -59,25 +59,25 @@ export default function RoadmapPage() {
   const isCurrentEnrolled = currentViewTrack?.id === activeEnrolledTrackId;
 
   const getTrackIcon = (name: string) => {
-    if (name?.includes('Backend')) return <Server className="w-4 h-4 text-accent-400" />;
-    if (name?.includes('Full-Stack')) return <Layers className="w-4 h-4 text-primary-400" />;
-    if (name?.includes('Mobile')) return <Smartphone className="w-4 h-4 text-gold-400" />;
-    if (name?.includes('Python') || name?.includes('AI')) return <Sparkles className="w-4 h-4 text-danger-400" />;
-    return <Layout className="w-4 h-4 text-primary-400" />;
+    if (name?.includes('Backend')) return <Server className="w-4 h-4 text-zinc-900" />;
+    if (name?.includes('Full-Stack')) return <Layers className="w-4 h-4 text-zinc-900" />;
+    if (name?.includes('Mobile')) return <Smartphone className="w-4 h-4 text-zinc-900" />;
+    if (name?.includes('Python') || name?.includes('AI')) return <Sparkles className="w-4 h-4 text-zinc-900" />;
+    return <Layout className="w-4 h-4 text-zinc-900" />;
   };
 
   return (
     <div className="max-w-5xl mx-auto w-full p-6 sm:p-10 py-10 space-y-8">
       {/* Top Banner */}
       <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/30 text-primary-300 text-xs font-semibold uppercase tracking-wider">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-900 text-xs font-semibold uppercase tracking-wider">
           <Compass className="w-3.5 h-3.5" />
           <span>Curriculum & Career Roadmaps</span>
         </div>
-        <h1 className="font-heading text-3xl sm:text-5xl font-bold text-white tracking-tight">
-          Explore Learning Tracks & <span className="text-primary-400">Syllabus</span>
+        <h1 className="font-heading text-3xl sm:text-5xl font-bold text-zinc-950 tracking-tight">
+          Explore Learning Tracks & <span className="text-zinc-500">Syllabus</span>
         </h1>
-        <p className="text-sm text-slate-400 max-w-2xl mx-auto font-body leading-relaxed">
+        <p className="text-sm text-zinc-600 max-w-2xl mx-auto font-body leading-relaxed">
           Select any career track to inspect its full course roadmap and interactive coding missions. Switch your enrolled path anytime with 1 click.
         </p>
       </div>
@@ -93,14 +93,14 @@ export default function RoadmapPage() {
               onClick={() => setSelectedTrackId(track.id)}
               className={`px-4 py-2.5 rounded-[10px] text-xs font-semibold transition-all flex items-center gap-2 whitespace-nowrap border shrink-0 ${
                 isSelected
-                  ? 'bg-primary-600/15 text-white border-primary-500 shadow-sm'
-                  : 'bg-surface-dark text-slate-400 border-border-dark hover:border-slate-700 hover:text-white'
+                  ? 'bg-black text-white border-black shadow-sm'
+                  : 'bg-white text-zinc-700 border-zinc-200 hover:border-zinc-400 hover:text-black'
               }`}
             >
               {getTrackIcon(track.name)}
               <span>{track.name}</span>
               {isEnrolled && (
-                <Badge variant="verified" size="sm">
+                <Badge variant={isSelected ? 'secondary' : 'default'} size="sm">
                   Active
                 </Badge>
               )}
@@ -111,11 +111,11 @@ export default function RoadmapPage() {
 
       {/* Selected Track Overview Card */}
       {currentViewTrack && (
-        <Card className="border-primary-500/30 bg-gradient-to-r from-surface-dark via-surface-dark to-night">
+        <Card className="border-zinc-200 bg-zinc-50">
           <CardContent className="p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className="text-xs uppercase font-mono font-semibold text-primary-400 tracking-wider">
+                <span className="text-xs uppercase font-mono font-semibold text-zinc-500 tracking-wider">
                   {currentViewTrack.name}
                 </span>
                 {isCurrentEnrolled && (
@@ -124,14 +124,14 @@ export default function RoadmapPage() {
                   </Badge>
                 )}
               </div>
-              <h2 className="font-heading text-2xl font-bold text-white">{currentViewTrack.name}</h2>
-              <p className="text-xs text-slate-400 max-w-2xl leading-relaxed font-body">
+              <h2 className="font-heading text-2xl font-bold text-zinc-950">{currentViewTrack.name}</h2>
+              <p className="text-xs text-zinc-600 max-w-2xl leading-relaxed font-body">
                 {currentViewTrack.description}
               </p>
-              <div className="flex items-center gap-3 text-xs text-slate-400 pt-1 font-mono">
+              <div className="flex items-center gap-3 text-xs text-zinc-500 pt-1 font-mono">
                 <span>{currentViewTrack.courses?.length || 0} courses</span>
                 <span>·</span>
-                <span className="text-accent-400 font-semibold">
+                <span className="text-zinc-950 font-bold">
                   {currentViewTrack.totalMissionsCount ||
                     currentViewTrack.courses?.flatMap((c: any) => c.missions || []).length ||
                     0}{' '}
@@ -166,7 +166,7 @@ export default function RoadmapPage() {
 
       {/* Course Tree */}
       <div className="relative pt-4">
-        <div className="absolute left-[31px] top-6 bottom-4 w-0.5 bg-border-dark hidden sm:block" />
+        <div className="absolute left-[31px] top-6 bottom-4 w-0.5 bg-zinc-200 hidden sm:block" />
 
         <div className="space-y-6 relative z-10">
           {(currentViewTrack?.courses || []).map((course: any, index: number) => {
@@ -174,18 +174,18 @@ export default function RoadmapPage() {
             return (
               <div key={course.id || index} className="flex flex-col sm:flex-row gap-5">
                 {/* Node number */}
-                <div className="w-14 h-14 shrink-0 rounded-[14px] flex items-center justify-center border-2 border-primary-500/40 bg-surface-dark text-white font-heading font-bold text-base shadow-sm">
+                <div className="w-14 h-14 shrink-0 rounded-[14px] flex items-center justify-center border-2 border-zinc-950 bg-white text-zinc-950 font-heading font-bold text-base shadow-sm">
                   {index + 1}
                 </div>
 
                 <Card className="flex-1">
                   <CardContent className="p-5 sm:p-6 space-y-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border-dark pb-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-200 pb-3">
                       <div>
-                        <h3 className="font-heading text-base font-bold text-white">
+                        <h3 className="font-heading text-base font-bold text-zinc-950">
                           {course.name || course.title}
                         </h3>
-                        <p className="text-xs text-slate-400 mt-0.5 font-body">{course.description}</p>
+                        <p className="text-xs text-zinc-500 mt-0.5 font-body">{course.description}</p>
                       </div>
                       <Badge variant="secondary" size="sm" className="self-start sm:self-auto font-mono">
                         {missions.length} missions
@@ -198,17 +198,17 @@ export default function RoadmapPage() {
                         <Link
                           key={m.id}
                           href={`/mission/${m.id}/`}
-                          className="p-3.5 bg-night rounded-[10px] border border-border-dark hover:border-primary-500/50 hover:bg-surface-raised transition-all flex items-center justify-between gap-2 group"
+                          className="p-3.5 bg-zinc-50 rounded-[10px] border border-zinc-200 hover:border-zinc-400 hover:bg-zinc-100 transition-all flex items-center justify-between gap-2 group"
                         >
                           <div className="space-y-0.5 min-w-0">
-                            <h4 className="text-xs font-semibold text-slate-200 group-hover:text-primary-300 transition-colors truncate">
+                            <h4 className="text-xs font-semibold text-zinc-900 group-hover:text-black transition-colors truncate">
                               {m.title}
                             </h4>
-                            <span className="text-[11px] font-mono font-medium text-accent-400">
+                            <span className="text-[11px] font-mono font-bold text-zinc-950">
                               +{m.xpReward} XP
                             </span>
                           </div>
-                          <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all shrink-0" />
+                          <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-black group-hover:translate-x-0.5 transition-all shrink-0" />
                         </Link>
                       ))}
                     </div>

@@ -100,22 +100,22 @@ export default function ParentPage() {
   return (
     <div className="p-6 sm:p-10 max-w-7xl mx-auto w-full space-y-8">
       {/* Portal Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border-dark">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-zinc-200">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-semibold flex items-center gap-1.5 font-body">
-              <Heart className="w-3.5 h-3.5 fill-gold-500" />
+            <span className="px-2.5 py-0.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-900 text-xs font-semibold flex items-center gap-1.5 font-body">
+              <Heart className="w-3.5 h-3.5 fill-zinc-900 text-zinc-900" />
               <span>Family Oversight Hub</span>
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-accent-500/10 border border-accent-500/30 text-accent-400 text-xs font-semibold flex items-center gap-1.5 font-body">
-              <ShieldCheck className="w-3.5 h-3.5" />
+            <span className="px-2.5 py-0.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-900 text-xs font-semibold flex items-center gap-1.5 font-body">
+              <ShieldCheck className="w-3.5 h-3.5 text-zinc-700" />
               <span>Verified Reports & Progress</span>
             </span>
           </div>
-          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-white tracking-tight">
+          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-zinc-950 tracking-tight">
             Family Learning Dashboard
           </h1>
-          <p className="text-slate-400 text-sm font-body mt-1">
+          <p className="text-zinc-600 text-sm font-body mt-1">
             Track learning velocity, review verified code evaluations, and send encouragement boosts.
           </p>
         </div>
@@ -126,7 +126,7 @@ export default function ParentPage() {
           onClick={() => setShowLinkModal(true)}
           className="gap-2 self-start md:self-auto text-xs"
         >
-          <UserPlus className="w-4 h-4 text-gold-400" />
+          <UserPlus className="w-4 h-4 text-zinc-700" />
           <span>Link another student</span>
         </Button>
       </div>
@@ -134,11 +134,11 @@ export default function ParentPage() {
       {/* If No Children Linked */}
       {!children || children.length === 0 ? (
         <Card className="max-w-xl mx-auto p-8 sm:p-10 text-center space-y-4">
-          <div className="w-14 h-14 rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 mx-auto">
-            <Heart className="w-7 h-7" />
+          <div className="w-14 h-14 rounded-full bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-900 mx-auto">
+            <Heart className="w-7 h-7 fill-zinc-900 text-zinc-900" />
           </div>
-          <h2 className="font-heading text-xl font-bold text-white">No Student Accounts Linked</h2>
-          <p className="text-slate-400 text-xs leading-relaxed font-body">
+          <h2 className="font-heading text-xl font-bold text-zinc-950">No Student Accounts Linked</h2>
+          <p className="text-zinc-600 text-xs leading-relaxed font-body">
             Enter your child's student email address below to monitor their daily study streak, view official progress reports, and cheer their milestones.
           </p>
           <div className="flex gap-2.5 pt-2">
@@ -150,7 +150,7 @@ export default function ParentPage() {
               className="flex-1 text-xs"
             />
             <Button
-              variant="amber"
+              variant="default"
               size="default"
               onClick={() => linkMutation.mutate(linkEmail)}
               disabled={!linkEmail || linkMutation.isPending}
@@ -164,15 +164,15 @@ export default function ParentPage() {
         <div className="space-y-8">
           {/* Child Switcher Tabs (if multiple) */}
           {children.length > 1 && (
-            <div className="flex gap-2 border-b border-border-dark pb-2">
+            <div className="flex gap-2 border-b border-zinc-200 pb-2">
               {children.map((child: any, idx: number) => (
                 <button
                   key={child.id}
                   onClick={() => setSelectedChildIndex(idx)}
                   className={`px-3.5 py-2 rounded-[10px] text-xs font-medium transition-all flex items-center gap-2 ${
                     idx === selectedChildIndex
-                      ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
-                      : 'bg-surface-dark text-slate-400 hover:text-white border border-border-dark'
+                      ? 'bg-black text-white border border-black'
+                      : 'bg-zinc-100 text-zinc-600 hover:text-zinc-950 border border-zinc-200'
                   }`}
                 >
                   <Avatar name={child.name} size="sm" variant="student" />
@@ -184,32 +184,32 @@ export default function ParentPage() {
 
           {/* Child Hero Card */}
           {currentChild && (
-            <Card className="border-gold-500/25 bg-gradient-to-r from-surface-dark via-surface-dark to-gold-950/10">
+            <Card className="border-zinc-200 bg-white">
               <CardContent className="p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="flex items-center gap-4 sm:gap-5">
                   <Avatar name={currentChild.name} size="xl" variant="student" />
                   <div className="space-y-1">
                     <div className="flex items-center gap-2.5 flex-wrap">
-                      <h2 className="font-heading text-2xl font-bold text-white">{currentChild.name}</h2>
+                      <h2 className="font-heading text-2xl font-bold text-zinc-950">{currentChild.name}</h2>
                       <Badge variant="streak">
                         Level {currentChild.level}
                       </Badge>
                     </div>
-                    <p className="text-xs text-primary-400 font-semibold">{currentChild.trackName}</p>
-                    <p className="text-xs text-slate-400 max-w-md">{currentChild.headline}</p>
+                    <p className="text-xs text-zinc-700 font-semibold">{currentChild.trackName}</p>
+                    <p className="text-xs text-zinc-500 max-w-md">{currentChild.headline}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2.5 self-end md:self-auto flex-wrap">
                   <Link href={`/portfolio/${currentChild.id}`} target="_blank">
                     <Button variant="outline" size="sm" className="gap-1.5 text-xs">
-                      <ExternalLink className="w-3.5 h-3.5 text-primary-400" />
+                      <ExternalLink className="w-3.5 h-3.5 text-zinc-700" />
                       <span>Portfolio</span>
                     </Button>
                   </Link>
 
                   <Button
-                    variant="amber"
+                    variant="default"
                     size="sm"
                     onClick={() => setActiveParentTab('CHEERS')}
                     className="gap-1.5 text-xs"
@@ -223,13 +223,13 @@ export default function ParentPage() {
           )}
 
           {/* Tab Navigation */}
-          <div className="flex items-center gap-2 border-b border-border-dark pb-3 overflow-x-auto">
+          <div className="flex items-center gap-2 border-b border-zinc-200 pb-3 overflow-x-auto">
             <button
               onClick={() => setActiveParentTab('OVERVIEW')}
               className={`px-4 py-2 rounded-[10px] text-xs font-semibold transition-all flex items-center gap-2 shrink-0 ${
                 activeParentTab === 'OVERVIEW'
-                  ? 'bg-gold-500 text-slate-950 shadow-sm'
-                  : 'bg-surface-dark text-slate-400 hover:text-white border border-border-dark'
+                  ? 'bg-black text-white shadow-sm'
+                  : 'bg-zinc-100 text-zinc-600 hover:text-zinc-950 border border-zinc-200'
               }`}
             >
               <TrendingUp className="w-4 h-4" />
@@ -240,14 +240,14 @@ export default function ParentPage() {
               onClick={() => setActiveParentTab('REPORTS')}
               className={`px-4 py-2 rounded-[10px] text-xs font-semibold transition-all flex items-center gap-2 shrink-0 ${
                 activeParentTab === 'REPORTS'
-                  ? 'bg-gold-500 text-slate-950 shadow-sm'
-                  : 'bg-surface-dark text-slate-400 hover:text-white border border-border-dark'
+                  ? 'bg-black text-white shadow-sm'
+                  : 'bg-zinc-100 text-zinc-600 hover:text-zinc-950 border border-zinc-200'
               }`}
             >
               <FileText className="w-4 h-4" />
               <span>Progress & Assessment Reports</span>
               {reportData?.mentorEvaluations?.length > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-slate-900 text-gold-400 font-mono text-[10px] font-bold">
+                <span className="px-1.5 py-0.2 rounded-full bg-zinc-800 text-white font-mono text-[10px] font-bold">
                   {reportData.mentorEvaluations.length}
                 </span>
               )}
@@ -257,14 +257,14 @@ export default function ParentPage() {
               onClick={() => setActiveParentTab('CHEERS')}
               className={`px-4 py-2 rounded-[10px] text-xs font-semibold transition-all flex items-center gap-2 shrink-0 ${
                 activeParentTab === 'CHEERS'
-                  ? 'bg-gold-500 text-slate-950 shadow-sm'
-                  : 'bg-surface-dark text-slate-400 hover:text-white border border-border-dark'
+                  ? 'bg-black text-white shadow-sm'
+                  : 'bg-zinc-100 text-zinc-600 hover:text-zinc-950 border border-zinc-200'
               }`}
             >
               <Sparkles className="w-4 h-4" />
               <span>Encouragement & Cheers</span>
               {currentChild?.cheers?.length > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-slate-900 text-gold-400 font-mono text-[10px] font-bold">
+                <span className="px-1.5 py-0.2 rounded-full bg-zinc-800 text-white font-mono text-[10px] font-bold">
                   {currentChild.cheers.length}
                 </span>
               )}
@@ -278,49 +278,49 @@ export default function ParentPage() {
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <Card>
                   <CardContent className="p-5">
-                    <div className="w-9 h-9 rounded-full bg-gold-500/10 border border-gold-500/25 flex items-center justify-center text-gold-400 mb-3">
-                      <Flame className="w-5 h-5 fill-gold-500" />
+                    <div className="w-9 h-9 rounded-full bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-900 mb-3">
+                      <Flame className="w-5 h-5 fill-zinc-900 text-zinc-900" />
                     </div>
-                    <p className="text-xs text-slate-400">Daily Streak</p>
-                    <p className="font-mono text-2xl font-bold text-white mt-1">{currentChild.streak} Days</p>
-                    <p className="text-[11px] text-gold-400 mt-0.5">Consistent daily habit</p>
+                    <p className="text-xs text-zinc-500">Daily Streak</p>
+                    <p className="font-mono text-2xl font-bold text-zinc-950 mt-1">{currentChild.streak} Days</p>
+                    <p className="text-[11px] text-zinc-600 mt-0.5">Consistent daily habit</p>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardContent className="p-5">
-                    <div className="w-9 h-9 rounded-full bg-primary-500/10 border border-primary-500/25 flex items-center justify-center text-primary-400 mb-3">
+                    <div className="w-9 h-9 rounded-full bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-900 mb-3">
                       <Clock className="w-5 h-5" />
                     </div>
-                    <p className="text-xs text-slate-400">Study Velocity</p>
-                    <p className="font-mono text-2xl font-bold text-white mt-1">
+                    <p className="text-xs text-zinc-500">Study Velocity</p>
+                    <p className="font-mono text-2xl font-bold text-zinc-950 mt-1">
                       ~{currentChild.estimatedHours || 1} Hours
                     </p>
-                    <p className="text-[11px] text-primary-400 mt-0.5">Focused code execution</p>
+                    <p className="text-[11px] text-zinc-600 mt-0.5">Focused code execution</p>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardContent className="p-5">
-                    <div className="w-9 h-9 rounded-full bg-accent-500/10 border border-accent-500/25 flex items-center justify-center text-accent-400 mb-3">
+                    <div className="w-9 h-9 rounded-full bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-900 mb-3">
                       <Trophy className="w-5 h-5" />
                     </div>
-                    <p className="text-xs text-slate-400">Total Experience</p>
-                    <p className="font-mono text-2xl font-bold text-accent-400 mt-1">{currentChild.xp} XP</p>
-                    <p className="text-[11px] text-slate-400 mt-0.5">Verified points earned</p>
+                    <p className="text-xs text-zinc-500">Total Experience</p>
+                    <p className="font-mono text-2xl font-bold text-zinc-950 mt-1">{currentChild.xp} XP</p>
+                    <p className="text-[11px] text-zinc-500 mt-0.5">Verified points earned</p>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardContent className="p-5">
-                    <div className="w-9 h-9 rounded-full bg-accent-500/10 border border-accent-500/25 flex items-center justify-center text-accent-400 mb-3">
+                    <div className="w-9 h-9 rounded-full bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-900 mb-3">
                       <CheckCircle2 className="w-5 h-5" />
                     </div>
-                    <p className="text-xs text-slate-400">Missions Completed</p>
-                    <p className="font-mono text-2xl font-bold text-white mt-1">
+                    <p className="text-xs text-zinc-500">Missions Completed</p>
+                    <p className="font-mono text-2xl font-bold text-zinc-950 mt-1">
                       {currentChild.completedMissionsCount}
                     </p>
-                    <p className="text-[11px] text-accent-400 mt-0.5">Passes automated tests</p>
+                    <p className="text-[11px] text-zinc-600 mt-0.5">Passes automated tests</p>
                   </CardContent>
                 </Card>
               </div>
@@ -332,21 +332,21 @@ export default function ParentPage() {
                     <div>
                       <CardTitle>Curriculum Progression</CardTitle>
                       <CardDescription>
-                        Enrolled track: <strong className="text-primary-400">{currentChild.trackName}</strong>
+                        Enrolled track: <strong className="text-zinc-900">{currentChild.trackName}</strong>
                       </CardDescription>
                     </div>
                     <div className="text-right">
-                      <span className="font-mono text-2xl font-bold text-white">
+                      <span className="font-mono text-2xl font-bold text-zinc-950">
                         {currentChild.completionRate}%
                       </span>
-                      <span className="text-xs text-slate-400 block font-mono">Milestone completion rate</span>
+                      <span className="text-xs text-zinc-500 block font-mono">Milestone completion rate</span>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="w-full h-2.5 bg-zinc-200 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-gold-500 transition-all duration-500 rounded-full"
+                      className="h-full bg-black transition-all duration-500 rounded-full"
                       style={{ width: `${Math.max(5, currentChild.completionRate)}%` }}
                     />
                   </div>
@@ -361,14 +361,14 @@ export default function ParentPage() {
                 </CardHeader>
                 <CardContent>
                   {!currentChild.recentActivity || currentChild.recentActivity.length === 0 ? (
-                    <p className="text-xs text-slate-500">No project submissions logged yet.</p>
+                    <p className="text-xs text-zinc-500">No project submissions logged yet.</p>
                   ) : (
-                    <div className="divide-y divide-border-dark">
+                    <div className="divide-y divide-zinc-200">
                       {currentChild.recentActivity.map((act: any, idx: number) => (
                         <div key={idx} className="py-3 flex items-center justify-between gap-4 text-xs">
                           <div className="space-y-0.5">
-                            <div className="font-semibold text-white text-sm">{act.missionTitle}</div>
-                            <div className="text-slate-400 font-mono text-[11px]">
+                            <div className="font-semibold text-zinc-950 text-sm">{act.missionTitle}</div>
+                            <div className="text-zinc-500 font-mono text-[11px]">
                               {act.courseName} · {new Date(act.date).toLocaleDateString()}
                             </div>
                           </div>
@@ -390,17 +390,17 @@ export default function ParentPage() {
           {activeParentTab === 'REPORTS' && currentChild && (
             <div className="space-y-6">
               {/* Report Header Card */}
-              <Card className="border-gold-500/25 bg-surface-dark">
+              <Card className="border-zinc-200 bg-white">
                 <CardContent className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                   <div className="space-y-1">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-semibold">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-900 text-xs font-semibold">
                       <FileText className="w-3.5 h-3.5" />
                       <span>Academic Progress Report</span>
                     </div>
-                    <h2 className="font-heading text-2xl font-bold text-white pt-1">
+                    <h2 className="font-heading text-2xl font-bold text-zinc-950 pt-1">
                       {currentChild.name}’s Certified Report Card
                     </h2>
-                    <p className="text-xs text-slate-400 max-w-xl font-body">
+                    <p className="text-xs text-zinc-600 max-w-xl font-body">
                       Curriculum mastery status, diagnostic assessment evaluation, and certified mentor reviews.
                     </p>
                   </div>
@@ -411,7 +411,7 @@ export default function ParentPage() {
                     onClick={() => window.print()}
                     className="gap-2 self-start sm:self-auto text-xs"
                   >
-                    <Printer className="w-4 h-4 text-gold-400" />
+                    <Printer className="w-4 h-4 text-zinc-700" />
                     <span>Print / Save Report</span>
                   </Button>
                 </CardContent>
@@ -423,10 +423,10 @@ export default function ParentPage() {
                 <div className="space-y-6">
                   {/* AI Placement & Skill Assessment */}
                   <Card>
-                    <CardHeader className="border-b border-border-dark pb-4">
+                    <CardHeader className="border-b border-zinc-200 pb-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 bg-primary-500/10 border border-primary-500/25 rounded-[10px] text-primary-400">
+                          <div className="p-2 bg-zinc-100 border border-zinc-200 rounded-[10px] text-zinc-900">
                             <Compass className="w-5 h-5" />
                           </div>
                           <div>
@@ -444,33 +444,33 @@ export default function ParentPage() {
 
                     <CardContent className="pt-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 bg-night rounded-[10px] border border-border-dark space-y-1">
-                          <span className="text-[11px] font-mono uppercase tracking-wider text-primary-400 font-semibold">
+                        <div className="p-4 bg-zinc-50 rounded-[10px] border border-zinc-200 space-y-1">
+                          <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-600 font-semibold">
                             Assigned Career Track
                           </span>
-                          <p className="font-heading text-base font-bold text-white">
+                          <p className="font-heading text-base font-bold text-zinc-950">
                             {reportData?.assessmentResult?.trackName || currentChild.trackName}
                           </p>
-                          <p className="text-xs text-slate-400 leading-relaxed font-body">
+                          <p className="text-xs text-zinc-600 leading-relaxed font-body">
                             {reportData?.assessmentResult?.trackDescription ||
                               'Curriculum tailored to build modern interactive projects with industry code standards.'}
                           </p>
                         </div>
 
-                        <div className="p-4 bg-night rounded-[10px] border border-border-dark space-y-2 font-mono">
-                          <span className="text-[11px] uppercase tracking-wider text-accent-400 font-semibold">
+                        <div className="p-4 bg-zinc-50 rounded-[10px] border border-zinc-200 space-y-2 font-mono">
+                          <span className="text-[11px] uppercase tracking-wider text-zinc-600 font-semibold">
                             Competency Summary
                           </span>
                           <div className="grid grid-cols-2 gap-2 text-xs">
-                            <div className="p-2.5 bg-surface-dark rounded-md border border-border-dark">
-                              <span className="text-slate-400 block text-[10px]">Total Missions</span>
-                              <span className="text-sm font-bold text-white">
+                            <div className="p-2.5 bg-white rounded-md border border-zinc-200">
+                              <span className="text-zinc-500 block text-[10px]">Total Missions</span>
+                              <span className="text-sm font-bold text-zinc-950">
                                 {reportData?.track?.totalMissions || 0}
                               </span>
                             </div>
-                            <div className="p-2.5 bg-surface-dark rounded-md border border-border-dark">
-                              <span className="text-slate-400 block text-[10px]">Passed</span>
-                              <span className="text-sm font-bold text-accent-400">
+                            <div className="p-2.5 bg-white rounded-md border border-zinc-200">
+                              <span className="text-zinc-500 block text-[10px]">Passed</span>
+                              <span className="text-sm font-bold text-zinc-950">
                                 {reportData?.track?.completedMissions || 0}
                               </span>
                             </div>
@@ -482,10 +482,10 @@ export default function ParentPage() {
 
                   {/* Course-by-Course Curriculum Mastery Breakdown */}
                   <Card>
-                    <CardHeader className="border-b border-border-dark pb-4">
+                    <CardHeader className="border-b border-zinc-200 pb-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 bg-accent-500/10 border border-accent-500/25 rounded-[10px] text-accent-400">
+                          <div className="p-2 bg-zinc-100 border border-zinc-200 rounded-[10px] text-zinc-900">
                             <Layers className="w-5 h-5" />
                           </div>
                           <div>
@@ -493,7 +493,7 @@ export default function ParentPage() {
                             <CardDescription>Step-by-step progress through enrolled courses</CardDescription>
                           </div>
                         </div>
-                        <span className="font-mono text-xs font-semibold text-white">
+                        <span className="font-mono text-xs font-semibold text-zinc-950">
                           Overall: {reportData?.track?.overallPercentage || 0}%
                         </span>
                       </div>
@@ -501,11 +501,11 @@ export default function ParentPage() {
 
                     <CardContent className="pt-4 space-y-3">
                       {reportData?.coursesProgress?.map((course: any, idx: number) => (
-                        <div key={course.id || idx} className="p-4 bg-night rounded-[10px] border border-border-dark space-y-2">
+                        <div key={course.id || idx} className="p-4 bg-zinc-50 rounded-[10px] border border-zinc-200 space-y-2">
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div>
                               <div className="flex items-center gap-2">
-                                <span className="font-semibold text-sm text-white">{course.name}</span>
+                                <span className="font-semibold text-sm text-zinc-950">{course.name}</span>
                                 {course.isCompleted ? (
                                   <Badge variant="verified" size="sm">Mastered</Badge>
                                 ) : course.completedMissions > 0 ? (
@@ -514,20 +514,20 @@ export default function ParentPage() {
                                   <Badge variant="secondary" size="sm">Upcoming</Badge>
                                 )}
                               </div>
-                              <p className="text-xs text-slate-400 mt-0.5">{course.description}</p>
+                              <p className="text-xs text-zinc-600 mt-0.5">{course.description}</p>
                             </div>
 
                             <div className="font-mono text-xs text-right shrink-0">
-                              <span className="text-white font-medium">
+                              <span className="text-zinc-950 font-medium">
                                 {course.completedMissions} / {course.totalMissions} missions
                               </span>
-                              <span className="text-slate-500 ml-1.5 font-bold">({course.percentage}%)</span>
+                              <span className="text-zinc-500 ml-1.5 font-bold">({course.percentage}%)</span>
                             </div>
                           </div>
 
-                          <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                          <div className="w-full h-2 bg-zinc-200 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-accent-500 rounded-full transition-all duration-300"
+                              className="h-full bg-black rounded-full transition-all duration-300"
                               style={{ width: `${course.percentage}%` }}
                             />
                           </div>
@@ -538,10 +538,10 @@ export default function ParentPage() {
 
                   {/* Certified Mentor Evaluation Reports */}
                   <Card>
-                    <CardHeader className="border-b border-border-dark pb-4">
+                    <CardHeader className="border-b border-zinc-200 pb-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 bg-gold-500/10 border border-gold-500/25 rounded-[10px] text-gold-400">
+                          <div className="p-2 bg-zinc-100 border border-zinc-200 rounded-[10px] text-zinc-900">
                             <Award className="w-5 h-5" />
                           </div>
                           <div>
@@ -556,7 +556,7 @@ export default function ParentPage() {
 
                     <CardContent className="pt-4">
                       {!reportData?.mentorEvaluations || reportData.mentorEvaluations.length === 0 ? (
-                        <div className="text-center py-8 text-slate-500 text-xs font-body">
+                        <div className="text-center py-8 text-zinc-500 text-xs font-body">
                           No mentor evaluations yet. When {currentChild.name} completes coding challenges, certified mentors review and grade their code here.
                         </div>
                       ) : (
@@ -564,19 +564,19 @@ export default function ParentPage() {
                           {reportData.mentorEvaluations.map((item: any) => (
                             <div
                               key={item.submissionId}
-                              className="p-4 bg-night rounded-[10px] border border-border-dark space-y-2.5"
+                              className="p-4 bg-zinc-50 rounded-[10px] border border-zinc-200 space-y-2.5"
                             >
-                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border-dark pb-2.5">
+                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-200 pb-2.5">
                                 <div>
-                                  <h4 className="font-semibold text-sm text-white">{item.missionTitle}</h4>
-                                  <p className="text-xs text-slate-400 font-mono">
+                                  <h4 className="font-semibold text-sm text-zinc-950">{item.missionTitle}</h4>
+                                  <p className="text-xs text-zinc-500 font-mono">
                                     {item.courseName} · Evaluated {new Date(item.date).toLocaleDateString()}
                                   </p>
                                 </div>
 
                                 <div className="flex items-center gap-2">
-                                  <span className="inline-flex items-center gap-1 bg-gold-500/10 border border-gold-500/30 px-2.5 py-0.5 rounded-full font-mono text-xs font-bold text-gold-400">
-                                    <Star className="w-3.5 h-3.5 fill-gold-500" />
+                                  <span className="inline-flex items-center gap-1 bg-zinc-200 border border-zinc-300 px-2.5 py-0.5 rounded-full font-mono text-xs font-bold text-zinc-950">
+                                    <Star className="w-3.5 h-3.5 fill-black text-black" />
                                     <span>{item.review?.rating || 5} / 5</span>
                                   </span>
                                   <Badge variant="verified">Approved</Badge>
@@ -585,15 +585,15 @@ export default function ParentPage() {
 
                               <div className="space-y-1">
                                 <div className="flex items-center gap-2 text-xs">
-                                  <span className="font-semibold text-accent-400">
+                                  <span className="font-semibold text-zinc-950">
                                     {item.review?.mentorName || 'Certified Mentor'}
                                   </span>
-                                  <span className="text-slate-500">·</span>
-                                  <span className="text-slate-400 text-[11px]">
+                                  <span className="text-zinc-400">·</span>
+                                  <span className="text-zinc-500 text-[11px]">
                                     {item.review?.mentorHeadline || 'Staff Software Engineer'}
                                   </span>
                                 </div>
-                                <p className="text-xs text-slate-300 italic bg-surface-dark p-3 rounded-[8px] border border-border-dark leading-relaxed font-body">
+                                <p className="text-xs text-zinc-800 italic bg-white p-3 rounded-[8px] border border-zinc-200 leading-relaxed font-body">
                                   "{item.review?.feedback}"
                                 </p>
                               </div>
@@ -611,18 +611,18 @@ export default function ParentPage() {
           {/* TAB 3: CHEERS & ENCOURAGEMENT */}
           {activeParentTab === 'CHEERS' && currentChild && (
             <div className="space-y-6">
-              <Card className="border-gold-500/25">
+              <Card className="border-zinc-200">
                 <CardHeader>
                   <CardTitle>Send Encouragement Boost</CardTitle>
                   <CardDescription>
                     Your cheers appear on {currentChild.name}’s dashboard and reward them with{' '}
-                    <strong className="text-gold-400 font-mono">+15 XP</strong> to boost their streak!
+                    <strong className="text-zinc-950 font-mono">+15 XP</strong> to boost their streak!
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Preset Cheer Chips */}
                   <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-slate-300">Quick templates</label>
+                    <label className="text-xs font-medium text-zinc-700">Quick templates</label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {cheerTemplates.map((template, idx) => (
                         <button
@@ -631,8 +631,8 @@ export default function ParentPage() {
                           onClick={() => setCheerNote(template)}
                           className={`p-3 rounded-[10px] text-left text-xs border transition-all ${
                             cheerNote === template
-                              ? 'bg-gold-500/15 border-gold-500 text-gold-300'
-                              : 'bg-night border-border-dark text-slate-400 hover:text-white hover:bg-surface-raised'
+                              ? 'bg-black text-white border-black'
+                              : 'bg-white border-zinc-200 text-zinc-600 hover:text-zinc-950 hover:bg-zinc-50'
                           }`}
                         >
                           {template}
@@ -647,11 +647,11 @@ export default function ParentPage() {
                       value={cheerNote}
                       onChange={(e) => setCheerNote(e.target.value)}
                       placeholder="Write a warm note of encouragement..."
-                      className="w-full bg-night border border-border-dark rounded-[10px] p-3.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-gold-500 transition-colors font-body"
+                      className="w-full bg-white border border-zinc-300 rounded-[10px] p-3.5 text-xs text-zinc-950 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-black transition-colors font-body"
                     />
 
                     <Button
-                      variant="amber"
+                      variant="default"
                       size="default"
                       onClick={() =>
                         cheerMutation.mutate({
@@ -678,18 +678,18 @@ export default function ParentPage() {
                 </CardHeader>
                 <CardContent>
                   {!currentChild.cheers || currentChild.cheers.length === 0 ? (
-                    <p className="text-xs text-slate-500 py-2">No encouragement cheers sent yet.</p>
+                    <p className="text-xs text-zinc-500 py-2">No encouragement cheers sent yet.</p>
                   ) : (
-                    <div className="divide-y divide-border-dark">
+                    <div className="divide-y divide-zinc-200">
                       {currentChild.cheers.map((cheer: any) => (
                         <div key={cheer.id} className="py-3 flex items-start justify-between gap-4 text-xs">
                           <div className="flex items-start gap-3">
-                            <div className="p-1.5 bg-gold-500/10 border border-gold-500/25 rounded-full text-gold-400 mt-0.5">
-                              <Heart className="w-3.5 h-3.5 fill-gold-500" />
+                            <div className="p-1.5 bg-zinc-100 border border-zinc-200 rounded-full text-zinc-900 mt-0.5">
+                              <Heart className="w-3.5 h-3.5 fill-zinc-900 text-zinc-900" />
                             </div>
                             <div>
-                              <p className="text-slate-200 font-body">{cheer.message}</p>
-                              <span className="text-[11px] text-slate-500 mt-0.5 block font-mono">
+                              <p className="text-zinc-800 font-body">{cheer.message}</p>
+                              <span className="text-[11px] text-zinc-500 mt-0.5 block font-mono">
                                 Sent {new Date(cheer.createdAt).toLocaleString()}
                               </span>
                             </div>
@@ -709,13 +709,13 @@ export default function ParentPage() {
 
       {/* Link Child Modal */}
       {showLinkModal && (
-        <div className="fixed inset-0 z-50 bg-night/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <Card className="max-w-md w-full p-6 space-y-4 shadow-2xl animate-slide-up">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <Card className="max-w-md w-full p-6 space-y-4 shadow-2xl animate-slide-up border-zinc-300">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">Link a Student Account</CardTitle>
               <button
                 onClick={() => setShowLinkModal(false)}
-                className="p-1 rounded-md text-slate-400 hover:text-white"
+                className="p-1 rounded-md text-zinc-400 hover:text-zinc-950"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -736,7 +736,7 @@ export default function ParentPage() {
                 Cancel
               </Button>
               <Button
-                variant="amber"
+                variant="default"
                 size="sm"
                 onClick={() => linkMutation.mutate(linkEmail)}
                 disabled={!linkEmail || linkMutation.isPending}

@@ -41,9 +41,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} dark`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="font-body bg-night text-slate-100 min-h-screen antialiased selection:bg-primary-600/30 selection:text-white">
+      <body className="font-body bg-white text-zinc-900 min-h-screen antialiased selection:bg-zinc-900 selection:text-white">
         <Providers>{children}</Providers>
       </body>
     </html>

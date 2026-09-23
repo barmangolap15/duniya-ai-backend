@@ -21,7 +21,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border-dark bg-night/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-zinc-200 bg-white/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
@@ -34,12 +34,12 @@ export default function Navbar() {
                 {/* Gamified stats for student */}
                 {role === 'STUDENT' && (
                   <div className="hidden sm:flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-500/10 border border-accent-500/25 px-2.5 py-1 font-mono text-xs font-medium text-accent-400">
-                      <Sparkles className="w-3.5 h-3.5" />
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 border border-zinc-200 px-2.5 py-1 font-mono text-xs font-semibold text-zinc-900">
+                      <Sparkles className="w-3.5 h-3.5 text-zinc-700" />
                       <span>{user.xp || 0} XP</span>
                     </span>
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gold-500/10 border border-gold-500/25 px-2.5 py-1 font-mono text-xs font-medium text-gold-400">
-                      <Flame className="w-3.5 h-3.5" />
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 border border-zinc-200 px-2.5 py-1 font-mono text-xs font-semibold text-zinc-900">
+                      <Flame className="w-3.5 h-3.5 fill-zinc-900 text-zinc-900" />
                       <span>{user.streak || 0}d</span>
                     </span>
                   </div>
@@ -48,7 +48,7 @@ export default function Navbar() {
                 {/* Profile link */}
                 <Link
                   href={homeRoute}
-                  className="flex items-center gap-2 px-2.5 py-1.5 rounded-[10px] border border-border-dark bg-surface-dark/80 hover:bg-surface-raised transition-colors group"
+                  className="flex items-center gap-2 px-2.5 py-1.5 rounded-[10px] border border-zinc-200 bg-white hover:bg-zinc-100 transition-colors group"
                 >
                   <Avatar
                     name={user.name}
@@ -64,20 +64,10 @@ export default function Navbar() {
                     }
                   />
                   <div className="flex flex-col text-left">
-                    <span className="text-xs font-medium text-slate-200 group-hover:text-white max-w-[120px] truncate leading-tight">
+                    <span className="text-xs font-medium text-zinc-900 group-hover:text-black max-w-[120px] truncate leading-tight">
                       {user.name}
                     </span>
-                    <span
-                      className={`text-[10px] font-mono font-medium leading-none mt-0.5 ${
-                        role === 'PARENT'
-                          ? 'text-gold-400'
-                          : role === 'MENTOR'
-                            ? 'text-accent-400'
-                            : role === 'RECRUITER'
-                              ? 'text-danger-400'
-                              : 'text-primary-400'
-                      }`}
-                    >
+                    <span className="text-[10px] font-mono font-medium leading-none mt-0.5 text-zinc-500">
                       {user.role}
                     </span>
                   </div>
@@ -86,7 +76,7 @@ export default function Navbar() {
                 {/* Logout Button */}
                 <button
                   onClick={logout}
-                  className="p-2 text-slate-400 hover:text-white hover:bg-surface-raised border border-transparent hover:border-border-dark rounded-[10px] transition-colors"
+                  className="p-2 text-zinc-500 hover:text-black hover:bg-zinc-100 border border-transparent hover:border-zinc-200 rounded-[10px] transition-colors"
                   title="Log out"
                 >
                   <LogOut className="w-4 h-4" />

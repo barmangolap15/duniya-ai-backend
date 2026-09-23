@@ -15,7 +15,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <ProtectedRoute>
-      <div className="flex h-screen overflow-hidden bg-night text-slate-100">
+      <div className="flex h-screen overflow-hidden bg-white text-zinc-900">
         {/* Desktop Fixed Sidebar (100vh, permanently pinned) */}
         {!hideSidebar && (
           <div className="hidden md:block shrink-0 h-screen">
@@ -25,11 +25,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Navbar */}
         {!hideSidebar && (
-          <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-surface-dark border-b border-border-dark z-50 flex items-center justify-between px-4">
+          <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-zinc-200 z-50 flex items-center justify-between px-4">
             <Logo size="sm" href="/dashboard" />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-slate-400 hover:text-white rounded-lg"
+              className="p-2 text-zinc-600 hover:text-zinc-950 rounded-lg"
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -39,7 +39,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Drawer Menu */}
         {!hideSidebar && mobileMenuOpen && (
-          <div className="md:hidden fixed inset-0 top-16 z-40 bg-surface-dark">
+          <div className="md:hidden fixed inset-0 top-16 z-40 bg-white">
             <Sidebar
               onNavigate={() => setMobileMenuOpen(false)}
               className="w-full h-full border-r-0"

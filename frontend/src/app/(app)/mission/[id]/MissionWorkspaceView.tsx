@@ -412,22 +412,22 @@ export default function MissionWorkspace() {
   `;
 
   return (
-    <div className="flex flex-col h-screen bg-night text-slate-100 overflow-hidden font-body">
+    <div className="flex flex-col h-screen bg-white text-zinc-900 overflow-hidden font-body">
       {/* Gamification popups */}
       <Confetti active={showConfetti} />
       <XPPopup xp={stepXPAmount} show={showStepXP} />
 
       {/* ─── WORKSPACE HEADER ─── */}
-      <header className="h-14 border-b border-border-dark bg-surface-dark flex items-center justify-between px-4 shrink-0">
+      <header className="h-14 border-b border-zinc-200 bg-white flex items-center justify-between px-4 shrink-0">
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard"
-            className="p-1.5 rounded-[8px] text-slate-400 hover:text-white hover:bg-surface-raised transition-colors"
+            className="p-1.5 rounded-[8px] text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors"
             title="Return to Dashboard"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
-          <div className="font-heading font-bold text-sm text-white truncate max-w-[200px] sm:max-w-md">
+          <div className="font-heading font-bold text-sm text-zinc-950 truncate max-w-[200px] sm:max-w-md">
             {mission.title}
           </div>
           <div className="hidden sm:flex items-center gap-1.5">
@@ -436,8 +436,8 @@ export default function MissionWorkspace() {
                 key={lang}
                 className={`px-2 py-0.5 rounded-[6px] text-[10px] font-mono uppercase font-semibold ${
                   currentStep?.target === lang
-                    ? 'bg-primary-500/20 text-primary-300 border border-primary-500/40'
-                    : 'bg-night text-slate-500 border border-border-dark'
+                    ? 'bg-black text-white border border-black'
+                    : 'bg-zinc-100 text-zinc-600 border border-zinc-200'
                 }`}
               >
                 {lang}
@@ -448,8 +448,8 @@ export default function MissionWorkspace() {
 
         <div className="flex items-center gap-3">
           {/* XP indicator */}
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-500/10 border border-accent-500/25 px-2.5 py-1 font-mono text-xs font-semibold text-accent-400 tabular-nums">
-            <Sparkles className="w-3.5 h-3.5" />
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 border border-zinc-200 px-2.5 py-1 font-mono text-xs font-semibold text-zinc-900 tabular-nums">
+            <Sparkles className="w-3.5 h-3.5 text-zinc-700" />
             <span>+{earnedXP} XP</span>
           </span>
 
@@ -458,24 +458,24 @@ export default function MissionWorkspace() {
             variant="outline"
             size="sm"
             onClick={() => setShowMentorDrawer(true)}
-            className="gap-1.5 text-xs"
+            className="gap-1.5 text-xs text-zinc-800"
           >
-            <MessageSquare className="w-3.5 h-3.5 text-accent-400" />
+            <MessageSquare className="w-3.5 h-3.5 text-zinc-700" />
             <span className="hidden sm:inline">Ask Mentor</span>
-            {missionThread && <span className="w-2 h-2 rounded-full bg-accent-400" />}
+            {missionThread && <span className="w-2 h-2 rounded-full bg-black" />}
           </Button>
 
           {/* Save status */}
-          <span className="text-xs text-slate-500 font-mono hidden sm:flex items-center gap-1">
+          <span className="text-xs text-zinc-500 font-mono hidden sm:flex items-center gap-1">
             {isSaving ? 'Saving...' : 'Saved'}
           </span>
         </div>
       </header>
 
       {/* ─── STEP PROGRESS TRACK ─── */}
-      <div className="h-1.5 bg-slate-800 shrink-0 relative">
+      <div className="h-1.5 bg-zinc-200 shrink-0 relative">
         <div
-          className="h-full bg-accent-500 transition-all duration-500 ease-out"
+          className="h-full bg-black transition-all duration-500 ease-out"
           style={{ width: `${progressPercent}%` }}
         />
       </div>
@@ -483,9 +483,9 @@ export default function MissionWorkspace() {
       {/* ─── MAIN WORKSPACE ─── */}
       <div className="flex-1 flex overflow-hidden">
         {/* LEFT PANEL: Editor & Preview */}
-        <div className="flex-1 flex flex-col border-r border-border-dark min-w-0">
+        <div className="flex-1 flex flex-col border-r border-zinc-200 min-w-0">
           {/* Editor Tabs Bar */}
-          <div className="flex bg-surface-dark border-b border-border-dark shrink-0">
+          <div className="flex bg-zinc-50 border-b border-zinc-200 shrink-0">
             {(() => {
               const stepTargets = Array.from(new Set(steps.map((s) => s.target).filter(Boolean)));
               const missionLangs: string[] =
@@ -515,15 +515,15 @@ export default function MissionWorkspace() {
                       setActiveTab(tab);
                       soundManager.playTap();
                     }}
-                    className={`relative px-5 py-2.5 text-xs font-mono font-semibold uppercase border-r border-border-dark transition-all flex items-center gap-2 ${
+                    className={`relative px-5 py-2.5 text-xs font-mono font-semibold uppercase border-r border-zinc-200 transition-all flex items-center gap-2 ${
                       isCurrentActive
-                        ? 'bg-night text-primary-400 border-t-2 border-t-primary-500'
-                        : 'text-slate-400 hover:bg-surface-raised hover:text-white border-t-2 border-t-transparent'
+                        ? 'bg-white text-zinc-950 border-t-2 border-t-black'
+                        : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 border-t-2 border-t-transparent'
                     }`}
                   >
                     <span>{tabLabels[tab] || tab.toUpperCase()}</span>
                     {isTarget && (
-                      <span className="text-[9px] px-1 py-0.2 rounded bg-primary-500/20 text-primary-300 font-mono lowercase border border-primary-500/30">
+                      <span className="text-[9px] px-1 py-0.2 rounded bg-zinc-200 text-zinc-800 font-mono lowercase border border-zinc-300">
                         step target
                       </span>
                     )}
@@ -535,7 +535,7 @@ export default function MissionWorkspace() {
             {/* Toggle Preview Button */}
             <button
               onClick={() => setShowPreview(!showPreview)}
-              className="ml-auto px-3 py-2 text-slate-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-body"
+              className="ml-auto px-3 py-2 text-zinc-600 hover:text-zinc-950 transition-colors flex items-center gap-1.5 text-xs font-body"
             >
               {showPreview ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
               <span>Preview</span>
@@ -543,7 +543,7 @@ export default function MissionWorkspace() {
           </div>
 
           {/* CodeMirror Editor Area */}
-          <div className={`${showPreview ? 'flex-1' : 'flex-[2]'} overflow-auto bg-night min-h-0`}>
+          <div className={`${showPreview ? 'flex-1' : 'flex-[2]'} overflow-auto bg-zinc-950 min-h-0`}>
             <CodeMirror
               value={code[activeTab]}
               height="100%"
@@ -562,8 +562,8 @@ export default function MissionWorkspace() {
 
           {/* Live Sandbox Preview */}
           {showPreview && (
-            <div className="flex-1 bg-white relative border-t border-border-dark min-h-0">
-              <div className="absolute top-2 left-2 text-[10px] bg-black/60 text-slate-300 px-2 py-0.5 rounded font-mono z-10 select-none">
+            <div className="flex-1 bg-white relative border-t border-zinc-200 min-h-0">
+              <div className="absolute top-2 left-2 text-[10px] bg-black/75 text-white px-2 py-0.5 rounded font-mono z-10 select-none">
                 LIVE SANDBOX PREVIEW
               </div>
               <iframe
@@ -577,15 +577,15 @@ export default function MissionWorkspace() {
         </div>
 
         {/* RIGHT PANEL: Step-by-Step Instructions */}
-        <div className="w-[380px] bg-surface-dark flex flex-col border-l border-border-dark shrink-0">
+        <div className="w-[380px] bg-white flex flex-col border-l border-zinc-200 shrink-0">
           {/* Step header */}
-          <div className="p-4 border-b border-border-dark shrink-0 flex items-center justify-between">
-            <h2 className="font-heading text-xs font-bold uppercase tracking-wider text-slate-400">
+          <div className="p-4 border-b border-zinc-200 shrink-0 flex items-center justify-between">
+            <h2 className="font-heading text-xs font-bold uppercase tracking-wider text-zinc-500">
               Mission Steps
             </h2>
             <span
               className={`font-mono text-xs font-semibold ${
-                allStepsCompleted ? 'text-accent-400' : 'text-slate-400'
+                allStepsCompleted ? 'text-zinc-950' : 'text-zinc-500'
               }`}
             >
               {completedSteps.size}/{steps.length} complete {allStepsCompleted && '✓'}
@@ -594,24 +594,24 @@ export default function MissionWorkspace() {
 
           {/* Mission Complete Card */}
           {(allStepsCompleted || showMissionComplete) && (
-            <div className="p-4 bg-accent-950/30 border-b border-accent-500/30 shrink-0 space-y-3 animate-slide-up">
+            <div className="p-4 bg-zinc-100 border-b border-zinc-300 shrink-0 space-y-3 animate-slide-up">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-[10px] bg-accent-500/20 border border-accent-500/40 flex items-center justify-center text-xl text-accent-400">
+                <div className="w-10 h-10 rounded-[10px] bg-zinc-200 border border-zinc-300 flex items-center justify-center text-xl text-zinc-900">
                   🏆
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-bold text-accent-400 uppercase tracking-wider">Mission Solved</p>
-                  <p className="text-sm font-bold text-white truncate">All steps verified</p>
+                  <p className="text-xs font-bold text-zinc-950 uppercase tracking-wider">Mission Solved</p>
+                  <p className="text-sm font-bold text-zinc-900 truncate">All steps verified</p>
                 </div>
                 <Badge variant="xp">+{mission.xpReward} XP</Badge>
               </div>
 
-              <p className="text-xs text-slate-300 font-body leading-relaxed">
+              <p className="text-xs text-zinc-600 font-body leading-relaxed">
                 Great job! All unit tests passed. Click continue to submit code for verified mentor endorsement.
               </p>
 
               <Button
-                variant="accent"
+                variant="default"
                 size="default"
                 onClick={() => submitMutation.mutate()}
                 isLoading={submitMutation.isPending}
@@ -636,10 +636,10 @@ export default function MissionWorkspace() {
                   key={step.id}
                   className={`rounded-[12px] transition-all duration-200 border ${
                     isCompleted
-                      ? 'bg-accent-950/15 border-accent-500/30'
+                      ? 'bg-zinc-50 border-zinc-200'
                       : isCurrent
-                        ? 'bg-primary-500/10 border-primary-500 ring-1 ring-primary-500/30'
-                        : 'bg-night border-border-dark opacity-60'
+                        ? 'bg-white border-black ring-1 ring-black'
+                        : 'bg-zinc-50/50 border-zinc-200 opacity-60'
                   }`}
                 >
                   {/* Step header */}
@@ -647,10 +647,10 @@ export default function MissionWorkspace() {
                     <div
                       className={`w-7 h-7 rounded-[8px] flex items-center justify-center text-xs font-bold shrink-0 transition-all ${
                         isCompleted
-                          ? 'bg-accent-500 text-slate-950 font-bold'
+                          ? 'bg-black text-white font-bold'
                           : isCurrent
-                            ? 'bg-primary-500/20 text-primary-300 border border-primary-500/40'
-                            : 'bg-surface-raised text-slate-500'
+                            ? 'bg-zinc-100 text-zinc-900 border border-zinc-300'
+                            : 'bg-zinc-200 text-zinc-500'
                       }`}
                     >
                       {isCompleted ? <Check className="w-4 h-4 stroke-[3]" /> : isLocked ? <Lock className="w-3 h-3" /> : step.emoji}
@@ -659,18 +659,18 @@ export default function MissionWorkspace() {
                     <div className="flex-1 min-w-0">
                       <p
                         className={`text-xs font-semibold truncate ${
-                          isCompleted ? 'text-accent-400' : isCurrent ? 'text-white' : 'text-slate-400'
+                          isCompleted ? 'text-zinc-900' : isCurrent ? 'text-zinc-950 font-bold' : 'text-zinc-500'
                         }`}
                       >
                         {step.title}
                       </p>
                       {isCompleted && (
-                        <p className="text-[10px] font-mono text-accent-400/80">+{step.xp} XP</p>
+                        <p className="text-[10px] font-mono text-zinc-600">+{step.xp} XP</p>
                       )}
                     </div>
 
                     {(isCurrent || isCompleted) && (
-                      <span className="px-2 py-0.5 rounded text-[9px] font-mono uppercase bg-night border border-border-dark text-slate-400">
+                      <span className="px-2 py-0.5 rounded text-[9px] font-mono uppercase bg-zinc-100 border border-zinc-200 text-zinc-600">
                         {step.target}
                       </span>
                     )}
@@ -679,13 +679,13 @@ export default function MissionWorkspace() {
                   {/* Expanded instructions for active step */}
                   {isCurrent && !isCompleted && (
                     <div className="px-3 pb-3 space-y-3">
-                      <div className="bg-night rounded-[8px] p-3 border border-border-dark">
+                      <div className="bg-zinc-50 rounded-[8px] p-3 border border-zinc-200">
                         <p
-                          className="text-xs text-slate-300 font-body leading-relaxed"
+                          className="text-xs text-zinc-800 font-body leading-relaxed"
                           dangerouslySetInnerHTML={{
                             __html: step.instruction
-                              .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>')
-                              .replace(/`(.*?)`/g, '<code class="bg-surface-raised px-1.5 py-0.5 rounded text-primary-300 text-xs font-mono">$1</code>'),
+                              .replace(/\*\*(.*?)\*\*/g, '<strong class="text-zinc-950 font-semibold">$1</strong>')
+                              .replace(/`(.*?)`/g, '<code class="bg-zinc-200 px-1.5 py-0.5 rounded text-zinc-900 text-xs font-mono">$1</code>'),
                           }}
                         />
                       </div>
@@ -694,6 +694,7 @@ export default function MissionWorkspace() {
                       <div className="flex gap-2">
                         <Button
                           size="sm"
+                          variant="default"
                           onClick={handleTabToFill}
                           className="flex-1 gap-1.5 text-xs font-semibold"
                         >
@@ -708,8 +709,8 @@ export default function MissionWorkspace() {
                           }}
                           className={`p-2 rounded-[8px] border transition-all ${
                             showHint
-                              ? 'bg-gold-500/20 text-gold-300 border-gold-500/40'
-                              : 'bg-night border-border-dark text-slate-400 hover:text-white'
+                              ? 'bg-black text-white border-black'
+                              : 'bg-white border-zinc-200 text-zinc-600 hover:text-zinc-950'
                           }`}
                           title="Show Hint"
                         >
@@ -723,7 +724,7 @@ export default function MissionWorkspace() {
                             );
                             setShowMentorDrawer(true);
                           }}
-                          className="p-2 rounded-[8px] border border-border-dark bg-night text-slate-400 hover:text-accent-300 hover:border-accent-500/40 transition-all"
+                          className="p-2 rounded-[8px] border border-zinc-200 bg-white text-zinc-600 hover:text-zinc-950 transition-all"
                           title="Ask Mentor"
                         >
                           <MessageSquare className="w-4 h-4" />
@@ -731,12 +732,12 @@ export default function MissionWorkspace() {
                       </div>
 
                       {showHint && (
-                        <div className="p-3 bg-gold-950/20 border border-gold-500/30 rounded-[8px] space-y-1">
-                          <div className="flex items-center gap-1.5 text-gold-400 text-xs font-semibold">
+                        <div className="p-3 bg-zinc-100 border border-zinc-300 rounded-[8px] space-y-1">
+                          <div className="flex items-center gap-1.5 text-zinc-950 text-xs font-semibold">
                             <Lightbulb className="w-3.5 h-3.5" />
                             <span>Hint</span>
                           </div>
-                          <code className="text-xs text-gold-300 font-mono break-all whitespace-pre-wrap block">
+                          <code className="text-xs text-zinc-800 font-mono break-all whitespace-pre-wrap block">
                             {step.hint}
                           </code>
                         </div>
@@ -749,46 +750,46 @@ export default function MissionWorkspace() {
           </div>
 
           {/* Bottom: Mission Reward */}
-          <div className="p-4 bg-night border-t border-border-dark shrink-0 flex items-center justify-between font-mono text-xs">
-            <span className="text-slate-400">Total Mission XP</span>
-            <span className="font-bold text-accent-400 text-sm">+{mission.xpReward} XP</span>
+          <div className="p-4 bg-zinc-50 border-t border-zinc-200 shrink-0 flex items-center justify-between font-mono text-xs">
+            <span className="text-zinc-500">Total Mission XP</span>
+            <span className="font-bold text-zinc-950 text-sm">+{mission.xpReward} XP</span>
           </div>
         </div>
       </div>
 
       {/* ─── SLIDE-OVER MENTOR DRAWER ─── */}
       {showMentorDrawer && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-night/80 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-md bg-surface-dark border-l border-border-dark h-full flex flex-col shadow-2xl animate-slide-left">
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="w-full max-w-md bg-white border-l border-zinc-200 h-full flex flex-col shadow-2xl animate-slide-left">
             {/* Header */}
-            <div className="p-4 border-b border-border-dark bg-night flex items-center justify-between">
+            <div className="p-4 border-b border-zinc-200 bg-zinc-50 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Avatar name="Elena Rostova" size="md" variant="mentor" />
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-sm font-bold text-white">Elena Rostova</span>
+                    <span className="text-sm font-bold text-zinc-950">Elena Rostova</span>
                     <Badge variant="verified" size="sm">
                       Mentor
                     </Badge>
                   </div>
-                  <p className="text-[11px] text-slate-400 font-mono">Staff Frontend Engineer</p>
+                  <p className="text-[11px] text-zinc-500 font-mono">Staff Frontend Engineer</p>
                 </div>
               </div>
               <button
                 onClick={() => setShowMentorDrawer(false)}
-                className="p-1 rounded-md text-slate-400 hover:text-white"
+                className="p-1 rounded-md text-zinc-400 hover:text-zinc-950"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Parent Notice */}
-            <div className="px-4 py-2 bg-primary-950/30 border-b border-border-dark flex items-center justify-between text-[11px] text-primary-300 font-mono">
+            <div className="px-4 py-2 bg-zinc-100 border-b border-zinc-200 flex items-center justify-between text-[11px] text-zinc-700 font-mono">
               <span className="flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-primary-400" />
+                <ShieldCheck className="w-3.5 h-3.5 text-zinc-700" />
                 Verified mentorship environment
               </span>
-              <Link href="/mentorship" className="text-primary-400 hover:underline">
+              <Link href="/mentorship" className="text-zinc-950 font-semibold hover:underline">
                 Hub &rarr;
               </Link>
             </div>
@@ -797,7 +798,7 @@ export default function MissionWorkspace() {
             <div className="flex-1 p-4 overflow-y-auto space-y-4">
               {missionThread ? (
                 <div className="space-y-3">
-                  <p className="text-xs font-semibold text-accent-400">
+                  <p className="text-xs font-semibold text-zinc-950">
                     Active Discussion: {missionThread.subject}
                   </p>
                   <div className="space-y-2">
@@ -808,8 +809,8 @@ export default function MissionWorkspace() {
                           key={msg.id}
                           className={`p-3 rounded-[10px] text-xs leading-relaxed ${
                             isUser
-                              ? 'bg-primary-600 text-white ml-6'
-                              : 'bg-night text-slate-200 mr-6 border border-border-dark'
+                              ? 'bg-black text-white ml-6'
+                              : 'bg-zinc-100 text-zinc-900 mr-6 border border-zinc-200'
                           }`}
                         >
                           <div className="font-semibold text-[10px] opacity-75 mb-1 font-mono">
@@ -817,7 +818,7 @@ export default function MissionWorkspace() {
                           </div>
                           <p className="font-body">{msg.content}</p>
                           {msg.codeSnippet && (
-                            <pre className="mt-2 p-2 bg-night rounded border border-border-dark text-[11px] font-mono text-accent-300 overflow-x-auto">
+                            <pre className="mt-2 p-2 bg-zinc-900 rounded border border-zinc-800 text-[11px] font-mono text-zinc-100 overflow-x-auto">
                               <code>{msg.codeSnippet}</code>
                             </pre>
                           )}
@@ -828,29 +829,29 @@ export default function MissionWorkspace() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <div className="p-3 bg-night rounded-[10px] border border-border-dark text-xs text-slate-300 font-body">
-                    <p className="font-semibold text-white mb-1">Need guidance on {mission.title}?</p>
-                    <p className="text-slate-400">
+                  <div className="p-3 bg-zinc-50 rounded-[10px] border border-zinc-200 text-xs text-zinc-700 font-body">
+                    <p className="font-semibold text-zinc-950 mb-1">Need guidance on {mission.title}?</p>
+                    <p className="text-zinc-600">
                       Elena will review your code snapshot and help you work through blockers without spoiling the solution.
                     </p>
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-slate-300">Your question</label>
+                    <label className="text-xs font-medium text-zinc-700">Your question</label>
                     <textarea
                       rows={4}
                       value={mentorQuestion}
                       onChange={(e) => setMentorQuestion(e.target.value)}
                       placeholder="e.g. How do I get the flex container to wrap properly?"
-                      className="w-full bg-night border border-border-dark rounded-[10px] p-3 text-xs text-white focus:outline-none focus:ring-2 focus:ring-accent-500 font-body resize-none"
+                      className="w-full bg-white border border-zinc-300 rounded-[10px] p-3 text-xs text-zinc-950 focus:outline-none focus:ring-2 focus:ring-black font-body resize-none"
                     />
                   </div>
 
                   <div className="space-y-1">
-                    <p className="text-[11px] text-accent-400 font-mono flex items-center gap-1">
+                    <p className="text-[11px] text-zinc-700 font-mono flex items-center gap-1">
                       <Code2 className="w-3.5 h-3.5" /> Auto-attached Code ({activeTab.toUpperCase()})
                     </p>
-                    <pre className="p-2.5 bg-night border border-border-dark rounded-[10px] text-[11px] font-mono text-accent-300/90 max-h-36 overflow-y-auto">
+                    <pre className="p-2.5 bg-zinc-900 border border-zinc-800 rounded-[10px] text-[11px] font-mono text-zinc-100 max-h-36 overflow-y-auto">
                       <code>{code[activeTab] || '/* Empty file */'}</code>
                     </pre>
                   </div>
@@ -859,7 +860,7 @@ export default function MissionWorkspace() {
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-border-dark bg-night">
+            <div className="p-4 border-t border-zinc-200 bg-white">
               {missionThread ? (
                 <form
                   onSubmit={(e) => {

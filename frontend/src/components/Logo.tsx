@@ -54,10 +54,10 @@ export default function Logo({
       />
       {showText && (
         <div className="flex items-center tracking-tight leading-none">
-          <span className={`${current.text} font-heading font-bold text-white transition-colors`}>
+          <span className={`${current.text} font-heading font-bold text-zinc-950 transition-colors`}>
             Duniya
           </span>
-          <span className={`${current.ai} font-heading font-bold text-primary-400 ml-0.5`}>
+          <span className={`${current.ai} font-heading font-bold text-zinc-500 ml-0.5`}>
             AI
           </span>
         </div>
@@ -67,7 +67,7 @@ export default function Logo({
 
   if (href) {
     return (
-      <Link href={href} className="inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-lg">
+      <Link href={href} className="inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 rounded-lg">
         {content}
       </Link>
     );

@@ -17,14 +17,14 @@ export function Progress({
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
 
   const variantColors = {
-    primary: 'bg-primary-500',
-    accent: 'bg-accent-500',
-    gold: 'bg-gold-500',
+    primary: 'bg-black',
+    accent: 'bg-zinc-900',
+    gold: 'bg-zinc-800',
   };
 
   return (
     <div
-      className={cn('relative h-2 w-full overflow-hidden rounded-full bg-slate-800/80', className)}
+      className={cn('relative h-2 w-full overflow-hidden rounded-full bg-zinc-200', className)}
       {...props}
     >
       <div
