@@ -103,48 +103,49 @@ export default function QuizPage() {
     }
   };
 
-  const getOptionIcon = (iconName: string) => {
+  const getOptionIcon = (iconName: string, isSelected: boolean = false) => {
+    const iconClass = `w-5 h-5 ${isSelected ? 'text-white' : 'text-zinc-900'}`;
     switch (iconName) {
       case 'Sprout':
-        return <Rocket className="w-5 h-5 text-zinc-900" />;
+        return <Rocket className={iconClass} />;
       case 'Code2':
-        return <Code2 className="w-5 h-5 text-zinc-900" />;
+        return <Code2 className={iconClass} />;
       case 'Rocket':
-        return <Rocket className="w-5 h-5 text-zinc-900" />;
+        return <Rocket className={iconClass} />;
       case 'Layout':
-        return <Layers className="w-5 h-5 text-zinc-900" />;
+        return <Layers className={iconClass} />;
       case 'Server':
-        return <Server className="w-5 h-5 text-zinc-900" />;
+        return <Server className={iconClass} />;
       case 'Layers':
-        return <Layers className="w-5 h-5 text-zinc-900" />;
+        return <Layers className={iconClass} />;
       case 'Smartphone':
-        return <Smartphone className="w-5 h-5 text-zinc-900" />;
+        return <Smartphone className={iconClass} />;
       case 'Palette':
-        return <Palette className="w-5 h-5 text-zinc-900" />;
+        return <Palette className={iconClass} />;
       case 'Briefcase':
-        return <Briefcase className="w-5 h-5 text-zinc-900" />;
+        return <Briefcase className={iconClass} />;
       case 'Sparkles':
-        return <Sparkles className="w-5 h-5 text-zinc-900" />;
+        return <Sparkles className={iconClass} />;
       case 'GraduationCap':
-        return <GraduationCap className="w-5 h-5 text-zinc-900" />;
+        return <GraduationCap className={iconClass} />;
       case 'Compass':
-        return <Compass className="w-5 h-5 text-zinc-900" />;
+        return <Compass className={iconClass} />;
       case 'Eye':
-        return <Eye className="w-5 h-5 text-zinc-900" />;
+        return <Eye className={iconClass} />;
       case 'Cpu':
-        return <Cpu className="w-5 h-5 text-zinc-900" />;
+        return <Cpu className={iconClass} />;
       case 'Hammer':
-        return <Hammer className="w-5 h-5 text-zinc-900" />;
+        return <Hammer className={iconClass} />;
       case 'Clock':
-        return <Clock className="w-5 h-5 text-zinc-900" />;
+        return <Clock className={iconClass} />;
       case 'Zap':
-        return <Zap className="w-5 h-5 text-zinc-900" />;
+        return <Zap className={iconClass} />;
       case 'Flame':
-        return <Flame className="w-5 h-5 text-zinc-900" />;
+        return <Flame className={iconClass} />;
       case 'BrainCircuit':
-        return <BrainCircuit className="w-5 h-5 text-zinc-900" />;
+        return <BrainCircuit className={iconClass} />;
       default:
-        return <Sparkles className="w-5 h-5 text-zinc-900" />;
+        return <Sparkles className={iconClass} />;
     }
   };
 
@@ -436,7 +437,7 @@ export default function QuizPage() {
                           : 'bg-zinc-100 border-zinc-200 text-zinc-700'
                       }`}
                     >
-                      {getOptionIcon(option.icon)}
+                      {getOptionIcon(option.icon, selected)}
                     </div>
 
                     <div className="flex-1 min-w-0">
